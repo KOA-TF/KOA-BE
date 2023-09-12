@@ -1,10 +1,10 @@
-package com.koa.koabe;
+package com.koa.coremodule;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KoaBeApplicationTests {
+class CoreModuleApplicationTests {
 
     @Test
     void contextLoads() {
