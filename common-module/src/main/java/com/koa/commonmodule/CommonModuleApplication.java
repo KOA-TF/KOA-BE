@@ -1,13 +1,13 @@
-package com.koa.koabe;
+package com.koa.commonmodule;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KoaBeApplication {
+public class CommonModuleApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(KoaBeApplication.class, args);
+        SpringApplication.run(CommonModuleApplication.class, args);
     }
 
 }
