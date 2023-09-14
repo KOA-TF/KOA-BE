@@ -24,5 +24,7 @@ public class Notice extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "curriculum_id")
+    private Curriculum curriculum;
 }
