@@ -18,4 +18,8 @@ public class VoteItem extends BaseEntity {
 
     private String voteItemName;
     private Integer count;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote_id")
+    private Vote vote;
 }
