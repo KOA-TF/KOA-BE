@@ -2,7 +2,13 @@ package com.koa.coremodule.user.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.*;
 
+@Builder
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Entity
 public class UserInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
