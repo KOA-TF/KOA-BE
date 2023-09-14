@@ -23,9 +23,6 @@ public class User extends BaseEntity {
     private String userId;
     private String password;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 }
