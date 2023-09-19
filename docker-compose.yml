@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  koa-app:
+    container_name: koa-app
+    build: .
+    image: anjeonghoo/koa-application
+    environment:
+      - SPRING_DATASOURCE_USERNAME=koadatabase
+      - SPRING_DATASOURCE_PASSWORD=koadatabase
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "80:8080"
+    restart: always
