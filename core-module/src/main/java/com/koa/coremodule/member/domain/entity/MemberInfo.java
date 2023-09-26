@@ -1,4 +1,4 @@
-package com.koa.coremodule.user.domain.entity;
+package com.koa.coremodule.member.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import jakarta.persistence.*;
@@ -9,10 +9,10 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class UserInfo extends BaseEntity {
+public class MemberInfo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_info_id")
+    @Column(name = "member_info_id")
     private Long id;
 
     private String major;
@@ -22,6 +22,6 @@ public class UserInfo extends BaseEntity {
 
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member user;
 }
