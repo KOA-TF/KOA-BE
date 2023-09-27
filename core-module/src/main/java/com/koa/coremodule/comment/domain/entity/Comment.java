@@ -2,7 +2,7 @@ package com.koa.coremodule.comment.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.user.domain.entity.User;
+import com.koa.coremodule.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,15 +20,15 @@ public class Comment extends BaseEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
+    @JoinColumn(name = "parent_id")
     private Comment parent;
     
 }
