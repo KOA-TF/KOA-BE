@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberAuthHandler implements AuthHandler {
     private static final Authority AUTH_TYPE = Authority.MEMBER;
-    private final MemberQueryService userQueryService;
+    private final MemberQueryService memberQueryService;
 
     @Override
     public String handle(AuthRequest authenticationInfo) {
-        userQueryService.checkAccountExist(authenticationInfo.getEmail(),authenticationInfo.getAuthority());
+        memberQueryService.checkAccountExist(authenticationInfo.getEmail(),authenticationInfo.getAuthority());
         return authenticationInfo.getEmail();
     }
 

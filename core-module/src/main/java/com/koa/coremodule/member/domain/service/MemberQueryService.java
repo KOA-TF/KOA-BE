@@ -1,0 +1,23 @@
+package com.koa.coremodule.member.domain.service;
+
+import com.koa.commonmodule.annotation.DomainService;
+import com.koa.commonmodule.exception.Error;
+import com.koa.coremodule.member.domain.entity.Authority;
+import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.exception.UserNotFoundException;
+import com.koa.coremodule.member.domain.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
+
+@DomainService
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class MemberQueryService {
+    private final MemberRepository memberRepository;
+
+    public void checkAccountExist(String email, Authority authority) {
+        if(!memberRepository.existsByEmailAndAuthority(email,authority)) {
+            throw new UserNotFoundException(Error.USER_NOT_FOUND);
+        }
+    }
+}
