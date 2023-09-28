@@ -17,7 +17,7 @@ public class MemberQueryService {
 
     public void checkAccountExist(String email, Authority authority) {
         if(!memberRepository.existsByEmailAndAuthority(email,authority)) {
-            throw new UserNotFoundException(Error.USER_NOT_FOUND);
+            throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
         }
     }
 }
