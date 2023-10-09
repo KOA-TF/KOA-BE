@@ -1,12 +1,12 @@
 package com.koa.coremodule.notice.repository;
 
 import com.koa.coremodule.notice.application.dto.CurriculumListRequest;
-import com.koa.coremodule.notice.application.dto.CurriculumRequest;
 import com.koa.coremodule.notice.application.dto.NoticeListRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -27,8 +27,8 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     public List<NoticeListProjection> findAllNotice(NoticeListRequest request) {
         return jpaQueryFactory.select(NoticeListProjection.CONSTRUCTOR_EXPRESSION)
                 .from(notice)
-                .join(member).on(notice.id.eq(request.id()))
-                .orderBy(notice.id.desc())
+                .join(member).on(notice.id.eq(request.memberId()))
+                .orderBy(notice.createdAt.desc())
                 .fetch();
     }
 
@@ -41,12 +41,18 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     }
 
     @Override
-    public List<CurriculumProjection> findByCurriculum(CurriculumRequest request) {
+    public List<CurriculumProjection> findByCurriculum() {
+
         return jpaQueryFactory.select(CurriculumProjection.CONSTRUCTOR_EXPRESSION)
-                .from(notice)
-                .join(member).on(notice.id.eq(request.memberId()))
-                .join(curriculum).on(notice.id.eq(curriculum.id))
-                .orderBy(curriculum.id.desc())
+                .from(curriculum)
+                .join(notice).on(notice.id.eq(curriculum.notice.id))
+                .join(member).on(member.id.eq(notice.member.id))
+                .where(notice.createdAt.eq(
+                        JPAExpressions.select(notice.createdAt.max())
+                                .from(notice)
+                                .where(notice.curriculum.id.eq(curriculum.id))
+                                .fetchOne()))
+                .orderBy(curriculum.curriculumName.asc())
                 .fetch();
     }
 

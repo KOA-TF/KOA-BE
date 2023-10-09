@@ -13,7 +13,7 @@ public interface NoticeDynamicRepository {
 
     Integer findViewYn(NoticeViewRequest request);
 
-    List<CurriculumProjection> findByCurriculum(CurriculumRequest request);
+    List<CurriculumProjection> findByCurriculum();
 
     List<Notice> selectNoticeByCurriculum(CurriculumListRequest request);
 

@@ -5,6 +5,8 @@ import com.querydsl.core.types.Projections;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
@@ -19,7 +21,8 @@ public class NoticeListProjection {
                     notice.title,
                     notice.content,
                     curriculum.curriculumName,
-                    noticeTeam.teamName
+                    noticeTeam.teamName,
+                    notice.createdAt
             );
 
     private Long noticeId;
@@ -27,5 +30,6 @@ public class NoticeListProjection {
     private String content;
     private String curriculumName;
     private String teamName;
+    private LocalDate date;
 
 }

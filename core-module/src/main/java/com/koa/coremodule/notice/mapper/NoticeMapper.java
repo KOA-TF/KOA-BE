@@ -23,7 +23,8 @@ public interface NoticeMapper {
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "curriculumName", target = "curriculum"),
-            @Mapping(source = "teamName", target = "team")
+            @Mapping(source = "teamName", target = "team"),
+            @Mapping(source = "date", target = "date")
     })
     List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> company);
 
