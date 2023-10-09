@@ -1,7 +1,11 @@
 package com.koa.coremodule.notice.repository;
 
+import com.koa.coremodule.notice.application.dto.CurriculumListRequest;
+import com.koa.coremodule.notice.application.dto.CurriculumRequest;
 import com.koa.coremodule.notice.application.dto.NoticeListRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import static com.koa.coremodule.member.domain.entity.QMember.member;
+import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
 
@@ -22,7 +27,7 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     public List<NoticeListProjection> findAllNotice(NoticeListRequest request) {
         return jpaQueryFactory.select(NoticeListProjection.CONSTRUCTOR_EXPRESSION)
                 .from(notice)
-                .join(member).on(notice.id.eq(member.id))
+                .join(member).on(notice.id.eq(request.id()))
                 .orderBy(notice.id.desc())
                 .fetch();
     }
@@ -33,5 +38,23 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                 .from(noticeView)
                 .where(noticeView.member.id.eq(request.memberId()).and(noticeView.notice.id.eq(request.noticeId())))
                 .fetchOne();
+    }
+
+    @Override
+    public List<CurriculumProjection> findByCurriculum(CurriculumRequest request) {
+        return jpaQueryFactory.select(CurriculumProjection.CONSTRUCTOR_EXPRESSION)
+                .from(notice)
+                .join(member).on(notice.id.eq(request.memberId()))
+                .join(curriculum).on(notice.id.eq(curriculum.id))
+                .orderBy(curriculum.id.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Notice> selectNoticeByCurriculum(CurriculumListRequest request) {
+        return jpaQueryFactory.selectFrom(notice)
+                .join(curriculum).on(notice.id.eq(request.curriculumId()))
+                .orderBy(notice.createdAt.desc())
+                .fetch();
     }
 }
