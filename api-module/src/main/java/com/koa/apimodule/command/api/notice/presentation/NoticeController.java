@@ -41,11 +41,11 @@ public class NoticeController {
      * 커리큘럼 공지 조회
      */
     @GetMapping(value = "/curriculum")
-    public ResponseEntity<List<CurriculumResponse>> selectCurriculum(
-            @RequestParam Long noticeId
-    ) {
+    public ResponseEntity<List<CurriculumResponse>> selectCurriculum() {
 
-        CurriculumRequest request = new CurriculumRequest(noticeId);
+        Member memberRequest = memberUtils.getAccessMember();
+
+        CurriculumRequest request = new CurriculumRequest(memberRequest.getId());
         List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum(request);
 
         return ResponseEntity.ok(response);

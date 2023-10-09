@@ -1,10 +1,10 @@
 package com.koa.coremodule.notice.application.service;
 
-import com.koa.coremodule.notice.application.dto.NoticeListRequest;
-import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
+import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.mapper.NoticeMapper;
 import com.koa.coremodule.notice.repository.NoticeRepository;
+import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,6 +35,22 @@ public class NoticeFacadeService {
             }
             i++;
         }
+
+        return response;
+    }
+
+    public List<CurriculumResponse> selectCurriculum(CurriculumRequest request) {
+
+        List<CurriculumProjection> projection = noticeRepository.findByCurriculum(request);
+        List<CurriculumResponse> response = noticeMapper.toCurriculumDTO(projection);
+
+        return response;
+    }
+
+    public List<CurriculumListResponse> selectCurriculumList(CurriculumListRequest request) {
+
+        List<Notice> entityResponse = noticeRepository.selectNoticeByCurriculum(request);
+        List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
 
         return response;
     }
