@@ -61,10 +61,6 @@ public class JWTProvider {
         validateToken(refreshToken);
         Date expireDate = getExpiration(refreshToken);
         Date currentDate = new Date();
-        System.out.println("expireDate : " + expireDate);
-        System.out.println("currentDate : " + currentDate);
-        System.out.println("expireDate.getTime() - currentDate.getTime() : " + (expireDate.getTime() - currentDate.getTime()));
-        System.out.println("jwtProperties.getReissueExpirationTime() : " + jwtProperties.getReissueRefreshTokenExpirationTime());
         if (expireDate.getTime() - currentDate.getTime() < jwtProperties.getReissueRefreshTokenExpirationTime()) {
             final String email = extractEmailFromRefreshToken(refreshToken);
             tokenDeleteService.deleteToken(email);
