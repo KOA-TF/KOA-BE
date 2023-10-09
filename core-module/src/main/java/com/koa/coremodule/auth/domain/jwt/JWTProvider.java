@@ -4,6 +4,7 @@ import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.auth.domain.entity.TokenType;
 import com.koa.coremodule.auth.domain.jwt.exception.ExpiredTokenException;
 import com.koa.coremodule.auth.domain.jwt.exception.InvalidTokenException;
+import com.koa.coremodule.auth.domain.service.TokenDeleteService;
 import com.koa.coremodule.auth.domain.service.TokenQueryService;
 import com.koa.coremodule.auth.domain.service.TokenSaveService;
 import io.jsonwebtoken.*;
@@ -11,6 +12,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -24,7 +26,7 @@ public class JWTProvider {
     private final JWTProperties jwtProperties;
     private final TokenSaveService tokenSaveService;
     private final TokenQueryService tokenQueryService;
-
+    private final TokenDeleteService tokenDeleteService;
     /**
      * access token 생성
      *
@@ -46,13 +48,29 @@ public class JWTProvider {
     }
 
     /**
-     * refresh token을 이용하여 access token 재발급
+     * refresh token을 이용하여 token 재발급
      *
      */
-    public String reIssueAccessToken(final String refreshToken) {
+    public String reIssueAccessToken (final String refreshToken) {
         validateToken(refreshToken);
         final String email = extractEmailFromRefreshToken(refreshToken);
         return generateAccessToken(email);
+    }
+
+    public String reIssueRefreshToken (final String refreshToken) {
+        validateToken(refreshToken);
+        Date expireDate = getExpiration(refreshToken);
+        Date currentDate = new Date();
+        System.out.println("expireDate : " + expireDate);
+        System.out.println("currentDate : " + currentDate);
+        System.out.println("expireDate.getTime() - currentDate.getTime() : " + (expireDate.getTime() - currentDate.getTime()));
+        System.out.println("jwtProperties.getReissueExpirationTime() : " + jwtProperties.getReissueRefreshTokenExpirationTime());
+        if (expireDate.getTime() - currentDate.getTime() < jwtProperties.getReissueRefreshTokenExpirationTime()) {
+            final String email = extractEmailFromRefreshToken(refreshToken);
+            tokenDeleteService.deleteToken(email);
+            return generateRefreshToken(email);
+        }
+        else return refreshToken;
     }
 
     /**
@@ -133,4 +151,10 @@ public class JWTProvider {
                 .build();
     }
 
+    private Date getExpiration(final String token) {
+        return initializeJwtParser()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+    }
 }
