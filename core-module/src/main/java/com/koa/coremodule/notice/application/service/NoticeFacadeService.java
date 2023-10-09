@@ -26,7 +26,7 @@ public class NoticeFacadeService {
         int i = 0;
         while (i < response.size()) {
 
-            NoticeViewRequest viewRequest = new NoticeViewRequest(request.id(), projection.get(i).getNoticeId());
+            NoticeViewRequest viewRequest = new NoticeViewRequest(request.memberId(), projection.get(i).getNoticeId());
 
             if (noticeRepository.findViewYn(viewRequest) >= 1) {
                 NoticeListResponse originalResponse = response.get(i);
@@ -39,9 +39,9 @@ public class NoticeFacadeService {
         return response;
     }
 
-    public List<CurriculumResponse> selectCurriculum(CurriculumRequest request) {
+    public List<CurriculumResponse> selectCurriculum() {
 
-        List<CurriculumProjection> projection = noticeRepository.findByCurriculum(request);
+        List<CurriculumProjection> projection = noticeRepository.findByCurriculum();
         List<CurriculumResponse> response = noticeMapper.toCurriculumDTO(projection);
 
         return response;

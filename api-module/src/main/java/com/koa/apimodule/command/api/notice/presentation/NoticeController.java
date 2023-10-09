@@ -43,10 +43,7 @@ public class NoticeController {
     @GetMapping(value = "/curriculum")
     public ResponseEntity<List<CurriculumResponse>> selectCurriculum() {
 
-        Member memberRequest = memberUtils.getAccessMember();
-
-        CurriculumRequest request = new CurriculumRequest(memberRequest.getId());
-        List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum(request);
+        List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum();
 
         return ResponseEntity.ok(response);
     }

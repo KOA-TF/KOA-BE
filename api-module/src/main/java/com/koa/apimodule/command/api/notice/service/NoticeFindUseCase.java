@@ -20,9 +20,9 @@ public class NoticeFindUseCase {
         return noticeFacadeService.selectNotice(request);
     }
 
-    public List<CurriculumResponse> selectCurriculum(CurriculumRequest request) {
+    public List<CurriculumResponse> selectCurriculum() {
 
-        return noticeFacadeService.selectCurriculum(request);
+        return noticeFacadeService.selectCurriculum();
     }
 
     public List<CurriculumListResponse> selectCurriculumList(CurriculumListRequest request) {
