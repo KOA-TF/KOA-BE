@@ -1,10 +1,13 @@
 package com.koa.coremodule.notice.application.dto;
 
+import java.time.LocalDate;
+
 public record NoticeListResponse(Long noticeId,
                                  String curriculum,
                                  String team,
                                  String title,
                                  String content,
+                                 LocalDate date,
                                  Boolean viewYn) {
 
     public NoticeListResponse {
@@ -12,7 +15,7 @@ public record NoticeListResponse(Long noticeId,
     }
 
     public NoticeListResponse withViewYn(Boolean newViewYn) {
-        return new NoticeListResponse(noticeId, curriculum, team, title, content, newViewYn);
+        return new NoticeListResponse(noticeId, curriculum, team, title, content, date, newViewYn);
     }
 
 }
