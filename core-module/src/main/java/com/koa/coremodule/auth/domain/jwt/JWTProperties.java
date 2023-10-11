@@ -12,4 +12,5 @@ public class JWTProperties {
     private final String secret;
     private final long accessTokenExpirationTime;
     private final long refreshTokenExpirationTime;
+    private final long reissueRefreshTokenExpirationTime;
 }
