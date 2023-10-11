@@ -30,7 +30,7 @@ public interface NoticeMapper {
 
     @Mappings({
             @Mapping(source = "curriculumId", target = "curriculumId"),
-            @Mapping(source = "curriculum", target = "curriculum"),
+            @Mapping(source = "curriculumName", target = "curriculumName"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "title", target = "title")
     })

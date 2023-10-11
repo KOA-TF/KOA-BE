@@ -21,8 +21,7 @@ public class NoticeListProjection {
                     notice.title,
                     notice.content,
                     curriculum.curriculumName,
-                    noticeTeam.teamName,
-                    notice.createdAt
+                    noticeTeam.teamName
             );
 
     private Long noticeId;
@@ -30,6 +29,5 @@ public class NoticeListProjection {
     private String content;
     private String curriculumName;
     private String teamName;
-    private LocalDate date;
 
 }
