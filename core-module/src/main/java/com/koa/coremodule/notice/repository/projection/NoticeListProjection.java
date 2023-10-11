@@ -5,8 +5,6 @@ import com.querydsl.core.types.Projections;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
