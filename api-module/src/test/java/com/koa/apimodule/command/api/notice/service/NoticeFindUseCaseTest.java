@@ -27,7 +27,7 @@ class NoticeFindUseCaseTest {
     class FindNoticeTest {
 
         @Test
-        void 정상적으로_조회한다() {
+        void selectNotice() {
 
             //given
             NoticeListRequest request = new NoticeListRequest(MEMBER_ID);
@@ -50,7 +50,7 @@ class NoticeFindUseCaseTest {
             List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum();
 
             //then
-            System.out.println(response);
+            Assertions.assertThat(response.size()).isEqualTo(2);
 
         }
 
