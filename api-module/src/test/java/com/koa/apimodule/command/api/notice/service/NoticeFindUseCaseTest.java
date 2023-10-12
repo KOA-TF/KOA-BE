@@ -18,6 +18,7 @@ import java.util.List;
 class NoticeFindUseCaseTest {
 
     private static final Long MEMBER_ID = 1L;
+    private static final Long CURRICULUM_ID = 1L;
 
     @Autowired
     private NoticeFindUseCase noticeFindUseCase;
@@ -30,10 +31,9 @@ class NoticeFindUseCaseTest {
         void selectNotice() {
 
             //given
-            NoticeListRequest request = new NoticeListRequest(MEMBER_ID);
 
             //when
-            List<NoticeListResponse> response = noticeFindUseCase.selectNotice(request);
+            List<NoticeListResponse> response = noticeFindUseCase.selectNotice(MEMBER_ID);
 
             //then
             Assertions.assertThat(response.get(0).noticeId()).isEqualTo(1L);
@@ -58,10 +58,9 @@ class NoticeFindUseCaseTest {
         void selectCurriculumList() {
 
             //given
-            CurriculumListRequest request = new CurriculumListRequest(1L);
 
             //when
-            List<CurriculumListResponse> response = noticeFindUseCase.selectCurriculumList(request);
+            List<CurriculumListResponse> response = noticeFindUseCase.selectCurriculumList(CURRICULUM_ID);
 
             //then
             Assertions.assertThat(response.get(0).title()).isEqualTo("제목입니다.");

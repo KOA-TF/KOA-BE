@@ -18,15 +18,15 @@ public class NoticeQueryService {
     private final NoticeRepository noticeRepository;
     private final NoticeMapper noticeMapper;
 
-    public List<NoticeListResponse> selectNotice(NoticeListRequest request) {
+    public List<NoticeListResponse> selectNotice(Long memberId) {
 
-        List<NoticeListProjection> projection = noticeRepository.findAllNotice(request);
+        List<NoticeListProjection> projection = noticeRepository.findAllNotice(memberId);
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
 
         int i = 0;
         while (i < response.size()) {
 
-            NoticeViewRequest viewRequest = new NoticeViewRequest(request.memberId(), projection.get(i).getNoticeId());
+            NoticeViewRequest viewRequest = new NoticeViewRequest(memberId, projection.get(i).getNoticeId());
 
             if (noticeRepository.findViewYn(viewRequest) >= 1) {
                 NoticeListResponse originalResponse = response.get(i);
@@ -47,9 +47,9 @@ public class NoticeQueryService {
         return response;
     }
 
-    public List<CurriculumListResponse> selectCurriculumList(CurriculumListRequest request) {
+    public List<CurriculumListResponse> selectCurriculumList(Long curriculumId) {
 
-        List<Notice> entityResponse = noticeRepository.selectNoticeByCurriculum(request);
+        List<Notice> entityResponse = noticeRepository.selectNoticeByCurriculum(curriculumId);
         List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
 
         return response;

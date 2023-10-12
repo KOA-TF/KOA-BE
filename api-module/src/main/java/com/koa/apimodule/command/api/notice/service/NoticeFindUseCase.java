@@ -15,9 +15,9 @@ public class NoticeFindUseCase {
 
     private final NoticeQueryService noticeQueryService;
 
-    public List<NoticeListResponse> selectNotice(NoticeListRequest request) {
+    public List<NoticeListResponse> selectNotice(Long memberId) {
 
-        return noticeQueryService.selectNotice(request);
+        return noticeQueryService.selectNotice(memberId);
     }
 
     public List<CurriculumResponse> selectCurriculum() {
@@ -25,9 +25,9 @@ public class NoticeFindUseCase {
         return noticeQueryService.selectCurriculum();
     }
 
-    public List<CurriculumListResponse> selectCurriculumList(CurriculumListRequest request) {
+    public List<CurriculumListResponse> selectCurriculumList(Long curriculumId) {
 
-        return noticeQueryService.selectCurriculumList(request);
+        return noticeQueryService.selectCurriculumList(curriculumId);
     }
 
 }

@@ -31,8 +31,7 @@ public class NoticeController {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        NoticeListRequest request = new NoticeListRequest(memberRequest.getId());
-        List<NoticeListResponse> response = noticeFindUseCase.selectNotice(request);
+        List<NoticeListResponse> response = noticeFindUseCase.selectNotice(memberRequest.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -56,8 +55,7 @@ public class NoticeController {
             @RequestParam Long curriculumId
     ) {
 
-        CurriculumListRequest request = new CurriculumListRequest(curriculumId);
-        List<CurriculumListResponse> responses = noticeFindUseCase.selectCurriculumList(request);
+        List<CurriculumListResponse> responses = noticeFindUseCase.selectCurriculumList(curriculumId);
 
         return ResponseEntity.ok(responses);
     }

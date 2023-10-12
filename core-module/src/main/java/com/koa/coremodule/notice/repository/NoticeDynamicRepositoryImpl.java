@@ -1,7 +1,5 @@
 package com.koa.coremodule.notice.repository;
 
-import com.koa.coremodule.notice.application.dto.CurriculumListRequest;
-import com.koa.coremodule.notice.application.dto.NoticeListRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
@@ -24,10 +22,10 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
 
 
     @Override
-    public List<NoticeListProjection> findAllNotice(NoticeListRequest request) {
+    public List<NoticeListProjection> findAllNotice(Long memberId) {
         return jpaQueryFactory.select(NoticeListProjection.CONSTRUCTOR_EXPRESSION)
                 .from(notice)
-                .join(member).on(notice.id.eq(request.memberId()))
+                .join(member).on(notice.id.eq(memberId))
                 .join(noticeTeam).on(noticeTeam.notice.id.eq(notice.id))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
@@ -52,9 +50,9 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     }
 
     @Override
-    public List<Notice> selectNoticeByCurriculum(CurriculumListRequest request) {
+    public List<Notice> selectNoticeByCurriculum(Long curriculumId) {
         return jpaQueryFactory.selectFrom(notice)
-                .join(curriculum).on(notice.id.eq(request.curriculumId()))
+                .join(curriculum).on(notice.id.eq(curriculumId))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
     }
