@@ -17,12 +17,15 @@ import java.util.List;
 public class NoticeQueryService {
 
     private final NoticeRepository noticeRepository;
-    private final NoticeMapper noticeMapper;
 
-    public List<NoticeListResponse> selectNotice(Long memberId) {
+    public List<NoticeListProjection> selectNotice(Long memberId) {
 
         List<NoticeListProjection> projection = noticeRepository.findAllNotice(memberId);
-        List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
+
+        return projection;
+    }
+
+    public void findViewYn(List<NoticeListResponse> response, Long memberId, List<NoticeListProjection> projection) {
 
         int i = 0;
         while (i < response.size()) {
@@ -36,24 +39,20 @@ public class NoticeQueryService {
             }
             i++;
         }
-
-        return response;
     }
 
-    public List<CurriculumResponse> selectCurriculum() {
+    public List<CurriculumProjection> selectCurriculum() {
 
         List<CurriculumProjection> projection = noticeRepository.findByCurriculum();
-        List<CurriculumResponse> response = noticeMapper.toCurriculumDTO(projection);
 
-        return response;
+        return projection;
     }
 
-    public List<CurriculumListResponse> selectCurriculumList(Long curriculumId) {
+    public List<Notice> selectCurriculumList(Long curriculumId) {
 
         List<Notice> entityResponse = noticeRepository.selectNoticeByCurriculum(curriculumId);
-        List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
 
-        return response;
+        return entityResponse;
     }
 
 }
