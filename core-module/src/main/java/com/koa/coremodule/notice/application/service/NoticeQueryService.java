@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class NoticeFacadeService {
+public class NoticeQueryService {
 
     private final NoticeRepository noticeRepository;
     private final NoticeMapper noticeMapper;
