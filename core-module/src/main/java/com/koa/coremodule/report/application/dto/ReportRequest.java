@@ -1,4 +1,14 @@
 package com.koa.coremodule.report.application.dto;
 
-public record ReportRequest(Long memberId) {
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ReportRequest {
+
+    private Long memberId;
+    private Long commentId;
+    private String content;
+
 }
