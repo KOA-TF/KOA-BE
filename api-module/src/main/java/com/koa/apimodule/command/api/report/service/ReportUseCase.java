@@ -13,7 +13,7 @@ public class ReportUseCase {
 
     private final ReportFacadeService reportFacadeService;
 
-    public Long create(ReportRequest request) {
+    public Long createReport (ReportRequest request) {
 
         return reportFacadeService.create(request);
     }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,12 +24,13 @@ public class ReportController {
     private final MemberUtils memberUtils;
 
     @PostMapping(value = "")
-    public ResponseEntity<Void> reportReply() {
+    public ResponseEntity<Void> reportReply(
+            @RequestBody ReportRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        ReportRequest request = new ReportRequest(memberRequest.getId());
-        Long reportId = reportUseCase.create(request);
+        request.setMemberId(memberRequest.getId());
+        Long reportId = reportUseCase.createReport(request);
 
         return ResponseEntity.created(URI.create("/report/" + reportId)).build();
     }

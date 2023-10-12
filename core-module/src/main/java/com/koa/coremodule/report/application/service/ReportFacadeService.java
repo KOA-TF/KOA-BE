@@ -5,6 +5,7 @@ import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.notice.domain.entity.NoticeReport;
 import com.koa.coremodule.report.application.dto.ReportRequest;
 import com.koa.coremodule.report.application.exception.ReportException;
+import com.koa.coremodule.report.mapper.ReportMapper;
 import com.koa.coremodule.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,17 @@ import java.util.Optional;
 public class ReportFacadeService {
 
     private final ReportRepository reportRepository;
+    private final ReportMapper reportMapper;
 
     public Long create(ReportRequest request) {
-        Optional<NoticeReport> existingReport = reportRepository.findById(request.memberId());
+
+        Optional<NoticeReport> existingReport = reportRepository.findById(request.getCommentId());
 
         if (existingReport.isPresent()) {
-            throw new ReportException(Error.AUTH_FAIL);
+            throw new ReportException(Error.DUPLICATE_REPORT);
         } else {
-            NoticeReport report = new NoticeReport(); // NoticeReport 객체를 생성하거나 request에서 가져와서 생성합니다.
-            NoticeReport savedReport = reportRepository.save(report);
+            NoticeReport reportEntity = reportMapper.toReportEntity(request);
+            NoticeReport savedReport = reportRepository.save(reportEntity);
             return savedReport.getId();
         }
     }
