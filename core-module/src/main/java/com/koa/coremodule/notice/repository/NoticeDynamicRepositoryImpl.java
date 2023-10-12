@@ -2,6 +2,7 @@ package com.koa.coremodule.notice.repository;
 
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,7 +33,7 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     }
 
     @Override
-    public Integer findViewYn(NoticeViewRequest request) {
+    public ViewType findViewYn(NoticeViewRequest request) {
         return jpaQueryFactory.select(noticeView.view)
                 .from(noticeView)
                 .where(noticeView.member.id.eq(request.memberId()).and(noticeView.notice.id.eq(request.noticeId())))

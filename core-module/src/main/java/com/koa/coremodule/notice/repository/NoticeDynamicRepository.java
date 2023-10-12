@@ -2,6 +2,7 @@ package com.koa.coremodule.notice.repository;
 
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
 
@@ -11,7 +12,7 @@ public interface NoticeDynamicRepository {
 
     List<NoticeListProjection> findAllNotice(Long memberId);
 
-    Integer findViewYn(NoticeViewRequest request);
+    ViewType findViewYn(NoticeViewRequest request);
 
     List<CurriculumProjection> findByCurriculum();
 

@@ -2,6 +2,7 @@ package com.koa.coremodule.notice.application.service;
 
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.mapper.NoticeMapper;
 import com.koa.coremodule.notice.repository.NoticeRepository;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
@@ -28,7 +29,7 @@ public class NoticeQueryService {
 
             NoticeViewRequest viewRequest = new NoticeViewRequest(memberId, projection.get(i).getNoticeId());
 
-            if (noticeRepository.findViewYn(viewRequest) >= 1) {
+            if (noticeRepository.findViewYn(viewRequest).equals(ViewType.VIEWED)) {
                 NoticeListResponse originalResponse = response.get(i);
                 NoticeListResponse updatedResponse = originalResponse.withViewYn(true);
                 response.set(i, updatedResponse);

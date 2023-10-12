@@ -16,7 +16,7 @@ public class NoticeView {
     @Column(name = "notice_view_id")
     private Long id;
 
-    private Integer view;
+    private ViewType view;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
