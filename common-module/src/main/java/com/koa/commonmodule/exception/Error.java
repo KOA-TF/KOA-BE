@@ -12,6 +12,9 @@ public enum Error {
     EMPTY_AUTHORIZATION_HEADER("Authorization Header가 비어있습니다.", 1005),
     AUTH_FAIL("로그인에 실패했습니다.", 1006),
 
+    //REPORT
+    DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
+
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000);
     private final String message;
