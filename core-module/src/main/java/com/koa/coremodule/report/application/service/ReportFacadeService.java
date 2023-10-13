@@ -17,18 +17,14 @@ import java.util.Optional;
 public class ReportFacadeService {
 
     private final ReportRepository reportRepository;
-    private final ReportMapper reportMapper;
 
-    public Long create(ReportRequest request) {
+    public Optional<NoticeReport> findById(Long commentId) {
 
-        Optional<NoticeReport> existingReport = reportRepository.findById(request.getCommentId());
+        return reportRepository.findById(commentId);
+    }
 
-        if (existingReport.isPresent()) {
-            throw new ReportException(Error.DUPLICATE_REPORT);
-        } else {
-            NoticeReport reportEntity = reportMapper.toReportEntity(request);
-            NoticeReport savedReport = reportRepository.save(reportEntity);
-            return savedReport.getId();
-        }
+    public NoticeReport save(NoticeReport report) {
+
+        return reportRepository.save(report);
     }
 }
