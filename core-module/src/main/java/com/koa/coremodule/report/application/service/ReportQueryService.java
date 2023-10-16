@@ -13,9 +13,9 @@ public class ReportQueryService {
 
     private final ReportRepository reportRepository;
 
-    public Optional<Report> findById(Long commentId) {
+    public Optional<Report> findByIds(Long memberId, Long commentId) {
 
-        return reportRepository.findById(commentId);
+        return Optional.ofNullable(reportRepository.findByCommentIdAndMemberId(memberId, commentId));
     }
 
     public Report save(Report report) {

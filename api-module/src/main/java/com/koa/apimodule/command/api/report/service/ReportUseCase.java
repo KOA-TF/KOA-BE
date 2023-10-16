@@ -22,7 +22,7 @@ public class ReportUseCase {
 
     public Long createReport(ReportRequest request) {
 
-        Optional<Report> existingReport = reportQueryService.findById(request.getCommentId());
+        Optional<Report> existingReport = reportQueryService.findByIds(request.getMemberId(), request.getCommentId());
 
         if (existingReport.isPresent()) {
             throw new ReportException(Error.DUPLICATE_REPORT);
