@@ -1,7 +1,7 @@
 package com.koa.apimodule.command.api.report.service;
 
 import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.notice.domain.entity.NoticeReport;
+import com.koa.coremodule.report.domain.entity.Report;
 import com.koa.coremodule.report.application.dto.ReportRequest;
 import com.koa.coremodule.report.application.exception.ReportException;
 import com.koa.coremodule.report.application.service.ReportQueryService;
@@ -22,13 +22,13 @@ public class ReportUseCase {
 
     public Long createReport(ReportRequest request) {
 
-        Optional<NoticeReport> existingReport = reportQueryService.findById(request.getCommentId());
+        Optional<Report> existingReport = reportQueryService.findById(request.getCommentId());
 
         if (existingReport.isPresent()) {
             throw new ReportException(Error.DUPLICATE_REPORT);
         } else {
-            NoticeReport reportEntity = reportMapper.toReportEntity(request);
-            NoticeReport savedReport = reportQueryService.save(reportEntity);
+            Report reportEntity = reportMapper.toReportEntity(request);
+            Report savedReport = reportQueryService.save(reportEntity);
             return savedReport.getId();
         }
     }

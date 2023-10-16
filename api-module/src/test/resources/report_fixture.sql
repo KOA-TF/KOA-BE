@@ -13,7 +13,7 @@ values (1, 1, 1, '제목입니다.', '내용입니다.');
 INSERT INTO comment (comment_id, content, member_id, notice_id, parent_id)
 values (1, '댓글입니다.', 1, 1, 1);
 
--- INSERT INTO notice_report (notice_report_id, content, member_id, comment_id)
+-- INSERT INTO report (report_id, content, member_id, comment_id)
 -- values (1, '신고 내용입니다', 1, 1);
 
 UPDATE Curriculum

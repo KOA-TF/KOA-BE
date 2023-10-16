@@ -1,4 +1,4 @@
-package com.koa.coremodule.notice.domain.entity;
+package com.koa.coremodule.report.domain.entity;
 
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class NoticeReport {
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_report_id")
+    @Column(name = "report_id")
     private Long id;
 
     private String content;
