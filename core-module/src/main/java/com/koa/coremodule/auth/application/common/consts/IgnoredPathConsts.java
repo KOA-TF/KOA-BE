@@ -16,7 +16,7 @@ public class IgnoredPathConsts {
             "/docs/**", Set.of(HttpMethod.GET),
             "/oauth/**", Set.of(HttpMethod.GET),
             "/h2-console/**", Set.of(HttpMethod.GET, HttpMethod.POST),
-            "/auth/login/**", Set.of(HttpMethod.GET, HttpMethod.POST),
+            "/v1/auth/login/**", Set.of(HttpMethod.GET, HttpMethod.POST),
             "/api-docs/**", Set.of(HttpMethod.GET, HttpMethod.POST),
             "/error", Set.of(HttpMethod.GET, HttpMethod.POST),
             "/favicon.ico", Set.of(HttpMethod.GET, HttpMethod.POST),
