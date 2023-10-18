@@ -16,7 +16,15 @@ public enum Error {
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
 
     // MEMBER
-    MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000);
+    MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
+
+    //NOTICE
+    NOTICE_NOT_FOUND("공지사항을 찾을 수 없습니다.", 3000),
+
+    //COMMENT
+    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", 4000),
+    NOT_SAME_USER("작성자가 아닙니다.", 4001);
+
     private final String message;
     private final int errorCode;
 
