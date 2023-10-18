@@ -1,8 +1,10 @@
 package com.koa.coremodule.notice.application.service;
 
+import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
+import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.mapper.NoticeMapper;
 import com.koa.coremodule.notice.repository.NoticeRepository;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
@@ -55,4 +57,7 @@ public class NoticeQueryService {
         return entityResponse;
     }
 
+    public Notice findByNoticeId(Long noticeId) {
+        return noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+    }
 }
