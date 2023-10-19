@@ -11,4 +11,5 @@ public class CommentInfoResponse {
     private final Long commentId;
     private final String content;
     private final String writer;
+    private final String createdAt;
 }

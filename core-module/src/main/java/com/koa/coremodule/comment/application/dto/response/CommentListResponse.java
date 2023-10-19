@@ -11,5 +11,6 @@ public class CommentListResponse {
     private final Long commentId;
     private final String content;
     private final String writer;
+    private final String createdAt;
     private final Integer commentCount;
 }

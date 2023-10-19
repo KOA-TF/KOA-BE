@@ -24,7 +24,7 @@ public class CommentReadUseCase {
         List<Comment> commentList = commentQueryService.getCommentByNoticeId(noticeId);
         for (Comment comment : commentList) {
             final List<Comment> childCommentList = childCommentMap.get(comment.getId());
-            commentListResponses.add(new CommentListResponse(comment.getId(), comment.getContent(), comment.getWriter().getName(), childCommentList != null ? childCommentList.size() : 0));
+            commentListResponses.add(new CommentListResponse(comment.getId(), comment.getContent(), comment.getWriter().getName(), comment.getCreatedAt().toString() ,childCommentList != null ? childCommentList.size() : 0));
         }
         return commentListResponses;
     }
@@ -33,7 +33,7 @@ public class CommentReadUseCase {
         final List<Comment> childCommentList = commentQueryService.getChildCommentByCommentId(commentId);
         final ArrayList<CommentInfoResponse> childCommentInfoResponses = new ArrayList<>();
         for (Comment comment : childCommentList) {
-            childCommentInfoResponses.add(new CommentInfoResponse(comment.getId(), comment.getContent(), comment.getWriter().getName()));
+            childCommentInfoResponses.add(new CommentInfoResponse(comment.getId(), comment.getContent(), comment.getWriter().getName(), comment.getCreatedAt().toString()));
         }
         return childCommentInfoResponses;
     }
