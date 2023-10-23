@@ -82,7 +82,7 @@ public class NoticeController {
     @GetMapping(value = "/{noticeId}/detail")
     public ResponseEntity<NoticeDetailResponse> noticeDetail(
             @PathVariable Long noticeId) {
-        
+
         NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(noticeId);
         return ResponseEntity.ok(response);
     }
