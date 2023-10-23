@@ -4,6 +4,7 @@ import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.repository.projection.NoticeDetailProjection;
 import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 import static com.koa.coremodule.member.domain.entity.QMember.member;
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
+import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
 import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
 import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
 
@@ -56,5 +58,15 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                 .join(curriculum).on(notice.id.eq(curriculumId))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
+    }
+
+    @Override
+    public NoticeDetailProjection findNoticeDetailById(Long noticeId) {
+        return jpaQueryFactory.select(NoticeDetailProjection.CONSTRUCTOR_EXPRESSION)
+                .from(notice)
+                .join(noticeTeam).on(noticeTeam.notice.id.eq(notice.id))
+                .join(noticeImage).on(noticeImage.notice.id.eq(notice.id))
+                .where(notice.id.eq(noticeId))
+                .fetchOne();
     }
 }
