@@ -15,6 +15,10 @@ public enum Error {
     //REPORT
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
 
+    //NOTICE
+    FILE_UPLOAD_FAIL("파일 업로드에 실패했습니다.", 500),
+    WRONG_FILE_FORMAT("잘못된 파일 확장자입니다.", 400),
+
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000);
     private final String message;
