@@ -1,4 +1,11 @@
 package com.koa.coremodule.notice.application.exception;
 
-public class NoticeException {
+import com.koa.commonmodule.exception.BusinessException;
+import com.koa.commonmodule.exception.Error;
+
+public class NoticeException extends BusinessException {
+
+    public NoticeException(Error error) {
+        super(error);
+    }
 }

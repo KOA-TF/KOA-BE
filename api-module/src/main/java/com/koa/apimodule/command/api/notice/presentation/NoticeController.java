@@ -1,17 +1,17 @@
 package com.koa.apimodule.command.api.notice.presentation;
 
 import com.koa.apimodule.command.api.notice.service.NoticeFindUseCase;
+import com.koa.apimodule.command.api.notice.service.NoticeSaveUseCase;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -21,6 +21,7 @@ import java.util.List;
 public class NoticeController {
 
     private final NoticeFindUseCase noticeFindUseCase;
+    private final NoticeSaveUseCase noticeSaveUseCase;
     private final MemberUtils memberUtils;
 
     /**
@@ -61,11 +62,29 @@ public class NoticeController {
     }
 
     /**
-     * 공지 상세 조회 (내용)
-     */
-
-    /**
      * 공지 작성
      */
+    @PostMapping(value = "")
+    public ResponseEntity<Void> saveNotice(
+            @RequestPart(value = "dto") NoticeRequest request,
+            @RequestPart(value = "file") MultipartFile multipartFile) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+        request.setMemberId(memberRequest.getId());
+
+        Long noticeId = noticeSaveUseCase.saveNotice(request, multipartFile);
+        return ResponseEntity.created(URI.create("/notice/" + noticeId)).build();
+    }
+
+    /**
+     * 공지 상세 조회 (내용)
+     */
+    @GetMapping(value = "/{noticeId}/detail")
+    public ResponseEntity<NoticeDetailResponse> noticeDetail(
+            @PathVariable Long noticeId) {
+
+        NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(noticeId);
+        return ResponseEntity.ok(response);
+    }
 
 }

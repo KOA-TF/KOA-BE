@@ -1,6 +1,8 @@
 package com.koa.apimodule.command.api.notice.service;
 
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
+import com.koa.coremodule.notice.application.dto.CurriculumResponse;
+import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.service.NoticeQueryService;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.mapper.NoticeMapper;
