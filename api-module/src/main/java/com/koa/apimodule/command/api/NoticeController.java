@@ -1,7 +1,7 @@
-package com.koa.apimodule.command.api.notice.presentation;
+package com.koa.apimodule.command.api;
 
-import com.koa.apimodule.command.api.notice.service.NoticeFindUseCase;
-import com.koa.apimodule.command.api.notice.service.NoticeSaveUseCase;
+import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.*;

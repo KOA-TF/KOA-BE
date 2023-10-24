@@ -1,4 +1,4 @@
-package com.koa.coremodule.report.repository;
+package com.koa.coremodule.report.domain.repository;
 
 import com.koa.coremodule.report.domain.entity.Report;
 import org.springframework.data.jpa.repository.JpaRepository;

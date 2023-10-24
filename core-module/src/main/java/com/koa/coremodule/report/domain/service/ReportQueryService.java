@@ -1,7 +1,7 @@
-package com.koa.coremodule.report.application.service;
+package com.koa.coremodule.report.domain.service;
 
 import com.koa.coremodule.report.domain.entity.Report;
-import com.koa.coremodule.report.repository.ReportRepository;
+import com.koa.coremodule.report.domain.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

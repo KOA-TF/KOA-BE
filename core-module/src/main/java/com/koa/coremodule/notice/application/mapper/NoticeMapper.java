@@ -1,10 +1,10 @@
-package com.koa.coremodule.notice.mapper;
+package com.koa.coremodule.notice.application.mapper;
 
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeDetailProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import org.mapstruct.*;
 
 import java.util.List;

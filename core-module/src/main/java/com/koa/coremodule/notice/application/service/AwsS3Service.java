@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.notice.application.exception.NoticeException;
+import com.koa.coremodule.notice.domain.exception.NoticeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

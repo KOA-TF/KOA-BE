@@ -1,4 +1,4 @@
-package com.koa.coremodule.notice.repository.projection;
+package com.koa.coremodule.notice.domain.repository.projection;
 
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;

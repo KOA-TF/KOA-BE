@@ -1,4 +1,4 @@
-package com.koa.coremodule.report.application.exception;
+package com.koa.coremodule.report.domain.exception;
 
 import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;

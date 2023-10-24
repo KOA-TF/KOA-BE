@@ -1,17 +1,15 @@
-package com.koa.coremodule.notice.application.service;
+package com.koa.coremodule.notice.domain.service;
 
 import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
-import com.koa.coremodule.notice.mapper.NoticeMapper;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
-import com.koa.coremodule.notice.repository.NoticeRepository;
-import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeDetailProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.NoticeRepository;
+import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

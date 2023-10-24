@@ -1,11 +1,11 @@
-package com.koa.apimodule.command.api.report.service;
+package com.koa.coremodule.report.application.service;
 
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.report.domain.entity.Report;
 import com.koa.coremodule.report.application.dto.ReportRequest;
-import com.koa.coremodule.report.application.exception.ReportException;
-import com.koa.coremodule.report.application.service.ReportQueryService;
-import com.koa.coremodule.report.mapper.ReportMapper;
+import com.koa.coremodule.report.domain.exception.ReportException;
+import com.koa.coremodule.report.domain.service.ReportQueryService;
+import com.koa.coremodule.report.application.mapper.ReportMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ReportUseCase {
+public class ReportSaveUseCase {
 
     private final ReportQueryService reportQueryService;
     private final ReportMapper reportMapper;

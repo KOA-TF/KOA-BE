@@ -1,4 +1,4 @@
-package com.koa.apimodule.config;
+package com.koa.commonmodule.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
