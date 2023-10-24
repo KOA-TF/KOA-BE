@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://koa-database.cuoqpzaevx20.ap-northeast-2.rds.amazonaws.com:3306/koa_database
     username: koadatabase
-    password: ${/koa/prod/DB_PASSWORD}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -35,21 +35,29 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: ${/koa/prod/S3_BUCKET}
+      bucket: ${S3_BUCKET}
     credentials:
-      access-key: ${/koa/prod/S3_ACCESS_KEY}
-      secret-key: ${/koa/prod/S3_SECRET_KEY}
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
     region:
-      static: ${/koa/prod/S3_REGION}
+      static: ${S3_REGION}
       auto: false
     stack:
       auto: false
 
 jwt:
-  secret: ${/koa/prod/JWT_SECRET}
+  secret: ${JWT_SECRET}
   access-token-expiration-time: 86400000 #  24*60*60*1000 = 1일
   refresh-token-expiration-time: 604800000 # 7*24*60*60*1000 = 7일
   reissue-refresh-token-expiration-time: 259200000 # 24*60*60*1000 = 3일
+
+# aws parameter store
+aws:
+  paramstore:
+    enabled: true
+    prefix: /config
+    profile-separator: _
+    name: koa
 
 logging:
   level:
