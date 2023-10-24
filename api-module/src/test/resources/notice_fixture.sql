@@ -22,7 +22,3 @@ values (1, 1, 'image.png');
 
 INSERT INTO notice_view (notice_view_id, member_id, notice_id, view)
 values (1, 1, 1, 1);
-
-UPDATE Curriculum
-SET notice_id = 2
-WHERE curriculum_id = 1;
