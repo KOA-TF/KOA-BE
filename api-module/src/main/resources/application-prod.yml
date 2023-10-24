@@ -3,7 +3,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: aws-parameterstore:/koa/prod/
+    import: aws-parameterstore:/config/koa_prod/
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
