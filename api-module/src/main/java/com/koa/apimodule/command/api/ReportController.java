@@ -1,6 +1,6 @@
-package com.koa.apimodule.command.api.report.presentation;
+package com.koa.apimodule.command.api;
 
-import com.koa.apimodule.command.api.report.service.ReportUseCase;
+import com.koa.coremodule.report.application.service.ReportSaveUseCase;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.report.application.dto.ReportRequest;
@@ -20,7 +20,7 @@ import java.net.URI;
 @RequestMapping("/v1/report")
 public class ReportController {
 
-    private final ReportUseCase reportUseCase;
+    private final ReportSaveUseCase reportSaveUseCase;
     private final MemberUtils memberUtils;
 
     @PostMapping(value = "")
@@ -30,7 +30,7 @@ public class ReportController {
         Member memberRequest = memberUtils.getAccessMember();
 
         request.setMemberId(memberRequest.getId());
-        Long reportId = reportUseCase.createReport(request);
+        Long reportId = reportSaveUseCase.createReport(request);
 
         return ResponseEntity.created(URI.create("/report/" + reportId)).build();
     }

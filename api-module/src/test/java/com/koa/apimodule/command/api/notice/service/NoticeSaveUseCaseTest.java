@@ -3,6 +3,7 @@ package com.koa.apimodule.command.api.notice.service;
 import com.koa.commonmodule.testisolation.TestIsolation;
 import com.koa.coremodule.notice.application.dto.NoticeDetailResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
+import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

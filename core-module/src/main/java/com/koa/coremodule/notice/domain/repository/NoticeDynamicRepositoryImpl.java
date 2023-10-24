@@ -1,11 +1,11 @@
-package com.koa.coremodule.notice.repository;
+package com.koa.coremodule.notice.domain.repository;
 
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
-import com.koa.coremodule.notice.repository.projection.CurriculumProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeDetailProjection;
-import com.koa.coremodule.notice.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 

@@ -1,12 +1,11 @@
-package com.koa.apimodule.command.api.notice.service;
+package com.koa.coremodule.notice.application.service;
 
 import com.koa.coremodule.notice.application.dto.NoticeDetailResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
-import com.koa.coremodule.notice.application.service.AwsS3Service;
-import com.koa.coremodule.notice.application.service.NoticeQueryService;
+import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.notice.mapper.NoticeMapper;
-import com.koa.coremodule.notice.repository.projection.NoticeDetailProjection;
+import com.koa.coremodule.notice.application.mapper.NoticeMapper;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

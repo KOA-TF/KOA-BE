@@ -1,4 +1,4 @@
-package com.koa.coremodule.report.mapper;
+package com.koa.coremodule.report.application.mapper;
 
 import com.koa.coremodule.report.domain.entity.Report;
 import com.koa.coremodule.report.application.dto.ReportRequest;
