@@ -1,18 +1,55 @@
 spring:
+
   config:
     activate:
       on-profile: prod
+    import: 'aws-parameterstore:'
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://koa-database.cuoqpzaevx20.ap-northeast-2.rds.amazonaws.com:3306/koa_database
     username: koadatabase
-    password: ${DB-PASSWORD}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       hibernate:
         format_sql: true
+        hbm2ddl:
+          auto: update
         show_sql: true
+
+# swagger settings
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha # 정렬 기준
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /**
+
+# S3
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET}
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ${S3_REGION}
+      auto: false
+    stack:
+      auto: false
+
+jwt:
+  secret: ${JWT_SECRET} Thisistheattendanceappserviceforthekusitmsconferenceandthisisaverylongsecertkey
+  access-token-expiration-time: 86400000 #  24*60*60*1000 = 1일
+  refresh-token-expiration-time: 604800000 # 7*24*60*60*1000 = 7일
+  reissue-refresh-token-expiration-time: 259200000 # 24*60*60*1000 = 3일
 
 logging:
   level:
