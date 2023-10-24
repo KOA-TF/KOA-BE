@@ -3,7 +3,7 @@ spring:
   config:
     activate:
       on-profile: prod
-    import: 'aws-parameterstore:'
+    import: aws-parameterstore:/koa/prod/
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -50,14 +50,6 @@ jwt:
   access-token-expiration-time: 86400000 #  24*60*60*1000 = 1일
   refresh-token-expiration-time: 604800000 # 7*24*60*60*1000 = 7일
   reissue-refresh-token-expiration-time: 259200000 # 24*60*60*1000 = 3일
-
-# aws parameter store
-aws:
-  paramstore:
-    enabled: true
-    prefix: /config
-    profile-separator: _
-    name: koa
 
 logging:
   level:
