@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://koa-database.cuoqpzaevx20.ap-northeast-2.rds.amazonaws.com:3306/koa_database
     username: koadatabase
-    password: ${DB_PASSWORD}
+    password: ${/koa/prod/DB_PASSWORD}
   jpa:
     properties:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -35,18 +35,18 @@ springdoc:
 cloud:
   aws:
     s3:
-      bucket: ${S3_BUCKET}
+      bucket: ${/koa/prod/S3_BUCKET}
     credentials:
-      access-key: ${S3_ACCESS_KEY}
-      secret-key: ${S3_SECRET_KEY}
+      access-key: ${/koa/prod/S3_ACCESS_KEY}
+      secret-key: ${/koa/prod/S3_SECRET_KEY}
     region:
-      static: ${S3_REGION}
+      static: ${/koa/prod/S3_REGION}
       auto: false
     stack:
       auto: false
 
 jwt:
-  secret: ${JWT_SECRET} Thisistheattendanceappserviceforthekusitmsconferenceandthisisaverylongsecertkey
+  secret: ${/koa/prod/JWT_SECRET}
   access-token-expiration-time: 86400000 #  24*60*60*1000 = 1일
   refresh-token-expiration-time: 604800000 # 7*24*60*60*1000 = 7일
   reissue-refresh-token-expiration-time: 259200000 # 24*60*60*1000 = 3일
