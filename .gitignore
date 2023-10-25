@@ -36,4 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 
-api-module/src/main/resources/
+api-module/src/main/resources/application-prod.yml
