@@ -1,5 +1,6 @@
 package com.koa.coremodule.notice.application.service;
 
+import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.notice.application.dto.NoticeDetailResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;

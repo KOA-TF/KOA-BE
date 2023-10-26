@@ -16,8 +16,6 @@ public enum Error {
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
 
     //NOTICE
-    FILE_UPLOAD_FAIL("파일 업로드에 실패했습니다.", 500),
-    WRONG_FILE_FORMAT("잘못된 파일 확장자입니다.", 400),
 
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
@@ -27,7 +25,12 @@ public enum Error {
 
     //COMMENT
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", 4000),
-    NOT_SAME_USER("작성자가 아닙니다.", 4001);
+    NOT_SAME_USER("작성자가 아닙니다.", 4001),
+
+    // IMAGE
+    FILE_UPLOAD_FAIL("파일 업로드에 실패했습니다.", 5000),
+    WRONG_FILE_FORMAT("잘못된 파일 확장자입니다.", 5001),
+    FILE_DELETE_FAIL("파일 삭제에 실패했습니다.", 5002);
 
     private final String message;
     private final int errorCode;
