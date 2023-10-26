@@ -1,4 +1,4 @@
-package com.koa.coremodule.member.application.dto;
+package com.koa.coremodule.member.application.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class MemberInfo {
+public class MemberInfoResponse {
     private String name;
     private String email;
+    private boolean isMemberDetailExist;
 }
