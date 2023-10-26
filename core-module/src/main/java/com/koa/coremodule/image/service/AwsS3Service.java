@@ -1,20 +1,21 @@
-package com.koa.coremodule.notice.application.service;
+package com.koa.coremodule.image.service;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.notice.domain.exception.NoticeException;
+import com.koa.coremodule.image.exception.FileDeleteException;
+import com.koa.coremodule.image.exception.FileExtensionException;
+import com.koa.coremodule.image.exception.FileUploadException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,7 @@ public class AwsS3Service {
             amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
-            throw new NoticeException(Error.FILE_UPLOAD_FAIL);
+            throw new FileUploadException(Error.FILE_UPLOAD_FAIL);
         }
 
         return amazonS3.getUrl(bucketName, fileName).toString();
@@ -51,15 +52,20 @@ public class AwsS3Service {
      */
     private void validateFileExists(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
-            throw new NoticeException(Error.FILE_UPLOAD_FAIL);
+            throw new FileUploadException(Error.FILE_UPLOAD_FAIL);
         }
     }
 
     /**
      * 파일 삭제 메서드
      */
-    public void deleteFile(String fileName) {
-        amazonS3.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+    public void deleteFile(String fileUrl) {
+        if (fileUrl == null) return;
+        try {
+            amazonS3.deleteObject(bucketName, fileUrl.split("/")[3]);
+        } catch (AmazonServiceException e) {
+            throw new FileDeleteException(Error.FILE_DELETE_FAIL);
+        }
     }
 
     /**
@@ -76,7 +82,7 @@ public class AwsS3Service {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new NoticeException(Error.WRONG_FILE_FORMAT);
+            throw new FileExtensionException(Error.WRONG_FILE_FORMAT);
         }
     }
 
