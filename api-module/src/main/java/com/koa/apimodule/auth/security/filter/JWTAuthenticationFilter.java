@@ -56,7 +56,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private Boolean isMatchingPath(HttpServletRequest request, String ignoredPathURI){
         final AntPathMatcher antPathMatcher = new AntPathMatcher();
-        return antPathMatcher.matchStart(ignoredPathURI, request.getRequestURI());
+        return antPathMatcher.match(ignoredPathURI, request.getRequestURI());
     }
 
     private Boolean isMatchingMethod(HttpServletRequest request, String ignoredPathURI) {
