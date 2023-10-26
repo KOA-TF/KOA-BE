@@ -20,18 +20,6 @@ spring:
           auto: update
         show_sql: true
 
-# swagger settings
-springdoc:
-  swagger-ui:
-    path: /api-docs
-    disable-swagger-default-url: true
-    display-request-duration: true
-    operations-sorter: alpha # 정렬 기준
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  paths-to-match:
-    - /**
-
 jwt:
   secret: Thisistheattendanceappserviceforthekusitmsconferenceandthisisaverylongsecertkey
   access-token-expiration-time: 86400000 #  24*60*60*1000 = 1일

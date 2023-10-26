@@ -9,7 +9,7 @@ import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.comment.domain.service.CommentSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.notice.application.service.NoticeQueryService;
+import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
