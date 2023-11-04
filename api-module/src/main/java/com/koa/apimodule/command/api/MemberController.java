@@ -3,18 +3,16 @@ package com.koa.apimodule.command.api;
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
-import com.koa.coremodule.member.application.dto.response.RegisterResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
-import com.koa.coremodule.member.application.service.MemberRegisterGetUseCase;
+import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -29,7 +27,7 @@ public class MemberController {
 
     private final MemberGetUseCase memberGetUseCase;
     private final MemberDetailCreateUseCase memberDetailCreateUseCase;
-    private final MemberRegisterGetUseCase memberRegisterGetUseCase;
+    private final MemberCheckUseCase memberCheckUseCase;
     private final MemberDeleteUseCase memberDeleteUseCase;
     private final EmailVerificationUseCase emailVerificationUseCase;
 
@@ -66,5 +64,10 @@ public class MemberController {
     @DeleteMapping
     public void deleteMember(){
         memberDeleteUseCase.deleteMember();
+    }
+
+    @PostMapping("/password")
+    public void checkPassword(@RequestParam String password) {
+        memberCheckUseCase.checkPassword(password);
     }
 }
