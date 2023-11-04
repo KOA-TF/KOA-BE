@@ -5,11 +5,13 @@ import com.koa.coremodule.member.application.dto.response.MemberDetailInfoRespon
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.dto.response.RegisterResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
+import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberInfoGetUseCase;
 import com.koa.coremodule.member.application.service.MemberRegisterGetUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ public class MemberController {
     private final MemberInfoGetUseCase memberInfoGetUseCase;
     private final MemberDetailCreateUseCase memberInfoCreateUseCase;
     private final MemberRegisterGetUseCase memberRegisterGetUseCase;
+    private final MemberDeleteUseCase memberDeleteUseCase;
     private final EmailVerificationUseCase emailVerificationUseCase;
 
     @GetMapping
@@ -57,5 +60,10 @@ public class MemberController {
     @PostMapping("/verify/code")
     public void verifyCode(@RequestParam String email, @RequestParam String code) {
         emailVerificationUseCase.verifyCode(email, code);
+    }
+
+    @DeleteMapping
+    public void deleteMember(){
+        memberDeleteUseCase.deleteMember();
     }
 }
