@@ -13,7 +13,7 @@ public class IgnoredPathConsts {
 
     @Getter
     private static Map<String, Set<HttpMethod>> ignoredPath = Map.of(
-            "/docs/**", Set.of(HttpMethod.GET),
+            "/v1/auth/reissue", Set.of(HttpMethod.GET),
             "/v1/member/register", Set.of(HttpMethod.POST),
             "/h2-console/**", Set.of(HttpMethod.GET, HttpMethod.POST),
             "/v1/auth/login/**", Set.of(HttpMethod.GET, HttpMethod.POST),
