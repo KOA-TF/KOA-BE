@@ -4,12 +4,16 @@ import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.coremodule.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE notice SET is_deleted = true WHERE notice_id = ?")
+@Where(clause = "is_deleted = false")
 public class Notice extends BaseEntity {
 
     @Id
@@ -19,6 +23,7 @@ public class Notice extends BaseEntity {
 
     private String title;
     private String content;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
