@@ -4,6 +4,7 @@ import com.koa.coremodule.member.application.dto.request.MemberDetailCreateReque
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.dto.response.RegisterResponse;
+import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberInfoGetUseCase;
 import com.koa.coremodule.member.application.service.MemberRegisterGetUseCase;
@@ -26,6 +27,7 @@ public class MemberController {
     private final MemberInfoGetUseCase memberInfoGetUseCase;
     private final MemberDetailCreateUseCase memberInfoCreateUseCase;
     private final MemberRegisterGetUseCase memberRegisterGetUseCase;
+    private final EmailVerificationUseCase emailVerificationUseCase;
 
     @GetMapping
     public MemberInfoResponse getMemberInfo(){
@@ -45,5 +47,15 @@ public class MemberController {
     @GetMapping("/info")
     public MemberDetailInfoResponse getMemberDetailInfo() {
         return memberInfoGetUseCase.getMemberDetailInfo();
+    }
+
+    @PostMapping("/verify")
+    public void postVerifyEmail(@RequestParam String email) {
+        emailVerificationUseCase.sendVerificationEmail(email);
+    }
+
+    @PostMapping("/verify/code")
+    public void verifyCode(@RequestParam String email, @RequestParam String code) {
+        emailVerificationUseCase.verifyCode(email, code);
     }
 }

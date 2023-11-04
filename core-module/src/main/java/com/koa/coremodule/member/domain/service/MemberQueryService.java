@@ -29,4 +29,10 @@ public class MemberQueryService {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(Error.MEMBER_NOT_FOUND));
     }
+
+    public void checkEmailExist(String email) {
+        if(memberRepository.existsByEmail(email) == false) {
+            throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
+        }
+    }
 }
