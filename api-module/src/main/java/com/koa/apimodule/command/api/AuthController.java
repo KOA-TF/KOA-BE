@@ -1,5 +1,6 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
 import com.koa.coremodule.auth.application.service.AuthUseCase;
 import com.koa.coremodule.member.domain.entity.Authority;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @GetMapping("/reissue")
-    public AuthResponse authReissue(){
-        return authUseCase.reissue();
+    public AuthResponse authReissue(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
+        return authUseCase.reissue(refreshToken);
     }
 }
