@@ -2,6 +2,7 @@ package com.koa.coremodule.member.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import jakarta.persistence.*;
+import java.util.Objects;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -30,4 +31,10 @@ public class Member extends BaseEntity {
     private Authority authority;
 
     private Boolean isDeleted = Boolean.FALSE;
+
+    public void updatePassword(String password) {
+        if(this.password.equals(password))
+            return;
+        this.password = Objects.requireNonNull(password, "password must be not null");
+    }
 }
