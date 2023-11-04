@@ -14,9 +14,17 @@ public class TokenQueryService {
 
     private final TokenRepository tokenRepository;
 
-    public String findEmailByToken(final String value, final TokenType tokenType) {
-        Token token = tokenRepository.findByTokenValueAndTokenType(value, tokenType)
-                .orElseThrow(() -> new NotExistTokenException(Error.NOT_EXIST_TOKEN));
+    public String findEmailByValue(final String value, final TokenType tokenType) {
+        Token token = findToken(value, tokenType);
         return token.getEmail();
+    }
+
+    public Token findTokenByValue(String value, TokenType tokenType) {
+        return findToken(value, tokenType);
+    }
+
+    private Token findToken(final String value, final TokenType tokenType){
+        return tokenRepository.findByValueAndTokenType(value, tokenType)
+                .orElseThrow(() -> new NotExistTokenException(Error.NOT_EXIST_TOKEN));
     }
 }
