@@ -4,9 +4,11 @@ import com.koa.commonmodule.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Entity
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,7 +23,7 @@ public class Token extends BaseEntity {
     private TokenType tokenType;
 
     private String email;
-    private String tokenValue;
+    private String value;
 
     public static Token createToken(TokenType type, String email, String value){
         return new Token(null, type, email, value);
