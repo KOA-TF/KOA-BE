@@ -9,12 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 @ApplicationService
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberRegisterGetUseCase {
+public class MemberCheckUseCase {
 
     private final MemberQueryService memberQueryService;
 
-    public RegisterResponse getMemberRegistered(String email, String password) {
-        boolean isRegistered = memberQueryService.checkRegister(email, password);
-        return new RegisterResponse(isRegistered);
+    public void checkMemberRegistered(String email, String password) {
+       memberQueryService.checkMemberRegistered(email, password);
     }
 }

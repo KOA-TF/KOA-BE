@@ -44,8 +44,8 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public RegisterResponse authJoin(@RequestParam String email, @RequestParam String password) {
-        return memberRegisterGetUseCase.getMemberRegistered(email, password);
+    public void checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
+         memberCheckUseCase.checkMemberRegistered(email, password);
     }
 
     @GetMapping("/info")
