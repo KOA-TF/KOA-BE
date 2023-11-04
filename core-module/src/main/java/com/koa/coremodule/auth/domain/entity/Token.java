@@ -27,7 +27,7 @@ public class Token extends BaseEntity {
     private TokenType tokenType;
 
     private String email;
-    private String value;
+    private String tokenValue;
 
     private Boolean deleted = Boolean.FALSE;
 }
