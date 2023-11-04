@@ -30,7 +30,11 @@ public enum Error {
     // IMAGE
     FILE_UPLOAD_FAIL("파일 업로드에 실패했습니다.", 5000),
     WRONG_FILE_FORMAT("잘못된 파일 확장자입니다.", 5001),
-    FILE_DELETE_FAIL("파일 삭제에 실패했습니다.", 5002);
+    FILE_DELETE_FAIL("파일 삭제에 실패했습니다.", 5002),
+
+    //Email
+    CREATE_CODE_FAIL("인증코드 생성에 실패했습니다.", 6000),
+    WRONG_CODE("잘못된 인증코드입니다.", 6001);
 
     private final String message;
     private final int errorCode;
