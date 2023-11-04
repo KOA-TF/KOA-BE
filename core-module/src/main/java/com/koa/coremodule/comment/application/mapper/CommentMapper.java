@@ -36,6 +36,7 @@ public class CommentMapper {
                 .content(comment.getContent())
                 .writer(member.getName())
                 .createdAt(comment.getCreatedAt().toString())
+                .isMine(comment.getWriter().equals(member))
                 .build();
     }
 
