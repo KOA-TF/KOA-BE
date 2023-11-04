@@ -16,7 +16,7 @@ public class LogoutUseCase {
 
     public void logoutAccessUser(String refreshTokenHeader) {
         final String refreshToken = TokenExtractUtils.extractToken(refreshTokenHeader);
-        final Token refreshTokenEntity = tokenQueryService.findTokenByValue(refreshToken, TokenType.REFRESH_TOKEN);
+        final Token refreshTokenEntity = tokenQueryService.findTokenByTokenValue(refreshToken, TokenType.REFRESH_TOKEN);
         tokenDeleteService.deleteToken(refreshTokenEntity);
     }
 

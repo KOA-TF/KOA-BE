@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class TokenDeleteService {
     private final TokenRepository tokenRepository;
-    public void deleteTokenByValue(String value) {
-        tokenRepository.deleteByValue(value);
+    public void deleteTokenByTokenValue(String value) {
+        tokenRepository.deleteByTokenValue(value);
     }
 
     public void deleteToken(final Token token){
