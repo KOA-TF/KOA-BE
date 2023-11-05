@@ -12,4 +12,5 @@ public class CommentInfoResponse {
     private final String content;
     private final String writer;
     private final String createdAt;
+    private final Boolean isMine;
 }
