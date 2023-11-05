@@ -42,8 +42,8 @@ public class MemberController {
     }
 
     @PostMapping
-    public void postMemberInfo(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
-        memberDetailCreateUseCase.createMemberInfo(memberInfoCreateRequest, multipartFile);
+    public void postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
+        memberDetailCreateUseCase.createMemberDetail(memberInfoCreateRequest, multipartFile);
     }
 
     @PostMapping("/register")

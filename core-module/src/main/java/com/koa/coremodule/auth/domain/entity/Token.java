@@ -14,9 +14,8 @@ import org.hibernate.annotations.Where;
 @Entity
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE token SET deleted = true WHERE token_id = ?")
-@Where(clause = "deleted = false")
-@Getter
+@SQLDelete(sql = "UPDATE token SET is_deleted = true WHERE token_id = ?")
+@Where(clause = "is_deleted = false")
 public class Token extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +28,5 @@ public class Token extends BaseEntity {
     private String email;
     private String tokenValue;
 
-    private Boolean deleted = Boolean.FALSE;
+    private Boolean isDeleted = Boolean.FALSE;
 }
