@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-@Builder
 @Entity
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE token SET is_deleted = true WHERE token_id = ?")
 @Where(clause = "is_deleted = false")
+@Getter
 public class Token extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +29,11 @@ public class Token extends BaseEntity {
     private String tokenValue;
 
     private Boolean isDeleted = Boolean.FALSE;
+
+    @Builder
+    public Token(TokenType tokenType, String email, String value) {
+        this.tokenType = tokenType;
+        this.email = email;
+        this.tokenValue = value;
+    }
 }

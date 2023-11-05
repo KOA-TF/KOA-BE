@@ -13,7 +13,7 @@ public class TokenSaveService {
     public void saveToken( final String token, final String email, final TokenType tokenType){
         tokenRepository.save(Token.builder()
                 .tokenType(tokenType)
-                .tokenValue(token)
+                .value(token)
                 .email(email)
                 .build());
     }
