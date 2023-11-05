@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.Objects;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,6 +26,7 @@ public class Member extends BaseEntity {
     private String name;
     private String email;
     private String password;
+    private String fcmToken;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -42,5 +45,11 @@ public class Member extends BaseEntity {
         if(this.password.equals(password))
             return;
         this.password = Objects.requireNonNull(password, "password must be not null");
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        if(Objects.nonNull(fcmToken)) {
+            this.fcmToken = fcmToken;
+        }
     }
 }
