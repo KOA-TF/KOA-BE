@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @ApplicationService
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberInfoGetUseCase {
+public class MemberGetUseCase {
 
     private final MemberUtils memberUtils;
     private final MemberDetailQueryService memberDetailQueryService;

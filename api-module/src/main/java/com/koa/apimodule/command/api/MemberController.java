@@ -1,19 +1,22 @@
 package com.koa.apimodule.command.api;
 
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
+import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
-import com.koa.coremodule.member.application.dto.response.RegisterResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
-import com.koa.coremodule.member.application.service.MemberInfoGetUseCase;
-import com.koa.coremodule.member.application.service.MemberRegisterGetUseCase;
+import com.koa.coremodule.member.application.service.MemberGetUseCase;
+import com.koa.coremodule.member.application.service.MemberCheckUseCase;
+import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -26,30 +29,31 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/v1/member")
 public class MemberController {
 
-    private final MemberInfoGetUseCase memberInfoGetUseCase;
-    private final MemberDetailCreateUseCase memberInfoCreateUseCase;
-    private final MemberRegisterGetUseCase memberRegisterGetUseCase;
+    private final MemberGetUseCase memberGetUseCase;
+    private final MemberDetailCreateUseCase memberDetailCreateUseCase;
+    private final MemberCheckUseCase memberCheckUseCase;
     private final MemberDeleteUseCase memberDeleteUseCase;
     private final EmailVerificationUseCase emailVerificationUseCase;
+    private final MemberPasswordChangeUseCase memberPasswordChangeUseCase;
 
     @GetMapping
     public MemberInfoResponse getMemberInfo(){
-        return memberInfoGetUseCase.getMemberInfo();
+        return memberGetUseCase.getMemberInfo();
     }
 
     @PostMapping
     public void postMemberInfo(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
-        memberInfoCreateUseCase.createMemberInfo(memberInfoCreateRequest, multipartFile);
+        memberDetailCreateUseCase.createMemberInfo(memberInfoCreateRequest, multipartFile);
     }
 
     @PostMapping("/register")
-    public RegisterResponse authJoin(@RequestParam String email, @RequestParam String password) {
-        return memberRegisterGetUseCase.getMemberRegistered(email, password);
+    public void checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
+         memberCheckUseCase.checkMemberRegistered(email, password);
     }
 
     @GetMapping("/info")
     public MemberDetailInfoResponse getMemberDetailInfo() {
-        return memberInfoGetUseCase.getMemberDetailInfo();
+        return memberGetUseCase.getMemberDetailInfo();
     }
 
     @PostMapping("/verify")
@@ -65,5 +69,15 @@ public class MemberController {
     @DeleteMapping
     public void deleteMember(){
         memberDeleteUseCase.deleteMember();
+    }
+
+    @PostMapping("/password")
+    public void checkPassword(@RequestParam String password) {
+        memberCheckUseCase.checkPassword(password);
+    }
+
+    @PutMapping("/password")
+    public void putPassword(@RequestBody MemberPasswordChangeRequest memberPasswordChangeRequest) {
+        memberPasswordChangeUseCase.changePassword(memberPasswordChangeRequest);
     }
 }

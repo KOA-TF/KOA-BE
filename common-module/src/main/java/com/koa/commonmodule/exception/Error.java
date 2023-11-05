@@ -19,6 +19,7 @@ public enum Error {
 
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
+    WRONG_PASSWORD("비밀번호가 틀렸습니다.", 2001),
 
     //NOTICE
     NOTICE_NOT_FOUND("공지사항을 찾을 수 없습니다.", 3000),
