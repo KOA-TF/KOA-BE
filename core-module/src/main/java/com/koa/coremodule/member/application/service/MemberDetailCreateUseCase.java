@@ -28,7 +28,7 @@ public class MemberDetailCreateUseCase {
     private final LinkSaveService linkSaveService;
     private final AwsS3Service awsS3Service;
 
-    public void createMemberInfo(MemberDetailCreateRequest memberInfoCreateRequest, MultipartFile multipartFile) {
+    public void createMemberDetail(MemberDetailCreateRequest memberInfoCreateRequest, MultipartFile multipartFile) {
         String imageUrl = Optional.ofNullable(multipartFile)
                 .map(awsS3Service::uploadFile)
                 .orElse(null);
