@@ -7,7 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -32,4 +31,12 @@ public class Notice extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
+
+    @Builder
+    public Notice(String title, String content, Member member, Curriculum curriculum) {
+        this.title = title;
+        this.content = content;
+        this.member = member;
+        this.curriculum = curriculum;
+    }
 }

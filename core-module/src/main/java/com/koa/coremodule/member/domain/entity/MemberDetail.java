@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -41,4 +40,14 @@ public class MemberDetail extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public MemberDetail(String major, Part part, String phoneNumber, String description, String profileImage, Member member) {
+        this.major = major;
+        this.part = part;
+        this.phoneNumber = phoneNumber;
+        this.description = description;
+        this.profileImage = profileImage;
+        this.member = member;
+    }
 }

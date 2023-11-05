@@ -8,7 +8,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -24,13 +23,20 @@ public class Member extends BaseEntity {
 
     private String name;
     private String email;
-    private String profileImageUrl;
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
     private Boolean isDeleted = Boolean.FALSE;
+
+    @Builder
+    public Member(String name, String email, String password, Authority authority) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.authority = authority;
+    }
 
     public void updatePassword(String password) {
         if(this.password.equals(password))
