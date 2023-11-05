@@ -15,12 +15,16 @@ public class TokenQueryService {
     private final TokenRepository tokenRepository;
 
     public String findEmailByValue(final String value, final TokenType tokenType) {
-        Token token = tokenRepository.findByEmailAndTokenType(value, tokenType)
-                .orElseThrow(() -> new NotExistTokenException(Error.NOT_EXIST_TOKEN));
+        Token token = findTokenByvalueAndTokenType(value, tokenType);
         return token.getEmail();
     }
 
     public Token findTokenByTokenValue(String value, TokenType tokenType) {
+        Token token = findTokenByvalueAndTokenType(value, tokenType);
+        return token;
+    }
+
+    public Token findTokenByvalueAndTokenType(String value, TokenType tokenType) {
         Token token = tokenRepository.findByTokenValueAndTokenType(value, tokenType)
                 .orElseThrow(() -> new NotExistTokenException(Error.NOT_EXIST_TOKEN));
         return token;
