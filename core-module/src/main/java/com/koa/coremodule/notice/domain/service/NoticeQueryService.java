@@ -73,4 +73,8 @@ public class NoticeQueryService {
     public Notice findByNoticeId(Long noticeId) {
         return noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
     }
+
+    public List<Long> findNoticeIdsByMemberId(Long memberId) {
+        return noticeRepository.findIdsByMemberId(memberId);
+    }
 }
