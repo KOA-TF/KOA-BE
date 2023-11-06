@@ -1,6 +1,7 @@
 package com.koa.coremodule.auth.domain.service;
 
 import com.koa.commonmodule.annotation.DomainService;
+import com.koa.coremodule.auth.domain.entity.Token;
 import com.koa.coremodule.auth.domain.repository.TokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class TokenDeleteService {
     private final TokenRepository tokenRepository;
-    public void deleteToken(final String email){
-        tokenRepository.deleteByEmail(email);
+    public void deleteTokenByTokenValue(String value) {
+        tokenRepository.deleteByTokenValue(value);
     }
+
+    public void deleteToken(final Token token){
+        tokenRepository.delete(token);
+    }
+
 }

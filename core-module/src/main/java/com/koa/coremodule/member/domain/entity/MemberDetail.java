@@ -14,16 +14,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE member_detail SET is_deleted = true WHERE member_detail_id = ?")
+@Where(clause = "is_deleted = false")
 public class MemberDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_info_id")
+    @Column(name = "member_detail_id")
     private Long id;
 
     private String major;
@@ -31,9 +34,20 @@ public class MemberDetail extends BaseEntity {
     private String phoneNumber;
     private String description;
     private String profileImage;
+    private Boolean isDeleted = Boolean.FALSE;
 
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public MemberDetail(String major, Part part, String phoneNumber, String description, String profileImage, Member member) {
+        this.major = major;
+        this.part = part;
+        this.phoneNumber = phoneNumber;
+        this.description = description;
+        this.profileImage = profileImage;
+        this.member = member;
+    }
 }

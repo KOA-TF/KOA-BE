@@ -63,6 +63,7 @@ public class MemberMapper {
                 .interests(interests)
                 .phoneNumber(memberDetail.getPhoneNumber())
                 .description(memberDetail.getDescription())
+                .profileImage(memberDetail.getProfileImage())
                 .links(links)
                 .build();
     }

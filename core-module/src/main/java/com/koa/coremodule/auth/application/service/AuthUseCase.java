@@ -23,19 +23,13 @@ public class AuthUseCase {
         return oAuthInvoker.execute(new AuthRequest(authority, email, password));
     }
 
-    public AuthResponse reissue(){
-        final String refreshTokenHeader = getHeader(AuthConsts.REFRESH_TOKEN_HEADER);
-        final String token = TokenExtractUtils.extractToken(refreshTokenHeader);
-        String accessToken = jwtProvider.reIssueAccessToken(token);
-        String refreshToken = jwtProvider.reIssueRefreshToken(token);
+    public AuthResponse reissue(String refreshToken){
+        final String token = TokenExtractUtils.extractToken(refreshToken);
+        String reIssueAccessToken = jwtProvider.reIssueAccessToken(token);
+        String reIssueRefreshToken = jwtProvider.reIssueRefreshToken(token);
         return AuthResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken(reIssueAccessToken)
+                .refreshToken(reIssueRefreshToken)
                 .build();
-    }
-
-    private String getHeader(final String name){
-        return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest().getHeader(name);
     }
 }

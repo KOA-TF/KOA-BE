@@ -13,4 +13,5 @@ public class CommentListResponse {
     private final String writer;
     private final String createdAt;
     private final Integer commentCount;
+    private final Boolean isMine;
 }

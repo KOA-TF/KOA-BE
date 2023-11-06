@@ -21,12 +21,20 @@ public class MemberQueryService {
         }
     }
 
-    public boolean checkRegister(String email, String password) {
-        return memberRepository.existsByEmailAndPassword(email, password);
+    public void checkMemberRegistered(String email, String password) {
+        if(!memberRepository.existsByEmailAndPassword(email, password)) {
+            throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
+        }
     }
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(Error.MEMBER_NOT_FOUND));
+    }
+
+    public void checkEmailExist(String email) {
+        if(memberRepository.existsByEmail(email) == false) {
+            throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
+        }
     }
 }

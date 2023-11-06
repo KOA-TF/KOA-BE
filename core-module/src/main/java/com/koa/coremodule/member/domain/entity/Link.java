@@ -30,6 +30,6 @@ public class Link extends BaseEntity {
     private String link;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_info_id")
+    @JoinColumn(name = "member_detail_id")
     private MemberDetail memberDetail;
 }

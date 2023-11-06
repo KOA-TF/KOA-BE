@@ -5,7 +5,7 @@ import com.koa.coremodule.comment.application.dto.response.CommentInfoResponse;
 import com.koa.coremodule.comment.application.dto.response.CommentListResponse;
 import com.koa.coremodule.comment.application.service.CommentCreateUseCase;
 import com.koa.coremodule.comment.application.service.CommentDeleteUseCase;
-import com.koa.coremodule.comment.application.service.CommentReadUseCase;
+import com.koa.coremodule.comment.application.service.CommentGetUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentCreateUseCase commentCreateUseCase;
     private final CommentDeleteUseCase commentDeleteUseCase;
-    private final CommentReadUseCase commentReadUseCase;
+    private final CommentGetUseCase commentGetUseCase;
 
     @PostMapping("/{noticeId}")
     public CommentInfoResponse createComment(@PathVariable Long noticeId, @RequestBody CommentCreateRequest commentCreateRequest) {
@@ -40,12 +40,12 @@ public class CommentController {
 
     @GetMapping("/{noticeId}")
     public List<CommentListResponse> getCommentList(@PathVariable Long noticeId){
-        return commentReadUseCase.getCommentList(noticeId);
+        return commentGetUseCase.getCommentList(noticeId);
     }
 
     @GetMapping("/child/{commentId}")
     public List<CommentInfoResponse> getChildCommentList(@PathVariable Long commentId){
-        return commentReadUseCase.getReCommentList(commentId);
+        return commentGetUseCase.getReCommentList(commentId);
     }
 
 }

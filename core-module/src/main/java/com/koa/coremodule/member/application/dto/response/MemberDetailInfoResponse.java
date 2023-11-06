@@ -15,5 +15,6 @@ public class MemberDetailInfoResponse {
     private List<InterestInfoResponse> interests;
     private String phoneNumber;
     private String description;
+    private String profileImage;
     private List<LinkInfoResponse> links;
 }
