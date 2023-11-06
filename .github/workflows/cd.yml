@@ -24,6 +24,9 @@ jobs:
           echo "${{ secrets.APPLICATION }}" > ./application-prod.yml
         shell: bash
 
+      - name: Gradlew 권한 부여
+        run: chmod +x ./gradlew
+
       - name: 스프링부트 애플리케이션 빌드
         run: ./gradlew bootJar
 
