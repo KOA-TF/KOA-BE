@@ -7,6 +7,7 @@ public record NoticeListResponse(Long noticeId,
                                  String team,
                                  String title,
                                  String content,
+                                 String imageUrl,
                                  LocalDate date,
                                  Boolean viewYn) {
 
@@ -15,7 +16,7 @@ public record NoticeListResponse(Long noticeId,
     }
 
     public NoticeListResponse withViewYn(Boolean newViewYn) {
-        return new NoticeListResponse(noticeId, curriculum, team, title, content, date, newViewYn);
+        return new NoticeListResponse(noticeId, curriculum, team, title, content, imageUrl, date, newViewYn);
     }
 
 }
