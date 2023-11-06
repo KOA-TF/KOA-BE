@@ -17,7 +17,7 @@ import java.util.Map;
 @ApplicationService
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CommentReadUseCase {
+public class CommentGetUseCase {
     private final CommentQueryService commentQueryService;
     private final MemberUtils memberUtils;
 
