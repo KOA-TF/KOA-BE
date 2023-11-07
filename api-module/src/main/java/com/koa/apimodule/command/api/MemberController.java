@@ -65,8 +65,8 @@ public class MemberController {
     }
 
     @PostMapping("/verify/code")
-    public void verifyCode(@RequestParam String email, @RequestParam String code) {
-        emailVerificationUseCase.verifyCode(email, code);
+    public VerifyCodeResponse verifyCode(@RequestParam String email, @RequestParam String code) {
+        return emailVerificationUseCase.verifyCode(email, code);
     }
 
     @DeleteMapping

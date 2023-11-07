@@ -3,6 +3,7 @@ package com.koa.coremodule.member.application.service;
 import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.email.service.EmailSendService;
 import com.koa.coremodule.email.service.EmailVerifyService;
+import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,8 @@ public class EmailVerificationUseCase {
         emailSendService.sendEmail(email);
     }
 
-    public void verifyCode(String email, String code) {
-        emailVerifyService.verifyCode(email, code);
+    public VerifyCodeResponse verifyCode(String email, String code) {
+        final boolean isVerified = emailVerifyService.verifyCode(email, code);
+        return new VerifyCodeResponse(isVerified);
     }
 }
