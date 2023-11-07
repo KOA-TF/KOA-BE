@@ -75,8 +75,8 @@ public class MemberController {
     }
 
     @PostMapping("/password")
-    public void checkPassword(@RequestParam String password) {
-        memberCheckUseCase.checkPassword(password);
+    public CheckPasswordResponse checkPassword(@RequestParam String password) {
+        return memberCheckUseCase.checkPassword(password);
     }
 
     @PutMapping("/password")

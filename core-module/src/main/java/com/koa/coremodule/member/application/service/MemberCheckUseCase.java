@@ -24,10 +24,8 @@ public class MemberCheckUseCase {
         return new CheckRegisterResponse(isRegistered);
     }
 
-    public void checkPassword(String password) {
+    public CheckPasswordResponse checkPassword(String password) {
         Member member = memberUtils.getAccessMember();
-        if(!member.getPassword().equals(password)) {
-            throw new WrongPasswordException(Error.WRONG_PASSWORD);
-        }
+        return new CheckPasswordResponse(member.getPassword().equals(password));
     }
 }
