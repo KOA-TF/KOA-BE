@@ -12,10 +12,8 @@ public class EmailVerifyService {
 
     private final RedisUtils redisUtils;
 
-    public void verifyCode(String email, String code) {
+    public boolean verifyCode(String email, String code) {
         String savedCode = redisUtils.getData(email);
-        if (!code.equals(savedCode)) {
-            throw new WrongCodeException(Error.WRONG_CODE);
-        }
+        return code.equals(savedCode);
     }
 }

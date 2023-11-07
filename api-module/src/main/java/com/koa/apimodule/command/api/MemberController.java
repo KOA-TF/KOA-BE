@@ -2,8 +2,11 @@ package com.koa.apimodule.command.api;
 
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
 import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
+import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
+import com.koa.coremodule.member.application.dto.response.CheckRegisterResponse;
+import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
@@ -47,8 +50,8 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public void checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
-         memberCheckUseCase.checkMemberRegistered(email, password);
+    public CheckRegisterResponse checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
+         return memberCheckUseCase.checkMemberRegistered(email, password);
     }
 
     @GetMapping("/info")
@@ -62,8 +65,8 @@ public class MemberController {
     }
 
     @PostMapping("/verify/code")
-    public void verifyCode(@RequestParam String email, @RequestParam String code) {
-        emailVerificationUseCase.verifyCode(email, code);
+    public VerifyCodeResponse verifyCode(@RequestParam String email, @RequestParam String code) {
+        return emailVerificationUseCase.verifyCode(email, code);
     }
 
     @DeleteMapping
@@ -72,8 +75,8 @@ public class MemberController {
     }
 
     @PostMapping("/password")
-    public void checkPassword(@RequestParam String password) {
-        memberCheckUseCase.checkPassword(password);
+    public CheckPasswordResponse checkPassword(@RequestParam String password) {
+        return memberCheckUseCase.checkPassword(password);
     }
 
     @PutMapping("/password")
