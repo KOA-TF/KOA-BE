@@ -1,6 +1,6 @@
 -- notice 테이블 sample datas
-INSERT INTO member (member_id, name, email, profile_image_url, password, authority)
-values (1, '안정후', 'ajh@gmail.com', 'picture.com', '20001215', 'MEMBER');
+INSERT INTO member (member_id, name, email, password, fcm_token, authority)
+values (1, '안정후', 'ajh@gmail.com', '20001215', 'fcm_token', 'MEMBER');
 
 INSERT INTO member_info (member_info_id, member_id, major, part, phone_number, description)
 values (1, 1, '전자공학과', '개발팀', '010-6570-8852', '설명입니다.');
@@ -22,3 +22,6 @@ values (1, 1, 'image.png');
 
 INSERT INTO notice_view (notice_view_id, member_id, notice_id, view)
 values (1, 1, 1, 1);
+
+INSERT INTO notice_image (notice_image_id, image_url, notice_id, is_deleted)
+values (1, 'sampleimageurl.png', 1, false);

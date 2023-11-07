@@ -37,6 +37,7 @@ class NoticeFindUseCaseTest {
             List<NoticeListResponse> response = noticeFindUseCase.selectNotice(MEMBER_ID);
 
             //then
+            System.out.println(response);
             Assertions.assertThat(response.get(0).noticeId()).isEqualTo(1L);
             Assertions.assertThat(response.get(0).title()).isEqualTo("제목입니다.");
 
