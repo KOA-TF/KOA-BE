@@ -16,4 +16,12 @@ public class NoticeDeleteService {
     public void deleteNoticeByNoticeIds(List<Long> noticeIds) {
         noticeRepository.deleteByNoticeIds(noticeIds);
     }
+
+    public void deleteImageByeNoticeId(Long noticeId) {
+        noticeRepository.deleteImageByNoticeId(noticeId);
+    }
+
+    public void deleteNoticeBySingleNoticeId(Long noticeId) {
+        noticeRepository.deleteByNoticeId(noticeId);
+    }
 }
