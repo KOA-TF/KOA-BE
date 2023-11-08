@@ -1,5 +1,6 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
@@ -23,21 +24,21 @@ public class FcmController {
     private final MemberUtils memberUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerToken(@RequestBody RegisterTokenRequest request) {
+    public ApplicationResponse<String> registerToken(@RequestBody RegisterTokenRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
         noticeFcmUseCase.registerFcmToken(memberRequest.getId(), request.fcmToken());
 
-        return ResponseEntity.ok("성공적으로 토큰이 등록되었습니다.");
+        return ApplicationResponse.ok(null, "성공적으로 토큰이 등록되었습니다.");
     }
 
     @PostMapping("/send")
-    public ResponseEntity<String> sendNotification(@RequestBody SendNotificationRequest request) {
+    public ApplicationResponse<String> sendNotification(@RequestBody SendNotificationRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
         noticeFcmUseCase.sendNotification(memberRequest.getId(), request.title(), request.content());
 
-        return ResponseEntity.ok("성공적으로 알림을 보냈습니다.");
+        return ApplicationResponse.ok(null, "성공적으로 알림을 보냈습니다.");
     }
 
 }
