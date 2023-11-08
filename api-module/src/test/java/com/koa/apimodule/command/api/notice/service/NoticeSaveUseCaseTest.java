@@ -37,13 +37,46 @@ public class NoticeSaveUseCaseTest {
             //given
             byte[] content = "dummy content".getBytes();
             MultipartFile file = new MockMultipartFile("testFile.jpg", "testFile.jpg", "image/jpeg", content);
-            NoticeRequest noticeRequest = new NoticeRequest(MEMBER_ID, TEAM_ID, CURRICULUM_ID, null, "제목입니다.", "내용입니다.");
+            NoticeRequest noticeRequest = new NoticeRequest(MEMBER_ID, TEAM_ID, CURRICULUM_ID, "image.png", "제목입니다.", "내용입니다.");
 
             //when
             Long response = noticeSaveUseCase.saveNotice(noticeRequest, file);
 
             //then
             Assertions.assertThat(response).isEqualTo(3L);
+
+        }
+
+        @Test
+        void updateNotice() {
+
+            //given
+            NoticeRequest noticeRequest = new NoticeRequest(MEMBER_ID, TEAM_ID, CURRICULUM_ID, null, "수정 제목입니다.", "수정 내용입니다.");
+
+            //when
+            Long response = noticeSaveUseCase.updateNotice(noticeRequest, null);
+
+            //then
+            System.out.println("response ::" + response);
+            Assertions.assertThat(response).isEqualTo(3L);
+
+        }
+
+        @Test
+        void deleteNotice() {
+
+            //given
+            NoticeRequest noticeRequest = new NoticeRequest(MEMBER_ID, TEAM_ID, CURRICULUM_ID, null, "제목입니다.", "내용입니다.");
+
+            Long saveResponse = noticeSaveUseCase.saveNotice(noticeRequest, null);
+
+            //when
+            noticeSaveUseCase.deleteNotice(saveResponse);
+            NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(NOTICE_ID);
+
+            //then
+            System.out.println("save " + saveResponse);
+            System.out.println("delete " + response);
 
         }
 
