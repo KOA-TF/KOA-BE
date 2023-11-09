@@ -21,6 +21,7 @@ public interface NoticeMapper {
             @Mapping(source = "noticeId", target = "noticeId"),
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
+            @Mapping(source = "imageUrl", target = "imageUrl"),
             @Mapping(source = "curriculumName", target = "curriculum"),
             @Mapping(source = "teamName", target = "team"),
             @Mapping(source = "date", target = "date")

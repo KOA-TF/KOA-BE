@@ -2,6 +2,7 @@ package com.koa.coremodule.notice.domain.service;
 
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeImage;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
@@ -77,4 +78,6 @@ public class NoticeQueryService {
     public List<Long> findNoticeIdsByMemberId(Long memberId) {
         return noticeRepository.findIdsByMemberId(memberId);
     }
+
+    public NoticeImage findImageByNoticeId(Long noticeId) { return noticeRepository.findImageByNoticeId(noticeId); }
 }

@@ -1,5 +1,6 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
 import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -28,44 +29,44 @@ public class NoticeController {
      * 공지 전체 조회
      */
     @GetMapping(value = "")
-    public ResponseEntity<List<NoticeListResponse>> selectAllNotice() {
+    public ApplicationResponse<List<NoticeListResponse>> selectAllNotice() {
 
         Member memberRequest = memberUtils.getAccessMember();
 
         List<NoticeListResponse> response = noticeFindUseCase.selectNotice(memberRequest.getId());
 
-        return ResponseEntity.ok(response);
+        return ApplicationResponse.ok(response, "공지 전체 조회에 성공했습니다.");
     }
 
     /**
      * 커리큘럼 공지 조회
      */
     @GetMapping(value = "/curriculum")
-    public ResponseEntity<List<CurriculumResponse>> selectCurriculum() {
+    public ApplicationResponse<List<CurriculumResponse>> selectCurriculum() {
 
         List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum();
 
-        return ResponseEntity.ok(response);
+        return ApplicationResponse.ok(response, "커리큘럼 공지 조회에 성공했습니다.");
     }
 
     /**
      * 토글 누를 시 공지 조회
      */
     @GetMapping(value = "/curriculum/list")
-    public ResponseEntity<List<CurriculumListResponse>> selectCurriculumList(
+    public ApplicationResponse<List<CurriculumListResponse>> selectCurriculumList(
             @RequestParam Long curriculumId
     ) {
 
         List<CurriculumListResponse> responses = noticeFindUseCase.selectCurriculumList(curriculumId);
 
-        return ResponseEntity.ok(responses);
+        return ApplicationResponse.ok(responses, "공지 조회에 성공했습니다.");
     }
 
     /**
      * 공지 작성
      */
     @PostMapping(value = "")
-    public ResponseEntity<Void> saveNotice(
+    public ApplicationResponse<Long> saveNotice(
             @RequestPart(value = "dto") NoticeRequest request,
             @RequestPart(value = "file") MultipartFile multipartFile) {
 
@@ -73,18 +74,44 @@ public class NoticeController {
         request.setMemberId(memberRequest.getId());
 
         Long noticeId = noticeSaveUseCase.saveNotice(request, multipartFile);
-        return ResponseEntity.created(URI.create("/notice/" + noticeId)).build();
+        return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
+    }
+
+    /**
+     * 공지 수정
+     */
+    @PatchMapping(value = "")
+    public ApplicationResponse<Long> updateNotice(
+            @RequestPart(value = "dto") NoticeRequest request,
+            @RequestPart(value = "file") MultipartFile multipartFile) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+        request.setMemberId(memberRequest.getId());
+
+        Long noticeId = noticeSaveUseCase.updateNotice(request, multipartFile);
+        return ApplicationResponse.ok(noticeId, "공지 수정에 성공했습니다.");
+    }
+
+    /**
+     * 공지 삭제
+     */
+    @DeleteMapping(value = "/{noticeId}")
+    public ApplicationResponse<Void> deleteNotice(
+            @PathVariable Long noticeId) {
+
+        noticeSaveUseCase.deleteNotice(noticeId);
+        return ApplicationResponse.ok(null, "공지 삭제에 성공했습니다.");
     }
 
     /**
      * 공지 상세 조회 (내용)
      */
     @GetMapping(value = "/{noticeId}/detail")
-    public ResponseEntity<NoticeDetailResponse> noticeDetail(
+    public ApplicationResponse<NoticeDetailResponse> noticeDetail(
             @PathVariable Long noticeId) {
 
         NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(noticeId);
-        return ResponseEntity.ok(response);
+        return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
 }

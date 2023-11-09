@@ -30,6 +30,7 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                 .from(notice)
                 .join(member).on(notice.id.eq(memberId))
                 .join(noticeTeam).on(noticeTeam.notice.id.eq(notice.id))
+                .join(noticeImage).on(noticeImage.notice.id.eq(notice.id))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
     }
