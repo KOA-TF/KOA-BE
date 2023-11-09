@@ -24,7 +24,7 @@ public class FcmController {
     private final MemberUtils memberUtils;
 
     @PostMapping("/register")
-    public ApplicationResponse<String> registerToken(@RequestBody RegisterTokenRequest request) {
+    public ApplicationResponse<Void> registerToken(@RequestBody RegisterTokenRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
         noticeFcmUseCase.registerFcmToken(memberRequest.getId(), request.fcmToken());
@@ -33,7 +33,7 @@ public class FcmController {
     }
 
     @PostMapping("/send")
-    public ApplicationResponse<String> sendNotification(@RequestBody SendNotificationRequest request) {
+    public ApplicationResponse<Void> sendNotification(@RequestBody SendNotificationRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
         noticeFcmUseCase.sendNotification(memberRequest.getId(), request.title(), request.content());
