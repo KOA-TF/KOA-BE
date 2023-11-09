@@ -8,6 +8,7 @@ import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
+import com.koa.coremodule.member.domain.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,17 +21,24 @@ public class NoticeFcmUseCase {
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
+    private final MemberUtils memberUtils;
 
     @Transactional
-    public void registerFcmToken(Long memberId, String token) {
-        Member member = findMember(memberId);
+    public void registerFcmToken(String token) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+
+        Member member = findMember(memberRequest.getId());
         member.updateFcmToken(token);
         log.info("회원의 fcm 토큰이 등록되었습니다.");
     }
 
     @Transactional(readOnly = true)
-    public void sendNotification(Long memberId, String title, String content) {
-        Member member = findMember(memberId);
+    public void sendNotification(String title, String content) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+
+        Member member = findMember(memberRequest.getId());
         Notification notification = Notification.builder()
                 .setTitle(title)
                 .setBody(content)

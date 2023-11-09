@@ -21,13 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class FcmController {
 
     private final NoticeFcmUseCase noticeFcmUseCase;
-    private final MemberUtils memberUtils;
 
     @PostMapping("/register")
     public ApplicationResponse<Void> registerToken(@RequestBody RegisterTokenRequest request) {
 
-        Member memberRequest = memberUtils.getAccessMember();
-        noticeFcmUseCase.registerFcmToken(memberRequest.getId(), request.fcmToken());
+        noticeFcmUseCase.registerFcmToken(request.fcmToken());
 
         return ApplicationResponse.ok(null, "성공적으로 토큰이 등록되었습니다.");
     }
@@ -35,8 +33,7 @@ public class FcmController {
     @PostMapping("/send")
     public ApplicationResponse<Void> sendNotification(@RequestBody SendNotificationRequest request) {
 
-        Member memberRequest = memberUtils.getAccessMember();
-        noticeFcmUseCase.sendNotification(memberRequest.getId(), request.title(), request.content());
+        noticeFcmUseCase.sendNotification(request.title(), request.content());
 
         return ApplicationResponse.ok(null, "성공적으로 알림을 보냈습니다.");
     }
