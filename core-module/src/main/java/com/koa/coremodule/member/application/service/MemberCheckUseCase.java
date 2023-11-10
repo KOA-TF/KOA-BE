@@ -1,10 +1,9 @@
 package com.koa.coremodule.member.application.service;
 
 import com.koa.commonmodule.annotation.ApplicationService;
-import com.koa.commonmodule.exception.Error;
+import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.CheckRegisterResponse;
-import com.koa.coremodule.member.application.exception.WrongPasswordException;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
@@ -27,5 +26,10 @@ public class MemberCheckUseCase {
     public CheckPasswordResponse checkPassword(String password) {
         Member member = memberUtils.getAccessMember();
         return new CheckPasswordResponse(member.getPassword().equals(password));
+    }
+
+    public CheckEmailResponse checkEmail(String email) {
+        final boolean isEmailExist = memberQueryService.checkEmailExist(email);
+        return new CheckEmailResponse(isEmailExist);
     }
 }

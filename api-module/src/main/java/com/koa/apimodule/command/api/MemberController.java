@@ -64,6 +64,12 @@ public class MemberController {
         return ApplicationResponse.ok(response);
     }
 
+    @PostMapping("/email")
+    public ApplicationResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
+        CheckEmailResponse response = memberCheckUseCase.checkEmail(email);
+        return ApplicationResponse.ok(response);
+    }
+
     @PostMapping("/verify")
     public ApplicationResponse<Void> postVerifyEmail(@RequestParam String email) {
         emailVerificationUseCase.sendVerificationEmail(email);
