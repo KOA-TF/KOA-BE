@@ -16,7 +16,6 @@ public class EmailVerificationUseCase {
     private final MemberQueryService memberQueryService;
 
     public void sendVerificationEmail(String email) {
-        memberQueryService.checkEmailExist(email);
         emailSendService.sendEmail(email);
     }
 
