@@ -1,5 +1,6 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
 import com.koa.coremodule.auth.application.service.AuthUseCase;
@@ -20,17 +21,20 @@ public class AuthController {
     private final LogoutUseCase logoutUseCase;
 
     @GetMapping("/login/{authority}")
-    public AuthResponse authLogin(@PathVariable Authority authority, @RequestParam String email, @RequestParam String password){
-        return authUseCase.authLogin(authority, email, password);
+    public ApplicationResponse<AuthResponse> authLogin(@PathVariable Authority authority, @RequestParam String email, @RequestParam String password){
+        AuthResponse response = authUseCase.authLogin(authority, email, password);
+        return ApplicationResponse.ok(response);
     }
 
     @GetMapping("/reissue")
-    public AuthResponse authReissue(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
-        return authUseCase.reissue(refreshToken);
+    public ApplicationResponse<AuthResponse> authReissue(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
+        AuthResponse response = authUseCase.reissue(refreshToken);
+        return ApplicationResponse.ok(response);
     }
 
     @DeleteMapping("/logout")
-    public void logout(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
+    public ApplicationResponse<Void> logout(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
         logoutUseCase.logoutAccessUser(refreshToken);
+        return ApplicationResponse.ok(null);
     }
 }

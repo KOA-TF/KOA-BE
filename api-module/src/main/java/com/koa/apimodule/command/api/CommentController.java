@@ -1,5 +1,6 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.comment.application.dto.request.CommentCreateRequest;
 import com.koa.coremodule.comment.application.dto.response.CommentInfoResponse;
 import com.koa.coremodule.comment.application.dto.response.CommentListResponse;
@@ -23,29 +24,34 @@ public class CommentController {
     private final CommentGetUseCase commentGetUseCase;
 
     @PostMapping("/{noticeId}")
-    public CommentInfoResponse createComment(@PathVariable Long noticeId, @RequestBody CommentCreateRequest commentCreateRequest) {
-        return commentCreateUseCase.createComment(noticeId, commentCreateRequest);
+    public ApplicationResponse<CommentInfoResponse> createComment(@PathVariable Long noticeId, @RequestBody CommentCreateRequest commentCreateRequest) {
+        CommentInfoResponse response =  commentCreateUseCase.createComment(noticeId, commentCreateRequest);
+        return ApplicationResponse.ok(response);
     }
 
     @PostMapping("/{noticeId}/{commentId}")
-    public CommentInfoResponse createReComment(@PathVariable Long noticeId, @PathVariable Long commentId,
+    public ApplicationResponse<CommentInfoResponse> createReComment(@PathVariable Long noticeId, @PathVariable Long commentId,
                                                @RequestBody CommentCreateRequest commentCreateRequest) {
-        return commentCreateUseCase.createReComment(noticeId, commentId, commentCreateRequest);
+        CommentInfoResponse response = commentCreateUseCase.createReComment(noticeId, commentId, commentCreateRequest);
+        return ApplicationResponse.ok(response);
     }
 
     @DeleteMapping("/{commentId}")
-    public void delete(@PathVariable Long commentId){
+    public ApplicationResponse<Void> delete(@PathVariable Long commentId){
         commentDeleteUseCase.deleteComment(commentId);
+        return ApplicationResponse.ok(null);
     }
 
     @GetMapping("/{noticeId}")
-    public List<CommentListResponse> getCommentList(@PathVariable Long noticeId){
-        return commentGetUseCase.getCommentList(noticeId);
+    public ApplicationResponse<List<CommentListResponse>> getCommentList(@PathVariable Long noticeId){
+        List<CommentListResponse> response = commentGetUseCase.getCommentList(noticeId);
+        return ApplicationResponse.ok(response);
     }
 
     @GetMapping("/child/{commentId}")
-    public List<CommentInfoResponse> getChildCommentList(@PathVariable Long commentId){
-        return commentGetUseCase.getReCommentList(commentId);
+    public ApplicationResponse<List<CommentInfoResponse>> getChildCommentList(@PathVariable Long commentId){
+        List<CommentInfoResponse> response = commentGetUseCase.getReCommentList(commentId);
+        return ApplicationResponse.ok(response);
     }
 
 }
