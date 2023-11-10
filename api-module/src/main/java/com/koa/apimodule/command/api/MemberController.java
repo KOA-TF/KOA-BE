@@ -58,8 +58,7 @@ public class MemberController {
          CheckRegisterResponse response = memberCheckUseCase.checkMemberRegistered(email, password);
          return ApplicationResponse.ok(response);
     }
-
-    @GetMapping("/info")
+    @GetMapping("/info/detail")
     public ApplicationResponse<MemberDetailInfoResponse> getMemberDetailInfo() {
         MemberDetailInfoResponse response = memberGetUseCase.getMemberDetailInfo();
         return ApplicationResponse.ok(response);
