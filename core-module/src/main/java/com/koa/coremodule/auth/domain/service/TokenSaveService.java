@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 public class TokenSaveService {
     private final TokenRepository tokenRepository;
     public void saveToken( final String token, final String email, final TokenType tokenType){
-        tokenRepository.save(Token.createToken(tokenType, email, token));
+        tokenRepository.save(Token.builder()
+                .tokenType(tokenType)
+                .value(token)
+                .email(email)
+                .build());
     }
 }

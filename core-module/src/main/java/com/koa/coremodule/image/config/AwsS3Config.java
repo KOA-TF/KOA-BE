@@ -1,4 +1,4 @@
-package com.koa.commonmodule.config;
+package com.koa.coremodule.image.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

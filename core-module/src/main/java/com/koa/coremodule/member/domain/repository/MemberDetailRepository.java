@@ -10,4 +10,6 @@ public interface MemberDetailRepository extends JpaRepository<MemberDetail, Long
     Optional<MemberDetail> findByMemberId(Long memberId);
 
     boolean existsByMemberId(Long memberId);
+
+    void deleteByMemberId(Long memberId);
 }

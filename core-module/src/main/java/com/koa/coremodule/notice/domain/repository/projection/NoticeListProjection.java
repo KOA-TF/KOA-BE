@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
+import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
 import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
 
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class NoticeListProjection {
                     notice.id,
                     notice.title,
                     notice.content,
+                    noticeImage.imageUrl,
                     curriculum.curriculumName,
                     noticeTeam.teamName
             );
@@ -25,6 +27,7 @@ public class NoticeListProjection {
     private Long noticeId;
     private String title;
     private String content;
+    private String imageUrl;
     private String curriculumName;
     private String teamName;
 
