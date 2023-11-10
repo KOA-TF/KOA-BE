@@ -25,8 +25,8 @@ public class AuthUseCase {
 
     public AuthResponse reissue(String refreshToken){
         final String token = TokenExtractUtils.extractToken(refreshToken);
-        String reIssueAccessToken = jwtProvider.reIssueAccessToken(token);
-        String reIssueRefreshToken = jwtProvider.reIssueRefreshToken(token);
+        String reIssueAccessToken = AuthConsts.AUTHENTICATION_TYPE_PREFIX+jwtProvider.reIssueAccessToken(token);
+        String reIssueRefreshToken = AuthConsts.AUTHENTICATION_TYPE_PREFIX+jwtProvider.reIssueRefreshToken(token);
         return AuthResponse.builder()
                 .accessToken(reIssueAccessToken)
                 .refreshToken(reIssueRefreshToken)

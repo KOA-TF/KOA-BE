@@ -19,8 +19,6 @@ public class AuthInvoker {
     private final List<AuthHandler> authHandlerList;
     private final JWTProvider jwtProvider;
 
-    private static final String AUTHENTICATION_TYPE = AuthConsts.AUTHENTICATION_TYPE + " ";
-
     public AuthResponse execute(AuthRequest request){
         String email = attemptLogin(request);
         return generateServerAuthenticationTokens(email);
@@ -45,6 +43,6 @@ public class AuthInvoker {
     }
 
     private <T> String attachAuthenticationType(Function<T, String> generateTokenMethod, T includeClaimData) {
-        return AUTHENTICATION_TYPE + generateTokenMethod.apply(includeClaimData);
+        return AuthConsts.AUTHENTICATION_TYPE_PREFIX + generateTokenMethod.apply(includeClaimData);
     }
 }
