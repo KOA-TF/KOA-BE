@@ -3,6 +3,7 @@ package com.koa.apimodule.command.api;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
 import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
+import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
@@ -40,9 +41,10 @@ public class MemberController {
     private final EmailVerificationUseCase emailVerificationUseCase;
     private final MemberPasswordChangeUseCase memberPasswordChangeUseCase;
 
-    @GetMapping
-    public MemberInfoResponse getMemberInfo(){
-        return memberGetUseCase.getMemberInfo();
+    @GetMapping("/info")
+    public ApplicationResponse<MemberInfoResponse> getMemberInfo(){
+        MemberInfoResponse response = memberGetUseCase.getMemberInfo();
+        return ApplicationResponse.ok(response);
     }
 
     @PostMapping
@@ -56,10 +58,15 @@ public class MemberController {
          CheckRegisterResponse response = memberCheckUseCase.checkMemberRegistered(email, password);
          return ApplicationResponse.ok(response);
     }
-
-    @GetMapping("/info")
+    @GetMapping("/info/detail")
     public ApplicationResponse<MemberDetailInfoResponse> getMemberDetailInfo() {
         MemberDetailInfoResponse response = memberGetUseCase.getMemberDetailInfo();
+        return ApplicationResponse.ok(response);
+    }
+
+    @PostMapping("/email")
+    public ApplicationResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
+        CheckEmailResponse response = memberCheckUseCase.checkEmail(email);
         return ApplicationResponse.ok(response);
     }
 

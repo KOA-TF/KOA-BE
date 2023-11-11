@@ -31,7 +31,6 @@ public class MemberDetail extends BaseEntity {
 
     private String major;
     private Part part;
-    private String phoneNumber;
     private String description;
     private String profileImage;
     private Boolean isDeleted = Boolean.FALSE;
@@ -42,10 +41,9 @@ public class MemberDetail extends BaseEntity {
     private Member member;
 
     @Builder
-    public MemberDetail(String major, Part part, String phoneNumber, String description, String profileImage, Member member) {
+    public MemberDetail(String major, Part part, String description, String profileImage, Member member) {
         this.major = major;
         this.part = part;
-        this.phoneNumber = phoneNumber;
         this.description = description;
         this.profileImage = profileImage;
         this.member = member;

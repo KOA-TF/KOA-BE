@@ -24,7 +24,9 @@ public class Member extends BaseEntity {
     private Long id;
 
     private String name;
+    private String period;
     private String email;
+    private String phoneNumber;
     private String password;
     private String fcmToken;
 
@@ -34,9 +36,11 @@ public class Member extends BaseEntity {
     private Boolean isDeleted = Boolean.FALSE;
 
     @Builder
-    public Member(String name, String email, String password, Authority authority) {
+    public Member(String name, String period, String email, String phoneNumber, String password, Authority authority) {
         this.name = name;
+        this.period = period;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.authority = authority;
     }

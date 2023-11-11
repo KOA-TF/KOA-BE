@@ -13,7 +13,6 @@ public class MemberDetailInfoResponse {
     private String major;
     private String part;
     private List<InterestInfoResponse> interests;
-    private String phoneNumber;
     private String description;
     private String profileImage;
     private List<LinkInfoResponse> links;
