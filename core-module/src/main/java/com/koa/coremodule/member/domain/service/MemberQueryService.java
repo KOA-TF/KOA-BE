@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberQueryService {
     private final MemberRepository memberRepository;
 
-    public void checkAccountExist(String email, Authority authority) {
-        if(!memberRepository.existsByEmailAndAuthority(email,authority)) {
+    public void checkAccountExist(Authority authority, String email, String password) {
+        if(!memberRepository.existsByAuthorityAndEmailAndPassword(authority,email,password)) {
             throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
         }
     }
