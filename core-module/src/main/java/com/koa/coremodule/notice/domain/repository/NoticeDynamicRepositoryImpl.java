@@ -25,12 +25,12 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
 
 
     @Override
-    public List<NoticeListProjection> findAllNotice(Long memberId) {
+    public List<NoticeListProjection> findAllNotice() {
         return jpaQueryFactory.select(NoticeListProjection.CONSTRUCTOR_EXPRESSION)
                 .from(notice)
-                .join(member).on(notice.id.eq(memberId))
                 .join(noticeTeam).on(noticeTeam.notice.id.eq(notice.id))
                 .join(noticeImage).on(noticeImage.notice.id.eq(notice.id))
+                .join(curriculum).on((notice.curriculum.id.eq(curriculum.id)))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
     }
