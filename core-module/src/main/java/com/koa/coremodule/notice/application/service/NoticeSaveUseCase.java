@@ -4,6 +4,7 @@ import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.notice.application.dto.NoticeDetailResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
 import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.notice.domain.entity.Notice;
@@ -85,10 +86,14 @@ public class NoticeSaveUseCase {
         noticeDeleteService.deleteNoticeBySingleNoticeId(noticeId);
     }
 
-    public NoticeDetailResponse selectNoticeDetail(Long noticeId) {
+    public NoticeDetailResponse selectNoticeDetail(Long memberId, Long noticeId) {
 
         NoticeDetailProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
         NoticeDetailResponse response = noticeMapper.toNoticeDetailDTO(projection);
+
+        if(noticeQueryService.findSingleViewYn(noticeId, memberId).equals(ViewType.NONE)) {
+            noticeQueryService.updateSingleViewYn(noticeId, memberId, ViewType.VIEWED);
+        }
 
         return response;
     }

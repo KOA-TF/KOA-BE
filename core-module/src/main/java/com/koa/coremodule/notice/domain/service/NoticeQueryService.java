@@ -3,6 +3,7 @@ package com.koa.coremodule.notice.domain.service;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.NoticeView;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
@@ -22,9 +23,9 @@ public class NoticeQueryService {
 
     private final NoticeRepository noticeRepository;
 
-    public List<NoticeListProjection> selectNotice(Long memberId) {
+    public List<NoticeListProjection> selectNotice() {
 
-        List<NoticeListProjection> projection = noticeRepository.findAllNotice(memberId);
+        List<NoticeListProjection> projection = noticeRepository.findAllNotice();
 
         return projection;
     }
@@ -80,4 +81,8 @@ public class NoticeQueryService {
     }
 
     public NoticeImage findImageByNoticeId(Long noticeId) { return noticeRepository.findImageByNoticeId(noticeId); }
+
+    public ViewType findSingleViewYn(Long noticeId, Long memberId) { return noticeRepository.findSingleViewYn(memberId, noticeId); }
+
+    public void updateSingleViewYn(Long noticeId, Long memberId, ViewType viewType) { noticeRepository.updateSingleViewYn(noticeId, memberId, viewType); }
 }

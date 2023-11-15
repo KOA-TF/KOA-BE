@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface NoticeDynamicRepository {
 
-    List<NoticeListProjection> findAllNotice(Long memberId);
+    List<NoticeListProjection> findAllNotice();
 
     ViewType findViewYn(NoticeViewRequest request);
 

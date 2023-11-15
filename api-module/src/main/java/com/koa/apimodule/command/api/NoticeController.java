@@ -110,7 +110,9 @@ public class NoticeController {
     public ApplicationResponse<NoticeDetailResponse> noticeDetail(
             @PathVariable Long noticeId) {
 
-        NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(noticeId);
+        Member memberRequest = memberUtils.getAccessMember();
+
+        NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
         return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
