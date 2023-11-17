@@ -11,7 +11,6 @@ public class MemberDetailCreateRequest {
     private String major;
     private String part;
     private List<InterestCreateRequest> interests;
-    private String phoneNumber;
     private String description;
     private List<LinkCreateRequest> links;
 

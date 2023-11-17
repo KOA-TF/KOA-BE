@@ -1,7 +1,9 @@
 package com.koa.apimodule.command.api;
 
+import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
 import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
+import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
@@ -39,48 +41,62 @@ public class MemberController {
     private final EmailVerificationUseCase emailVerificationUseCase;
     private final MemberPasswordChangeUseCase memberPasswordChangeUseCase;
 
-    @GetMapping
-    public MemberInfoResponse getMemberInfo(){
-        return memberGetUseCase.getMemberInfo();
+    @GetMapping("/info")
+    public ApplicationResponse<MemberInfoResponse> getMemberInfo(){
+        MemberInfoResponse response = memberGetUseCase.getMemberInfo();
+        return ApplicationResponse.ok(response);
     }
 
     @PostMapping
-    public void postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
+    public ApplicationResponse<Void> postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
         memberDetailCreateUseCase.createMemberDetail(memberInfoCreateRequest, multipartFile);
+        return ApplicationResponse.ok(null);
     }
 
     @PostMapping("/register")
-    public CheckRegisterResponse checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
-         return memberCheckUseCase.checkMemberRegistered(email, password);
+    public ApplicationResponse<CheckRegisterResponse> checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
+         CheckRegisterResponse response = memberCheckUseCase.checkMemberRegistered(email, password);
+         return ApplicationResponse.ok(response);
+    }
+    @GetMapping("/info/detail")
+    public ApplicationResponse<MemberDetailInfoResponse> getMemberDetailInfo() {
+        MemberDetailInfoResponse response = memberGetUseCase.getMemberDetailInfo();
+        return ApplicationResponse.ok(response);
     }
 
-    @GetMapping("/info")
-    public MemberDetailInfoResponse getMemberDetailInfo() {
-        return memberGetUseCase.getMemberDetailInfo();
+    @PostMapping("/email")
+    public ApplicationResponse<CheckEmailResponse> checkEmail(@RequestParam String email) {
+        CheckEmailResponse response = memberCheckUseCase.checkEmail(email);
+        return ApplicationResponse.ok(response);
     }
 
     @PostMapping("/verify")
-    public void postVerifyEmail(@RequestParam String email) {
+    public ApplicationResponse<Void> postVerifyEmail(@RequestParam String email) {
         emailVerificationUseCase.sendVerificationEmail(email);
+        return ApplicationResponse.ok(null);
     }
 
     @PostMapping("/verify/code")
-    public VerifyCodeResponse verifyCode(@RequestParam String email, @RequestParam String code) {
-        return emailVerificationUseCase.verifyCode(email, code);
+    public ApplicationResponse<VerifyCodeResponse> verifyCode(@RequestParam String email, @RequestParam String code) {
+        VerifyCodeResponse response = emailVerificationUseCase.verifyCode(email, code);
+        return ApplicationResponse.ok(response);
     }
 
     @DeleteMapping
-    public void deleteMember(){
+    public ApplicationResponse<Void> deleteMember(){
         memberDeleteUseCase.deleteMember();
+        return ApplicationResponse.ok(null);
     }
 
     @PostMapping("/password")
-    public CheckPasswordResponse checkPassword(@RequestParam String password) {
-        return memberCheckUseCase.checkPassword(password);
+    public ApplicationResponse<CheckPasswordResponse> checkPassword(@RequestParam String password) {
+        CheckPasswordResponse response = memberCheckUseCase.checkPassword(password);
+        return ApplicationResponse.ok(response);
     }
 
     @PutMapping("/password")
-    public void putPassword(@RequestBody MemberPasswordChangeRequest memberPasswordChangeRequest) {
+    public ApplicationResponse<Void> putPassword(@RequestBody MemberPasswordChangeRequest memberPasswordChangeRequest) {
         memberPasswordChangeUseCase.changePassword(memberPasswordChangeRequest);
+        return ApplicationResponse.ok(null);
     }
 }

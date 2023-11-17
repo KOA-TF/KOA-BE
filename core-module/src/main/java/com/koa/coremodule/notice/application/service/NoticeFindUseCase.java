@@ -3,11 +3,11 @@ package com.koa.coremodule.notice.application.service;
 import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
 import com.koa.coremodule.notice.application.dto.CurriculumResponse;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
+import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,8 @@ public class NoticeFindUseCase {
 
     public List<NoticeListResponse> selectNotice(Long memberId) {
 
-        List<NoticeListProjection> projection = noticeQueryService.selectNotice(memberId);
+        List<NoticeListProjection> projection = noticeQueryService.selectNotice();
+
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
 
         noticeQueryService.findViewYn(response, memberId, projection);

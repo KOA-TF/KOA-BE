@@ -13,6 +13,8 @@ import org.hibernate.annotations.Where;
 @Entity
 @SQLDelete(sql = "UPDATE notice_image SET is_deleted = true WHERE notice_image_id = ?")
 @Where(clause = "is_deleted = false")
+@ToString
+@Setter
 public class NoticeImage extends BaseEntity {
 
     @Id
@@ -24,7 +26,10 @@ public class NoticeImage extends BaseEntity {
 
     private Boolean isDeleted = Boolean.FALSE;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id")
-    private Notice notice;
+    public static NoticeImage create(String imageUrl) {
+        return NoticeImage.builder()
+                .isDeleted(false)
+                .imageUrl(imageUrl)
+                .build();
+    }
 }

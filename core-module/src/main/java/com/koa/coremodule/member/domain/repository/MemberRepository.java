@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    boolean existsByEmailAndAuthority(String email, Authority authority);
+    boolean existsByAuthorityAndEmailAndPassword(Authority authority, String email, String password);
     boolean existsByEmailAndPassword(String email, String password);
     boolean existsByEmail(String email);
 

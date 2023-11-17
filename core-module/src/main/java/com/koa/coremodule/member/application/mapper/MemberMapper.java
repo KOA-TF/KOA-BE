@@ -24,7 +24,9 @@ public class MemberMapper {
     public static MemberInfoResponse mapToMemberInfoResponse(Member member, boolean isMemberDetailExist){
         return MemberInfoResponse.builder()
                 .name(member.getName())
+                .period(member.getPeriod())
                 .email(member.getEmail())
+                .phoneNumber(member.getPhoneNumber())
                 .isMemberDetailExist(isMemberDetailExist)
                 .build();
     }
@@ -33,7 +35,6 @@ public class MemberMapper {
         return MemberDetail.builder()
                 .major(memberInfoCreateRequest.getMajor())
                 .part(Part.valueOf(memberInfoCreateRequest.getPart()))
-                .phoneNumber(memberInfoCreateRequest.getPhoneNumber())
                 .description(memberInfoCreateRequest.getDescription())
                 .profileImage(imageUrl)
                 .member(member)
@@ -61,7 +62,6 @@ public class MemberMapper {
                 .major(memberDetail.getMajor())
                 .part(memberDetail.getPart().toString())
                 .interests(interests)
-                .phoneNumber(memberDetail.getPhoneNumber())
                 .description(memberDetail.getDescription())
                 .profileImage(memberDetail.getProfileImage())
                 .links(links)
