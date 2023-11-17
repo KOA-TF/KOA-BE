@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@ToString
 public class Curriculum extends BaseEntity {
 
     @Id
@@ -17,5 +18,9 @@ public class Curriculum extends BaseEntity {
     private Long id;
 
     private String curriculumName;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id")
+    private Notice notice;
 
 }

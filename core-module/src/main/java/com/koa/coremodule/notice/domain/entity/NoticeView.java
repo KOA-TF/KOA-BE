@@ -16,14 +16,18 @@ public class NoticeView {
     @Column(name = "notice_view_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private ViewType view;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id")
-    private Notice notice;
+    public static NoticeView create(ViewType view, Member member) {
+        return NoticeView.builder()
+                .view(view)
+                .member(member)
+                .build();
+    }
 
 }
