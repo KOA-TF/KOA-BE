@@ -1,22 +1,27 @@
 package com.koa.coremodule.notice.application.service;
 
+import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.image.service.AwsS3Service;
-import com.koa.coremodule.notice.application.dto.NoticeDetailResponse;
+import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
-import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
+import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
+import com.koa.coremodule.notice.application.mapper.NoticeMapper;
+import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.ViewType;
+import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.notice.application.mapper.NoticeMapper;
-import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailProjection;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,54 +36,58 @@ public class NoticeSaveUseCase {
     private final AwsS3Service awsS3Service;
 
     public Long saveNotice(NoticeRequest request, MultipartFile multipartFile) {
-
         // image 저장
-        if (multipartFile == null) {
-            request.setImageUrl(null);
-        } else {
-            String url = awsS3Service.uploadFile(multipartFile);
-            request.setImageUrl(url);
+        String imageUrl = null;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            imageUrl = awsS3Service.uploadFile(multipartFile);
         }
 
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeEntity(request);
+        final Member member = noticeQueryService.findMemberById(request.getMemberId()).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+
+        // 공지 저장 시 연관 테이블 모두 맵핑
+        final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId()).orElseThrow(() -> new EntityNotFoundException("팀을 찾을 수 없습니다."));
+        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId()).orElseThrow(() -> new EntityNotFoundException("커리큘럼을 찾을 수 없습니다."));
+        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum);
+
         Notice savedNotice = noticeQueryService.save(noticeEntity);
         return savedNotice.getId();
     }
 
-    public Long updateNotice(NoticeRequest request, MultipartFile multipartFile) {
+    public Long updateNotice(NoticeUpdateRequest request, MultipartFile multipartFile) {
+        final Notice findNotice = noticeQueryService.findByNoticeId(request.getNoticeId());
+        final String imageUrl = findNotice.getNoticeImage().getImageUrl();
 
-        // 티켓 메모의 이미지를 수정하는 경우
-        String url = "";
-        if (!(multipartFile == null)) {
-            // 기존에 이미지가 존재했다면
-            if (request.getImageUrl() != null) {
-                // 해당 이미지 삭제
-                awsS3Service.deleteFile(request.getImageUrl().replace(S3_URL, ""));
-            }
-            url = awsS3Service.uploadFile(multipartFile);
-            request.setImageUrl(url);
-        } else {
-            if (request.getImageUrl() != null) {
-                url = request.getImageUrl();
-                request.setImageUrl(url);
-            }
-        }
+        //이미지 업로드 || 업데이트
+        updateImage(multipartFile, imageUrl, findNotice);
 
         // 공지 본문 수정
-        Notice noticeEntity = noticeMapper.toNoticeEntity(request);
-        Notice updatedNotice = noticeQueryService.save(noticeEntity);
-        return updatedNotice.getId();
+        final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId()).get();
+        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId()).get();
+        findNotice.update(request.getTitle(), request.getContent(), noticeTeam, curriculum);
+        return findNotice.getId();
+    }
+
+    private void updateImage(MultipartFile multipartFile, String imageUrl, Notice findNotice) {
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            //이미지 삭제
+            if (imageUrl != null && !imageUrl.isEmpty() && !imageUrl.trim().isEmpty()) {
+                awsS3Service.deleteFile(imageUrl.replace(S3_URL, ""));
+            } else {
+                final String uploadUrl = awsS3Service.uploadFile(multipartFile);
+                findNotice.getNoticeImage().setImageUrl(uploadUrl);
+            }
+        }
     }
 
     public void deleteNotice(Long noticeId) {
 
-        Optional<NoticeImage> entityResponse = Optional.ofNullable(noticeQueryService.findImageByNoticeId(noticeId));
-        NoticeImage noticeImageResponse = entityResponse.get();
+        String imageUrl = noticeQueryService.findImageByNoticeId(noticeId);
 
         // 이미지가 존재하는 경우 S3 이미지 삭제
-        if (noticeImageResponse.getImageUrl() != null) {
-            awsS3Service.deleteFile(noticeImageResponse.getImageUrl().replace(S3_URL, ""));
+        if (imageUrl != null) {
+            awsS3Service.deleteFile(imageUrl.replace(S3_URL, ""));
             noticeDeleteService.deleteImageByeNoticeId(noticeId);
         }
 
@@ -86,13 +95,16 @@ public class NoticeSaveUseCase {
         noticeDeleteService.deleteNoticeBySingleNoticeId(noticeId);
     }
 
-    public NoticeDetailResponse selectNoticeDetail(Long memberId, Long noticeId) {
+    public NoticeListResponse selectNoticeDetail(Long memberId, Long noticeId) {
 
-        NoticeDetailProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
-        NoticeDetailResponse response = noticeMapper.toNoticeDetailDTO(projection);
+        NoticeListProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
+        NoticeListResponse response = noticeMapper.toNoticeDetailDTO(projection);
 
-        if(noticeQueryService.findSingleViewYn(noticeId, memberId).equals(ViewType.NONE)) {
-            noticeQueryService.updateSingleViewYn(noticeId, memberId, ViewType.VIEWED);
+        // 조회 여부 기록 업데이트
+        NoticeViewResponse viewResponse = noticeQueryService.findSingleViewYn(noticeId, memberId);
+
+        if (viewResponse.viewType().equals(ViewType.NONE)) {
+            noticeQueryService.updateSingleViewYn(viewResponse.id(), memberId, ViewType.VIEWED);
         }
 
         return response;

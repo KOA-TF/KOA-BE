@@ -62,7 +62,7 @@ public class AwsS3Service {
     public void deleteFile(String fileUrl) {
         if (fileUrl == null) return;
         try {
-            amazonS3.deleteObject(bucketName, fileUrl.split("/")[3]);
+            amazonS3.deleteObject(bucketName, fileUrl);
         } catch (AmazonServiceException e) {
             throw new FileDeleteException(Error.FILE_DELETE_FAIL);
         }

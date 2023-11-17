@@ -1,16 +1,15 @@
 package com.koa.coremodule.notice.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class NoticeRequest {
+@Jacksonized
+public class NoticeUpdateRequest {
     private Long memberId;
+    private Long noticeId;
     private Long teamId;
     private Long curriculumId;
     private String title;
