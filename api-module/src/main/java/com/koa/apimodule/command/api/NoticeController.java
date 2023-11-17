@@ -1,18 +1,16 @@
 package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
-import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
-import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -28,13 +26,12 @@ public class NoticeController {
     /**
      * 공지 전체 조회
      */
-    @GetMapping(value = "")
+    @GetMapping
     public ApplicationResponse<List<NoticeListResponse>> selectAllNotice() {
 
         Member memberRequest = memberUtils.getAccessMember();
 
         List<NoticeListResponse> response = noticeFindUseCase.selectNotice(memberRequest.getId());
-
         return ApplicationResponse.ok(response, "공지 전체 조회에 성공했습니다.");
     }
 
@@ -72,7 +69,6 @@ public class NoticeController {
 
         Member memberRequest = memberUtils.getAccessMember();
         request.setMemberId(memberRequest.getId());
-
         Long noticeId = noticeSaveUseCase.saveNotice(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
     }
@@ -82,14 +78,14 @@ public class NoticeController {
      */
     @PatchMapping(value = "")
     public ApplicationResponse<Long> updateNotice(
-            @RequestPart(value = "dto") NoticeRequest request,
+            @RequestPart(value = "dto") NoticeUpdateRequest request,
             @RequestPart(value = "file") MultipartFile multipartFile) {
 
         Member memberRequest = memberUtils.getAccessMember();
         request.setMemberId(memberRequest.getId());
 
-        Long noticeId = noticeSaveUseCase.updateNotice(request, multipartFile);
-        return ApplicationResponse.ok(noticeId, "공지 수정에 성공했습니다.");
+        final Long updatedId = noticeSaveUseCase.updateNotice(request, multipartFile);
+        return ApplicationResponse.ok(updatedId, "공지 수정에 성공했습니다.");
     }
 
     /**
@@ -107,12 +103,12 @@ public class NoticeController {
      * 공지 상세 조회 (내용)
      */
     @GetMapping(value = "/{noticeId}/detail")
-    public ApplicationResponse<NoticeDetailResponse> noticeDetail(
+    public ApplicationResponse<NoticeListResponse> noticeDetail(
             @PathVariable Long noticeId) {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        NoticeDetailResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
+        NoticeListResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
         return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
