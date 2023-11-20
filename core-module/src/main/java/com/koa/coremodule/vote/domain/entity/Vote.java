@@ -19,7 +19,7 @@ public class Vote extends BaseEntity {
 
     private String voteTitle;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
 }

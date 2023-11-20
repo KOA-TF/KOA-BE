@@ -10,16 +10,19 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class VoteItem extends BaseEntity {
+public class VoteItemRecord extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vote_item_id")
+    @Column(name = "vote_item_record_id")
     private Long id;
 
-    private String voteItemName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote_item_id")
+    private VoteItem voteItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_id")
-    private Vote vote;
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 }
