@@ -18,8 +18,4 @@ public class NoticeTeam extends BaseEntity {
 
     private String teamName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id")
-    private Notice notice;
-
 }
