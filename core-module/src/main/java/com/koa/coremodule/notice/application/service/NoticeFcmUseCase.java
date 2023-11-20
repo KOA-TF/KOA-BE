@@ -9,6 +9,7 @@ import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
+import com.koa.coremodule.notice.domain.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class NoticeFcmUseCase {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final MemberRepository memberRepository;
     private final MemberUtils memberUtils;
+    private final MemberRepository memberRepository;
+    private final NoticeRepository noticeRepository;
 
     @Transactional
     public void registerFcmToken(String token) {
@@ -53,6 +55,14 @@ public class NoticeFcmUseCase {
         } catch (FirebaseMessagingException ex) {
             log.info("알림 전송에 실패했습니다.");
         }
+    }
+
+    @Transactional
+    public void deleteFcmToken() {
+
+        Member memberRequest = memberUtils.getAccessMember();
+
+        noticeRepository.deleteToken(memberRequest.getId());
     }
 
     private Member findMember(Long memberId) {
