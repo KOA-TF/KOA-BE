@@ -19,8 +19,4 @@ public class Curriculum extends BaseEntity {
 
     private String curriculumName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "notice_id")
-    private Notice notice;
-
 }
