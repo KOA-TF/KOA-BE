@@ -99,4 +99,10 @@ public class MemberController {
         memberPasswordChangeUseCase.changePassword(memberPasswordChangeRequest);
         return ApplicationResponse.ok(null);
     }
+
+    @PutMapping("/password/unauthenticated")
+    public ApplicationResponse<Void> putPasswordUnauthenticated(@RequestParam String email, @RequestBody MemberPasswordChangeRequest memberPasswordChangeRequest) {
+        memberPasswordChangeUseCase.changePasswordUnauthenticated(email, memberPasswordChangeRequest);
+        return ApplicationResponse.ok(null);
+    }
 }

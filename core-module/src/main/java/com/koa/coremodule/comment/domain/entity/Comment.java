@@ -31,6 +31,8 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
+    private Boolean isAnonymous;
+
     public Long getParentId() {
         return this.parent != null ? this.parent.getId() : null;
     }
