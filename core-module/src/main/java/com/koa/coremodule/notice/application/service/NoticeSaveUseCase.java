@@ -45,13 +45,14 @@ public class NoticeSaveUseCase {
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeEntity(request);
         final Member member = noticeQueryService.findMemberById(request.getMemberId()).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+        Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId()).orElseThrow(() -> new EntityNotFoundException("팀을 찾을 수 없습니다."));
         final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId()).orElseThrow(() -> new EntityNotFoundException("커리큘럼을 찾을 수 없습니다."));
-        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum);
+        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
 
-        Notice savedNotice = noticeQueryService.save(noticeEntity);
+        noticeQueryService.save(noticeEntity);
         return savedNotice.getId();
     }
 
