@@ -25,7 +25,7 @@ public interface NoticeMapper {
             @Mapping(source = "teamName", target = "team"),
             @Mapping(source = "date", target = "date")
     })
-    List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> company);
+    List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> notice);
 
     @Mappings({
             @Mapping(source = "curriculumId", target = "curriculumId"),
@@ -33,14 +33,14 @@ public interface NoticeMapper {
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "title", target = "title")
     })
-    List<CurriculumResponse> toCurriculumDTO(List<CurriculumProjection> company);
+    List<CurriculumResponse> toCurriculumDTO(List<CurriculumProjection> notice);
 
     @Mappings({
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "createdAt", target = "date")
     })
-    List<CurriculumListResponse> toCurriculumListDTO(List<Notice> company);
+    List<CurriculumListResponse> toCurriculumListDTO(List<Notice> notice);
 
     @Mappings({
             @Mapping(source = "title", target = "title"),
