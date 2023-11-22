@@ -26,7 +26,7 @@ public class CommentCreateUseCase {
     public CommentInfoResponse createComment(Long noticeId, CommentCreateRequest commentCreateRequest){
         final Member member = memberUtils.getAccessMember();
         final Notice notice = noticeQueryService.findByNoticeId(noticeId);
-        final Comment comment = CommentMapper.mapToCommentWithUserAndAlbum(commentCreateRequest.getContent(), notice, member);
+        final Comment comment = CommentMapper.mapToCommentWithUserAndAlbum(commentCreateRequest.getContent(), notice, member, commentCreateRequest.getIsAnonymous());
 
         commentSaveService.saveComment(comment);
         return CommentMapper.mapToCommentInfoResponse(comment, member);
@@ -37,7 +37,7 @@ public class CommentCreateUseCase {
         final Member member = memberUtils.getAccessMember();
         final Notice notice = noticeQueryService.findByNoticeId(noticeId);
         final Comment parent = commentQueryService.getCommentById(commentId);
-        final Comment comment = CommentMapper.mapToCommentWithUserAndNoticeAndParent(commentCreateRequest.getContent(), notice, member, parent);
+        final Comment comment = CommentMapper.mapToCommentWithUserAndNoticeAndParent(commentCreateRequest.getContent(), notice, member, parent, commentCreateRequest.getIsAnonymous());
 
         commentSaveService.saveComment(comment);
         return CommentMapper.mapToCommentInfoResponse(comment, member);

@@ -29,7 +29,7 @@ public class CommentGetUseCase {
         for (Comment comment : commentList) {
             final List<Comment> childCommentList = childCommentMap.get(comment.getId());
             commentListResponses.add(new CommentListResponse(comment.getId(), comment.getContent(), comment.getWriter().getName(), comment.getCreatedAt().toString()
-                    ,childCommentList != null ? childCommentList.size() : 0, comment.getWriter().equals(member)));
+                    ,childCommentList != null ? childCommentList.size() : 0, comment.getWriter().equals(member), comment.getIsAnonymous()));
         }
         return commentListResponses;
     }
@@ -40,7 +40,7 @@ public class CommentGetUseCase {
         final ArrayList<CommentInfoResponse> childCommentInfoResponses = new ArrayList<>();
         for (Comment comment : childCommentList) {
             childCommentInfoResponses.add(new CommentInfoResponse(comment.getId(), comment.getContent()
-                    , comment.getWriter().getName(), comment.getCreatedAt().toString(), comment.getWriter().equals(member)));
+                    , comment.getWriter().getName(), comment.getCreatedAt().toString(), comment.getWriter().equals(member), comment.getIsAnonymous()));
         }
         return childCommentInfoResponses;
     }
