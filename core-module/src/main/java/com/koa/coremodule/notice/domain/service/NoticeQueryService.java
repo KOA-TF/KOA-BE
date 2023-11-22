@@ -92,8 +92,12 @@ public class NoticeQueryService {
         return noticeRepository.findImageByNoticeId(noticeId);
     }
 
-    public NoticeViewResponse findSingleViewYn(Long noticeId, Long memberId) {
-        return noticeRepository.findSingleViewYn(memberId, noticeId);
+    public Long findSingleViewId(Long noticeId, Long memberId) {
+        return noticeRepository.findSingleViewId(memberId, noticeId);
+    }
+
+    public ViewType findSingleViewType(Long noticeId, Long memberId) {
+        return noticeRepository.findSingleViewType(memberId, noticeId);
     }
 
     public void updateSingleViewYn(Long noticeViewId, Long memberId, ViewType viewType) {

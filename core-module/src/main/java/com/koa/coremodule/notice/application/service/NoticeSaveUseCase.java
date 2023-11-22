@@ -101,10 +101,11 @@ public class NoticeSaveUseCase {
         NoticeListResponse response = noticeMapper.toNoticeDetailDTO(projection);
 
         // 조회 여부 기록 업데이트
-        NoticeViewResponse viewResponse = noticeQueryService.findSingleViewYn(noticeId, memberId);
+        ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
+        Long viewId = noticeQueryService.findSingleViewId(noticeId, memberId);
 
-        if (viewResponse.viewType().equals(ViewType.NONE)) {
-            noticeQueryService.updateSingleViewYn(viewResponse.id(), memberId, ViewType.VIEWED);
+        if (viewResponse.equals(ViewType.NONE)) {
+            noticeQueryService.updateSingleViewYn(viewId, memberId, ViewType.VIEWED);
         }
 
         return response;

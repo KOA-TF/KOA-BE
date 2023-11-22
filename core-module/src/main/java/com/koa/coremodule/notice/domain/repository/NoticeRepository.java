@@ -33,8 +33,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeDyn
     @Query("update Notice n set n.title = :title, n.content = :content where n.id = :noticeId")
     void updateNotice(Long noticeId, String title, String content);
 
-    @Query("select v.id, v.view from Notice n join NoticeView v on n.noticeView.id = v.id where n.id = :noticeId and v.member.id = :memberId")
-    NoticeViewResponse findSingleViewYn(Long memberId, Long noticeId);
+    @Query("select v.id from Notice n join NoticeView v on n.noticeView.id = v.id where n.id = :noticeId and v.member.id = :memberId")
+    Long findSingleViewId(Long memberId, Long noticeId);
+
+    @Query("select v.view from Notice n join NoticeView v on n.noticeView.id = v.id where n.id = :noticeId and v.member.id = :memberId")
+    ViewType findSingleViewType(Long memberId, Long noticeId);
 
     @Modifying
     @Query("update NoticeView v set v.view = :viewType where v.member.id = :memberId and v.id = :noticeViewId")
