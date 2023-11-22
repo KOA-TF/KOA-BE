@@ -71,7 +71,7 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     @Override
     public List<Notice> selectNoticeByCurriculum(Long curriculumId) {
         return jpaQueryFactory.selectFrom(notice)
-                .join(curriculum).on(notice.id.eq(curriculumId))
+                .join(curriculum).on(notice.curriculum.id.eq(curriculumId))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
     }
