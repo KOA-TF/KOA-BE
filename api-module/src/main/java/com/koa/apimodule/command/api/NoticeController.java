@@ -67,8 +67,6 @@ public class NoticeController {
             @RequestPart(value = "dto") NoticeRequest request,
             @RequestPart(value = "file") MultipartFile multipartFile) {
 
-        Member memberRequest = memberUtils.getAccessMember();
-        request.setMemberId(memberRequest.getId());
         Long noticeId = noticeSaveUseCase.saveNotice(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
     }

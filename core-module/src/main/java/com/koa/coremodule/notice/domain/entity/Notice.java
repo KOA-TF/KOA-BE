@@ -56,11 +56,11 @@ public class Notice extends BaseEntity {
         this.curriculum = curriculum;
     }
     
-    public void settingInfo(String imageUrl, Member member, NoticeTeam team, Curriculum curriculum) {
+    public void settingInfo(String imageUrl, Member member, NoticeTeam team, Curriculum curriculum, Notice notice) {
         this.noticeTeam = team;
         this.noticeImage = NoticeImage.create(imageUrl);
         this.curriculum = curriculum;
-        this.noticeView = NoticeView.create(ViewType.NONE, member);
+        this.noticeView = NoticeView.create(ViewType.NONE, member, notice);
         this.member = member;
     }
 

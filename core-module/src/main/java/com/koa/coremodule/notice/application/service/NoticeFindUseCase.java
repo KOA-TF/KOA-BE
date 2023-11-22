@@ -25,7 +25,6 @@ public class NoticeFindUseCase {
     public List<NoticeListResponse> selectNotice(Long memberId) {
 
         List<NoticeListProjection> projection = noticeQueryService.selectNotice();
-
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
 
         noticeQueryService.findViewYn(response, memberId, projection);
