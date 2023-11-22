@@ -21,7 +21,6 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-
     @Override
     public List<NoticeListProjection> findAllNotice() {
         return jpaQueryFactory.select(new QNoticeListProjection(
@@ -51,10 +50,8 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     @Override
     public ViewType findViewYn(NoticeViewRequest request) {
         return jpaQueryFactory.select(noticeView.view)
-                .from(notice)
-                .join(noticeView)
-                .on(notice.noticeView.id.eq(noticeView.id))
-                .where(noticeView.member.id.eq(request.memberId()).and(notice.id.eq(request.noticeId())))
+                .from(noticeView)
+                .where(noticeView.member.id.eq(request.memberId()).and(noticeView.notice.id.eq(request.noticeId())))
                 .fetchOne();
     }
 
