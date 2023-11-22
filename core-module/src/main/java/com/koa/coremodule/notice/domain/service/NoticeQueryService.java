@@ -6,14 +6,12 @@ import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
-import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.notice.domain.entity.NoticeTeam;
-import com.koa.coremodule.notice.domain.entity.ViewType;
+import com.koa.coremodule.notice.domain.entity.*;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeViewRepository;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class NoticeQueryService {
     private final MemberRepository memberRepository;
     private final NoticeTeamRepository noticeTeamRepository;
     private final CurriculumRepository curriculumRepository;
+    private final NoticeViewRepository noticeViewRepository;
 
     public List<NoticeListProjection> selectNotice() {
 
@@ -44,12 +43,22 @@ public class NoticeQueryService {
         while (i < response.size()) {
 
             NoticeViewRequest viewRequest = new NoticeViewRequest(memberId, projection.get(i).getNoticeId());
+            ViewType viewType = noticeRepository.findViewYn(viewRequest);
 
-            if (noticeRepository.findViewYn(viewRequest).equals(ViewType.VIEWED)) {
-                NoticeListResponse originalResponse = response.get(i);
-                NoticeListResponse updatedResponse = originalResponse.withViewYn(true);
-                response.set(i, updatedResponse);
+            if (viewType != null) {
+
+                if (viewType.equals(ViewType.VIEWED)) {
+                    NoticeListResponse originalResponse = response.get(i);
+                    NoticeListResponse updatedResponse = originalResponse.withViewYn(true);
+                    response.set(i, updatedResponse);
+                }
+            } else {
+                final Member member = findMemberById(memberId).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+                final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+                NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
+                noticeViewRepository.save(noticeView);
             }
+
             i++;
         }
     }
