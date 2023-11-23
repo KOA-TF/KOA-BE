@@ -1,16 +1,24 @@
 package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
+import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
 import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
+import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
+import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Slf4j
@@ -22,6 +30,46 @@ public class NoticeController {
     private final NoticeFindUseCase noticeFindUseCase;
     private final NoticeSaveUseCase noticeSaveUseCase;
     private final MemberUtils memberUtils;
+    private final MemberRepository memberRepository;
+    private final NoticeTeamRepository noticeTeamRepository;
+    private final CurriculumRepository curriculumRepository;
+    private final NoticeRepository noticeRepository;
+
+    @PostConstruct
+    public void test() {
+        final Member member = Member.builder()
+                .authority(Authority.MEMBER)
+                .email("austinan123@gmail.com")
+                .password("001215")
+                .name("안정후")
+                .build();
+        memberRepository.save(member);
+        final Member member2 = Member.builder()
+                .authority(Authority.MEMBER)
+                .email("test@gmail.com")
+                .password("001215")
+                .name("test")
+                .build();
+        memberRepository.save(member2);
+
+        final Curriculum curriculum = Curriculum.builder()
+                .curriculumName("기업프로젝트1")
+                .build();
+        curriculumRepository.save(curriculum);
+        final Curriculum curriculum2 = Curriculum.builder()
+                .curriculumName("기업프로젝트2")
+                .build();
+        curriculumRepository.save(curriculum2);
+        final Curriculum curriculum3 = Curriculum.builder()
+                .curriculumName("기업프로젝트3")
+                .build();
+        curriculumRepository.save(curriculum3);
+
+        final NoticeTeam noticeTeam = NoticeTeam.builder()
+                .teamName("경영총괄팀")
+                .build();
+        noticeTeamRepository.save(noticeTeam);
+    }
 
     /**
      * 공지 전체 조회
