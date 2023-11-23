@@ -65,7 +65,7 @@ public class CommentGetUseCase {
         final Map<Long, MemberDetail> memberDetailMap = memberDetailList.stream()
                 .collect(Collectors.toMap(memberDetail -> memberDetail.getMember().getId(), memberDetail -> memberDetail));
         final Map<Comment, MemberDetail> commentMemberDetailMap = commentList.stream()
-                .sorted(Comparator.comparing(Comment::getCreatedAt).reversed())
+                .sorted(Comparator.comparing(Comment::getCreatedAt))
                 .collect(Collectors.toMap(
                         comment -> comment,
                         comment -> memberDetailMap.get(comment.getWriter().getId()),
