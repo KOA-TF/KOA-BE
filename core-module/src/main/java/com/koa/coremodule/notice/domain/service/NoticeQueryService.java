@@ -5,7 +5,6 @@ import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
-import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
 import com.koa.coremodule.notice.domain.entity.*;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.domain.repository.CurriculumRepository;

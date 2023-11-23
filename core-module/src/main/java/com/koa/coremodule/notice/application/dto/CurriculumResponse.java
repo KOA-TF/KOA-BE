@@ -1,7 +1,15 @@
 package com.koa.coremodule.notice.application.dto;
 
-public record CurriculumResponse(Long curriculumId,
-                                 String curriculumName,
-                                 String name,
-                                 String title) {
+import lombok.Builder;
+import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
+
+@Data
+@Builder
+@Jacksonized
+public class CurriculumResponse {
+
+    private Long curriculumId;
+    private String curriculumName;
+    private String title;
 }
