@@ -3,6 +3,7 @@ package com.koa.coremodule.comment.application.mapper;
 import com.koa.coremodule.comment.application.dto.response.CommentInfoResponse;
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.entity.MemberDetail;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,14 +33,16 @@ public class CommentMapper {
         return comment;
     }
 
-    public static CommentInfoResponse mapToCommentInfoResponse(Comment comment, Member member) {
+    public static CommentInfoResponse mapToCommentInfoResponse(Comment comment, Member member, MemberDetail memberDetail) {
         return CommentInfoResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .writer(member.getName())
-                .createdAt(comment.getCreatedAt().toString())
+                .createdAt(comment.getCreatedAtByFormat())
                 .isMine(comment.getWriter().equals(member))
                 .isAnonymous(comment.getIsAnonymous())
+                .profileImageUrl(memberDetail.getProfileImage())
+                .writerId(member.getId())
                 .build();
     }
 

@@ -8,6 +8,8 @@ import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.comment.domain.service.CommentSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.entity.MemberDetail;
+import com.koa.coremodule.member.domain.service.MemberDetailQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.notice.domain.entity.Notice;
@@ -21,15 +23,17 @@ public class CommentCreateUseCase {
     private final NoticeQueryService noticeQueryService;
     private final CommentSaveService commentSaveService;
     private final CommentQueryService commentQueryService;
+    private final MemberDetailQueryService memberDetailQueryService;
 
     @Transactional
     public CommentInfoResponse createComment(Long noticeId, CommentCreateRequest commentCreateRequest){
         final Member member = memberUtils.getAccessMember();
         final Notice notice = noticeQueryService.findByNoticeId(noticeId);
         final Comment comment = CommentMapper.mapToCommentWithUserAndAlbum(commentCreateRequest.getContent(), notice, member, commentCreateRequest.getIsAnonymous());
+        final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
 
         commentSaveService.saveComment(comment);
-        return CommentMapper.mapToCommentInfoResponse(comment, member);
+        return CommentMapper.mapToCommentInfoResponse(comment, member, memberDetail);
     }
 
     @Transactional
@@ -38,8 +42,9 @@ public class CommentCreateUseCase {
         final Notice notice = noticeQueryService.findByNoticeId(noticeId);
         final Comment parent = commentQueryService.getCommentById(commentId);
         final Comment comment = CommentMapper.mapToCommentWithUserAndNoticeAndParent(commentCreateRequest.getContent(), notice, member, parent, commentCreateRequest.getIsAnonymous());
+        final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
 
         commentSaveService.saveComment(comment);
-        return CommentMapper.mapToCommentInfoResponse(comment, member);
+        return CommentMapper.mapToCommentInfoResponse(comment, member, memberDetail);
     }
 }

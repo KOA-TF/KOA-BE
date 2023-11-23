@@ -4,6 +4,7 @@ import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.member.domain.entity.Member;
 import jakarta.persistence.*;
+import java.time.format.DateTimeFormatter;
 import lombok.*;
 
 @Builder
@@ -35,5 +36,9 @@ public class Comment extends BaseEntity {
 
     public Long getParentId() {
         return this.parent != null ? this.parent.getId() : null;
+    }
+
+    public String getCreatedAtByFormat() {
+        return this.createdAt.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
     }
 }

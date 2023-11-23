@@ -34,6 +34,7 @@ public class Member extends BaseEntity {
     private Authority authority;
 
     private Boolean isDeleted = Boolean.FALSE;
+    private Boolean isRegistered = Boolean.FALSE;
 
     @Builder
     public Member(String name, String period, String email, String phoneNumber, String password, Authority authority) {
@@ -55,5 +56,16 @@ public class Member extends BaseEntity {
         if(Objects.nonNull(fcmToken)) {
             this.fcmToken = fcmToken;
         }
+    }
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public void register() {
+        this.isRegistered = true;
+    }
+
+    public boolean isRegistered() {
+        return this.isRegistered;
     }
 }

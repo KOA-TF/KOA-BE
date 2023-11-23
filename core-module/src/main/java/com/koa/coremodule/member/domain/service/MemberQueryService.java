@@ -21,7 +21,7 @@ public class MemberQueryService {
         }
     }
 
-    public boolean checkMemberRegistered(String email, String password) {
+    public boolean checkMemberExist(String email, String password) {
         return memberRepository.existsByEmailAndPassword(email, password);
     }
 

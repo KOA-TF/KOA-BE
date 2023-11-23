@@ -15,6 +15,7 @@ import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
 import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
+import com.koa.coremodule.member.application.service.MemberRegisterUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +41,7 @@ public class MemberController {
     private final MemberDeleteUseCase memberDeleteUseCase;
     private final EmailVerificationUseCase emailVerificationUseCase;
     private final MemberPasswordChangeUseCase memberPasswordChangeUseCase;
+    private final MemberRegisterUseCase memberRegisterUseCase;
 
     @GetMapping("/info")
     public ApplicationResponse<MemberInfoResponse> getMemberInfo(){
@@ -53,11 +55,19 @@ public class MemberController {
         return ApplicationResponse.ok(null);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/check/register")
     public ApplicationResponse<CheckRegisterResponse> checkMemberRegistered(@RequestParam String email, @RequestParam String password) {
          CheckRegisterResponse response = memberCheckUseCase.checkMemberRegistered(email, password);
          return ApplicationResponse.ok(response);
     }
+
+    @PostMapping("/register")
+    public ApplicationResponse<Void> postMemberDetail(@RequestParam String email, @RequestParam String password){
+        memberRegisterUseCase.registerMember(email, password);
+        return ApplicationResponse.ok(null);
+    }
+
+
     @GetMapping("/info/detail")
     public ApplicationResponse<MemberDetailInfoResponse> getMemberDetailInfo() {
         MemberDetailInfoResponse response = memberGetUseCase.getMemberDetailInfo();
