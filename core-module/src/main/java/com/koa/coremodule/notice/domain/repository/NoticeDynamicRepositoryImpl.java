@@ -2,16 +2,18 @@ package com.koa.coremodule.notice.domain.repository;
 
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.QNotice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.QCurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.QNoticeListProjection;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.koa.coremodule.member.domain.entity.QMember.member;
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
@@ -58,11 +60,21 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     @Override
     public List<CurriculumProjection> findByCurriculum() {
 
-        return jpaQueryFactory.select(CurriculumProjection.CONSTRUCTOR_EXPRESSION)
+        final QNotice subNotice = new QNotice("sub");
+
+        return jpaQueryFactory
+                .selectDistinct(new QCurriculumProjection(
+                        curriculum.id,
+                        curriculum.curriculumName,
+                        notice.title
+                ))
                 .from(curriculum)
-                .join(notice).on(notice.curriculum.id.eq(curriculum.id))
-                .join(member).on(member.id.eq(notice.member.id))
-                .fetch();
+                .leftJoin(notice).on(curriculum.id.eq(notice.curriculum.id)
+                        .and(notice.createdAt.eq(JPAExpressions
+                                .select(subNotice.createdAt.max())
+                                .from(subNotice)
+                                .where(subNotice.curriculum.id.eq(notice.curriculum.id)))
+                        )).fetch();
     }
 
     @Override
