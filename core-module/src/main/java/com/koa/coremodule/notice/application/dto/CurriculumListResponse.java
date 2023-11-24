@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -14,6 +14,6 @@ public class CurriculumListResponse {
     private Long noticeId;
     private String title;
     private String content;
-    private LocalDateTime date;
+    private LocalDate date;
 
 }
