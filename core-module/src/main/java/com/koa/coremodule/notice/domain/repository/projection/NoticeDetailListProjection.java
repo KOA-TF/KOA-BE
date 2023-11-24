@@ -16,11 +16,13 @@ import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
 
 
 @Getter
-public class NoticeListProjection {
+public class NoticeDetailListProjection {
 
-    public static final ConstructorExpression<NoticeListProjection> CONSTRUCTOR_EXPRESSION =
-            Projections.constructor(NoticeListProjection.class,
+    public static final ConstructorExpression<NoticeDetailListProjection> CONSTRUCTOR_EXPRESSION =
+            Projections.constructor(NoticeDetailListProjection.class,
                     notice.id,
+                    member.name,
+                    memberDetail.profileImage,
                     notice.title,
                     notice.content,
                     notice.createdAt,
@@ -30,6 +32,8 @@ public class NoticeListProjection {
             );
 
     private final Long noticeId;
+    private final String name;
+    private final String profileImage;
     private final String title;
     private final String content;
     private final LocalDateTime date;
@@ -38,8 +42,10 @@ public class NoticeListProjection {
     private final String teamName;
 
     @QueryProjection
-    public NoticeListProjection(Long noticeId, String title, String content, LocalDateTime date, String imageUrl, String curriculumName, String teamName) {
+    public NoticeDetailListProjection(Long noticeId, String name, String profileImage, String title, String content, LocalDateTime date, String imageUrl, String curriculumName, String teamName) {
         this.noticeId = noticeId;
+        this.name = name;
+        this.profileImage = profileImage;
         this.title = title;
         this.content = content;
         this.date = date;

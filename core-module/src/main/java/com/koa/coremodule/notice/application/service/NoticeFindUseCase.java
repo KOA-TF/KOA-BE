@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -47,11 +49,19 @@ public class NoticeFindUseCase {
         List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
 
         for (int i = 0; i < size; i++) {
-            response.get(i).setNoticeId(entityResponse.get(i).getMember().getId());
-            response.get(i).setDate(entityResponse.get(i).getCreatedAt());
+            response.get(i).setNoticeId(entityResponse.get(i).getId());
+            response.get(i).setDate(convertDateString(entityResponse.get(i).getCreatedAt().toString()));
         }
 
         return response;
+    }
+
+    private LocalDate convertDateString(String dateString) {
+
+        String datePart = dateString.substring(0, 10);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(datePart, formatter);
     }
 
 }

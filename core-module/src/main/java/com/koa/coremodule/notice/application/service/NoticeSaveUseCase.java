@@ -3,16 +3,14 @@ package com.koa.coremodule.notice.application.service;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.application.dto.NoticeRequest;
-import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
-import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
+import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
@@ -96,10 +94,10 @@ public class NoticeSaveUseCase {
         noticeDeleteService.deleteNoticeBySingleNoticeId(noticeId);
     }
 
-    public NoticeListResponse selectNoticeDetail(Long memberId, Long noticeId) {
+    public NoticeDetailListResponse selectNoticeDetail(Long memberId, Long noticeId) {
 
-        NoticeListProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
-        NoticeListResponse response = noticeMapper.toNoticeDetailDTO(projection);
+        NoticeDetailListProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
+        NoticeDetailListResponse response = noticeMapper.toNoticeDetailDTO(projection);
 
         // 조회 여부 기록 업데이트
         ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);

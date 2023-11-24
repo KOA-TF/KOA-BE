@@ -3,6 +3,7 @@ package com.koa.coremodule.notice.application.mapper;
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import org.mapstruct.*;
 
@@ -62,6 +63,6 @@ public interface NoticeMapper {
             @Mapping(source = "teamName", target = "team"),
             @Mapping(source = "date", target = "date")
     })
-    NoticeListResponse toNoticeDetailDTO(NoticeListProjection projection);
+    NoticeDetailListResponse toNoticeDetailDTO(NoticeDetailListProjection projection);
 
 }

@@ -4,16 +4,15 @@ import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.QNotice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
-import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
-import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
-import com.koa.coremodule.notice.domain.repository.projection.QCurriculumProjection;
-import com.koa.coremodule.notice.domain.repository.projection.QNoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.koa.coremodule.member.domain.entity.QMember.member;
+import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
@@ -41,9 +40,11 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     }
 
     @Override
-    public NoticeListProjection findAllNoticeDetail(Long noticeId) {
-        return jpaQueryFactory.select(NoticeListProjection.CONSTRUCTOR_EXPRESSION)
+    public NoticeDetailListProjection findAllNoticeDetail(Long noticeId) {
+        return jpaQueryFactory.select(NoticeDetailListProjection.CONSTRUCTOR_EXPRESSION)
                 .from(notice)
+                .join(member).on(notice.member.id.eq(member.id))
+                .join(memberDetail).on(memberDetail.member.id.eq(member.id))
                 .where(notice.id.eq(noticeId))
                 .orderBy(notice.createdAt.desc())
                 .fetchOne();
