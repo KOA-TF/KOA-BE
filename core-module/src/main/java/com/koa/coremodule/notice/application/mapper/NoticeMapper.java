@@ -22,8 +22,8 @@ public interface NoticeMapper {
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "imageUrl", target = "imageUrl"),
-            @Mapping(source = "curriculumName", target = "curriculum"),
-            @Mapping(source = "teamName", target = "team"),
+            @Mapping(source = "curriculumName", target = "curriculumName"),
+            @Mapping(source = "teamName", target = "teamName"),
             @Mapping(source = "date", target = "date")
     })
     List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> notice);
@@ -56,6 +56,8 @@ public interface NoticeMapper {
 
     @Mappings({
             @Mapping(source = "noticeId", target = "noticeId"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "profileImage", target = "profileImage"),
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "imageUrl", target = "imageUrl"),

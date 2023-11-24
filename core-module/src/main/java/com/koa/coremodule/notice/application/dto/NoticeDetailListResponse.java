@@ -3,7 +3,7 @@ package com.koa.coremodule.notice.application.dto;
 import java.time.LocalDate;
 
 public record NoticeDetailListResponse(Long noticeId,
-                                       String writer,
+                                       String name,
                                        String profileImage,
                                        String curriculum,
                                        String team,
@@ -18,7 +18,7 @@ public record NoticeDetailListResponse(Long noticeId,
     }
 
     public NoticeDetailListResponse withViewYn(Boolean newViewYn) {
-        return new NoticeDetailListResponse(noticeId, writer, profileImage, curriculum, team, title, content, imageUrl, date, newViewYn);
+        return new NoticeDetailListResponse(noticeId, name, profileImage, curriculum, team, title, content, imageUrl, date, newViewYn);
     }
 
 }
