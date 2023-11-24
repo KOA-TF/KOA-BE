@@ -47,7 +47,7 @@ public class NoticeFindUseCase {
         List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
 
         for (int i = 0; i < size; i++) {
-            response.get(i).setNoticeId(entityResponse.get(i).getMember().getId());
+            response.get(i).setNoticeId(entityResponse.get(i).getId());
             response.get(i).setDate(entityResponse.get(i).getCreatedAt());
         }
 

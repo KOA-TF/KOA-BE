@@ -101,12 +101,12 @@ public class NoticeController {
      * 공지 상세 조회 (내용)
      */
     @GetMapping(value = "/{noticeId}/detail")
-    public ApplicationResponse<NoticeListResponse> noticeDetail(
+    public ApplicationResponse<NoticeDetailListResponse> noticeDetail(
             @PathVariable Long noticeId) {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        NoticeListResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
+        NoticeDetailListResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
         return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
