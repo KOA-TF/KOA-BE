@@ -2,8 +2,10 @@ package com.koa.coremodule.vote.application.service;
 
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.vote.application.dto.VoteItemRequest;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.vote.application.dto.VoteRequest;
+import com.koa.coremodule.vote.application.mapper.VoteItemRecordMapper;
 import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
@@ -12,6 +14,7 @@ import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,31 +23,39 @@ public class VoteSaveUseCase {
 
     private final MemberUtils memberUtils;
     private final VoteSaveService voteSaveService;
+    private final NoticeQueryService noticeQueryService;
     private final VoteMapper voteMapper;
 
     public Long saveVote(VoteRequest voteRequest) {
 
         Member memberRequest = memberUtils.getAccessMember();
 
+        final ArrayList<VoteItem> voteItems = new ArrayList<>();
         // 투표 제목 저장
         Vote voteEntity = voteMapper.toVoteEntity(voteRequest.title());
+        //1차 저장 -> ID 생성을 위해서
         Vote vote = voteSaveService.saveVote(voteEntity);
 
         // 투표 항목 개수 체크 후 각자 저장
         List<String> titles = voteRequest.item();
-        for(String i : titles) {
-
+        for (String i : titles) {
+            //vote Item enttiy 생성
             VoteItem voteItemEntity = voteMapper.toVoteItemEntity(i);
-            VoteItem voteItem = voteSaveService.saveVoteItem(voteItemEntity);
+            voteItemEntity.setVote(vote);
+            voteItems.add(voteItemEntity);
+            voteSaveService.saveVoteItem(voteItemEntity);
 
-            VoteItemRequest voteItemRequest = VoteItemRequest.builder()
-                    .memberId(memberRequest.getId())
-                    .voteItemId(voteItem.getId())
-                    .build();
-
-            VoteItemRecord voteItemRecordRequest = voteMapper.toVoteRecordEntity(voteItemRequest);
-            VoteItemRecord voteItemRecord = voteSaveService.saveVoteRecord(voteItemRecordRequest);
+            VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItemEntity, memberRequest);
+            voteSaveService.saveVoteRecord(voteItemRecordRequest);
         }
+        //vote Item을 vote를 통해서 저장
+        vote.setVoteItems(voteItems);
+
+        //notice 조회 후 저장
+        Notice notice = noticeQueryService.findByNoticeId(voteRequest.noticeId());
+        vote.setNotice(notice);
+
+        voteSaveService.saveVote(vote);
 
         return vote.getId();
     }
