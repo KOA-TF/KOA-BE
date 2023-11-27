@@ -19,20 +19,13 @@ import java.util.List;
 public interface VoteMapper {
 
     @Mappings({
-            @Mapping(source = "title", target = "title")
+            @Mapping(source = "title", target = "voteTitle")
     })
     Vote toVoteEntity(String title);
 
     @Mappings({
-            @Mapping(source = "voteItemName", target = "name")
+            @Mapping(source = "name", target = "voteItemName")
     })
     VoteItem toVoteItemEntity(String name);
-
-    @Mappings({
-            @Mapping(source = "memberId", target = "memberId"),
-            @Mapping(source = "voteItemId", target = "voteItemId"),
-    })
-    VoteItemRecord toVoteRecordEntity(VoteItemRequest voteItemRequest);
-
 
 }
