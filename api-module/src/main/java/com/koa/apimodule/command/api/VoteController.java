@@ -11,13 +11,12 @@ import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
 import com.koa.coremodule.vote.application.dto.VoteRequest;
+import com.koa.coremodule.vote.application.dto.VoteStatus;
+import com.koa.coremodule.vote.application.service.VoteFindUseCase;
 import com.koa.coremodule.vote.application.service.VoteSaveUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 
@@ -28,6 +27,7 @@ import javax.annotation.PostConstruct;
 public class VoteController {
 
     private final VoteSaveUseCase voteSaveUseCase;
+    private final VoteFindUseCase voteFindUseCase;
     private final MemberRepository memberRepository;
     private final NoticeTeamRepository noticeTeamRepository;
     private final CurriculumRepository curriculumRepository;
@@ -42,6 +42,13 @@ public class VoteController {
                 .name("안정후")
                 .build();
         memberRepository.save(member);
+        final Member member2 = Member.builder()
+                .authority(Authority.MEMBER)
+                .email("austinan12300@gmail.com")
+                .password("00121500")
+                .name("안정후22")
+                .build();
+        memberRepository.save(member2);
         final Curriculum curriculum = Curriculum.builder()
                 .curriculumName("기업프로젝트")
                 .build();
@@ -72,9 +79,25 @@ public class VoteController {
     /**
      * 투표 현황 조회 - 명단까지 리스트로 전달 필요
      */
+    @GetMapping
+    public ApplicationResponse<VoteStatus> getVoteStatus(Long noticeId) {
+
+        VoteStatus voteStatus = voteFindUseCase.findVoteStatus(noticeId);
+        return ApplicationResponse.ok(voteStatus, "투표 현황 조회 완료했습니다.");
+    }
 
     /**
      * 투표 참여
+     */
+    @PostMapping(value = "/attend")
+    public ApplicationResponse<Long> attendVote(Long voteItemId) {
+
+        Long voteItemRecordId = voteSaveUseCase.attendVote(voteItemId);
+        return ApplicationResponse.ok(voteItemRecordId, "투표 참여를 완료했습니다.");
+    }
+
+    /**
+     * 투표 마감 처리
      */
 
 }
