@@ -15,7 +15,10 @@ public enum Error {
     //REPORT
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
 
-    //NOTICE
+    // VOTE
+    VOTE_NOT_FOUND("투표가 존재하지 않습니다.", 400),
+    VOTE_ITEM_NOT_FOUND("투표 항목이 존재하지 않습니다.", 400),
+    VOTE_ITEM_RECORD_NOT_FOUND("투표 항목 참여자가 존재하지 않습니다.", 400),
 
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
