@@ -1,6 +1,7 @@
 package com.koa.coremodule.vote.application.service;
 
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
@@ -10,6 +11,7 @@ import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
+import com.koa.coremodule.vote.domain.service.VoteFindService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +25,9 @@ public class VoteSaveUseCase {
 
     private final MemberUtils memberUtils;
     private final VoteSaveService voteSaveService;
+    private final VoteFindService voteFindService;
     private final NoticeQueryService noticeQueryService;
+    private final MemberQueryService memberQueryService;
     private final VoteMapper voteMapper;
 
     public Long saveVote(VoteRequest voteRequest) {
@@ -44,9 +48,6 @@ public class VoteSaveUseCase {
             voteItemEntity.setVote(vote);
             voteItems.add(voteItemEntity);
             voteSaveService.saveVoteItem(voteItemEntity);
-
-            VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItemEntity, memberRequest);
-            voteSaveService.saveVoteRecord(voteItemRecordRequest);
         }
         //vote Item을 vote를 통해서 저장
         vote.setVoteItems(voteItems);
@@ -58,6 +59,18 @@ public class VoteSaveUseCase {
         voteSaveService.saveVote(vote);
 
         return vote.getId();
+    }
+
+    public Long attendVote(Long voteItemId) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+        VoteItem voteItem = voteFindService.findVoteItemById(voteItemId);
+        Member member = memberQueryService.findMemberById(memberRequest.getId());
+
+        VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItem, member);
+        VoteItemRecord voteItemRecord = voteSaveService.saveVoteRecord(voteItemRecordRequest);
+
+        return voteItemRecord.getId();
     }
 
 }
