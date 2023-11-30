@@ -3,7 +3,6 @@ package com.koa.coremodule.vote.domain.service;
 import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.vote.application.dto.VoteStatus;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
