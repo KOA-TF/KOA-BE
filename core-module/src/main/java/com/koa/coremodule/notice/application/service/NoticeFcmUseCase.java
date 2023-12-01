@@ -48,9 +48,7 @@ public class NoticeFcmUseCase {
                 .build();
 
         for (Member m : members) {
-
-            if (!m.getFcmToken().isEmpty()) {
-
+            if (m.getFcmToken() != null && !m.getFcmToken().isEmpty()) {
                 Message message = Message.builder()
                         .setToken(m.getFcmToken())
                         .setNotification(notification)
