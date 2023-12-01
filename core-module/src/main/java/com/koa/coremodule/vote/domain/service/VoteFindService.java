@@ -52,16 +52,19 @@ public class VoteFindService {
 
                 // 항목별 멤버 명단 나열
                 Optional<VoteItem> voteItem = findVoteItemByItem(v.getItem());
-                VoteItemRecord voteItemRecord = findVoteItemRecordById(voteItem.get().getId());
-                VoteStatus.MemberList memberListBuilder = VoteStatus.MemberList.builder()
-                        .memberId(voteItemRecord.getMember().getId())
-                        .build();
+                List<VoteItemRecord> voteItemRecord = findVoteItemRecordById(voteItem.get().getId());
 
-                // 이름 넣어주기
-                Member member = voteRepository.findVoteMemberByMemberId(memberListBuilder.getMemberId(), voteItemRecord.getId());
-                memberListBuilder.setName(member.getName());
+                for(VoteItemRecord vr : voteItemRecord) {
+                    VoteStatus.MemberList memberListBuilder = VoteStatus.MemberList.builder()
+                            .memberId(vr.getMember().getId())
+                            .build();
 
-                memberLists.add(memberListBuilder);
+                    // 이름 넣어주기
+                    Member member = voteRepository.findVoteMemberByMemberId(memberListBuilder.getMemberId(), vr.getId());
+                    memberListBuilder.setName(member.getName());
+
+                    memberLists.add(memberListBuilder);
+                }
 
                 voteItemStatus.setVoteItemId(voteItem.get().getId());
                 voteItemStatus.setMembers(memberLists);
@@ -100,7 +103,7 @@ public class VoteFindService {
         return voteItemRepository.findVoteItemByVoteItemName(item);
     }
 
-    public VoteItemRecord findVoteItemRecordById(Long voteItemId) {
+    public List<VoteItemRecord> findVoteItemRecordById(Long voteItemId) {
         return voteRecordRepository.findVoteItemRecordByVoteItemId(voteItemId);
     }
 
