@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,25 +37,31 @@ public class NoticeFcmUseCase {
         log.info("회원의 fcm 토큰이 등록되었습니다.");
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void sendNotification(String title, String content) {
 
-        Member memberRequest = memberUtils.getAccessMember();
+        List<Member> members = findAllMember();
 
-        Member member = findMember(memberRequest.getId());
         Notification notification = Notification.builder()
                 .setTitle(title)
                 .setBody(content)
                 .build();
-        Message message = Message.builder()
-                .setToken(member.getFcmToken())
-                .setNotification(notification)
-                .build();
 
-        try {
-            firebaseMessaging.send(message);
-        } catch (FirebaseMessagingException ex) {
-            log.info("알림 전송에 실패했습니다.");
+        for (Member m : members) {
+
+            if (!m.getFcmToken().isEmpty()) {
+
+                Message message = Message.builder()
+                        .setToken(m.getFcmToken())
+                        .setNotification(notification)
+                        .build();
+
+                try {
+                    firebaseMessaging.send(message);
+                } catch (FirebaseMessagingException ex) {
+                    log.info("알림 전송에 실패했습니다.");
+                }
+            }
         }
     }
 
@@ -68,5 +76,9 @@ public class NoticeFcmUseCase {
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(Error.MEMBER_NOT_FOUND));
+    }
+
+    private List<Member> findAllMember() {
+        return memberRepository.findAll();
     }
 }
