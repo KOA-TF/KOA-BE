@@ -30,7 +30,6 @@ public class VoteFindService {
 
         VoteStatus voteStatus = new VoteStatus();
         List<VoteStatus.VoteItemStatus> voteItemStatusList = new ArrayList<>();
-        List<VoteStatus.MemberList> memberLists = new ArrayList<>();
 
         // 제목, id 기본정보 넣기
         Vote voteList = findVoteByNoticeId(noticeId);
@@ -46,6 +45,8 @@ public class VoteFindService {
                     .item(v.getItem())
                     .count(Math.toIntExact(v.getCount()))
                     .build();
+
+            List<VoteStatus.MemberList> memberLists = new ArrayList<>(); // 항목별로 멤버 초기화
 
             if (v.getCount() >= 1) {
 
@@ -73,9 +74,9 @@ public class VoteFindService {
 
                 voteItemStatusList.add(voteItemStatus);
             }
-
-            voteStatus.setItems(voteItemStatusList);
         }
+
+        voteStatus.setItems(voteItemStatusList);
 
         return voteStatus;
     }
