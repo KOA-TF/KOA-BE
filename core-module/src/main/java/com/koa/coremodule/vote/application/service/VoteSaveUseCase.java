@@ -15,6 +15,7 @@ import com.koa.coremodule.vote.domain.service.VoteFindService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,37 +31,39 @@ public class VoteSaveUseCase {
     private final MemberQueryService memberQueryService;
     private final VoteMapper voteMapper;
 
+    @Transactional
     public Long saveVote(VoteRequest voteRequest) {
-
-        Member memberRequest = memberUtils.getAccessMember();
-
-        final ArrayList<VoteItem> voteItems = new ArrayList<>();
         // 투표 제목 저장
         Vote voteEntity = voteMapper.toVoteEntity(voteRequest.title());
-        //1차 저장 -> ID 생성을 위해서
-        Vote vote = voteSaveService.saveVote(voteEntity);
 
         // 투표 항목 개수 체크 후 각자 저장
         List<String> titles = voteRequest.item();
-        for (String i : titles) {
-            //vote Item enttiy 생성
-            VoteItem voteItemEntity = voteMapper.toVoteItemEntity(i);
-            voteItemEntity.setVote(vote);
+        List<VoteItem> voteItems = new ArrayList<>();
+
+        for (String title : titles) {
+            //vote Item entity 생성
+            VoteItem voteItemEntity = voteMapper.toVoteItemEntity(title);
             voteItems.add(voteItemEntity);
             voteSaveService.saveVoteItem(voteItemEntity);
         }
-        //vote Item을 vote를 통해서 저장
-        vote.setVoteItems(voteItems);
 
-        //notice 조회 후 저장
+        //notice 조회
         Notice notice = noticeQueryService.findByNoticeId(voteRequest.noticeId());
-        vote.setNotice(notice);
 
+        // Vote 엔티티 생성
+        Vote vote = Vote.builder()
+                .voteTitle(voteEntity.getVoteTitle())
+                .voteItems(voteItems)
+                .notice(notice)
+                .build();
+
+        // Vote 엔티티 저장
         voteSaveService.saveVote(vote);
 
         return vote.getId();
     }
 
+    @Transactional
     public Long attendVote(Long voteItemId) {
 
         Member memberRequest = memberUtils.getAccessMember();

@@ -16,12 +16,6 @@ public class VoteItem extends BaseEntity {
     @Column(name = "vote_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Vote vote;
-
     private String voteItemName;
 
-    public void setVote(Vote vote) {
-        this.vote = vote;
-    }
 }

@@ -99,6 +99,10 @@ public class VoteFindService {
         return voteItemRepository.findById(voteItemId).orElseThrow(() -> new BusinessException(Error.VOTE_ITEM_NOT_FOUND));
     }
 
+    public List<VoteItem> findAllVoteItems() {
+        return voteItemRepository.findAll();
+    }
+
     public Optional<VoteItem> findVoteItemByItem(String item) {
         return voteItemRepository.findVoteItemByVoteItemName(item);
     }

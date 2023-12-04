@@ -22,18 +22,11 @@ public class Vote extends BaseEntity {
 
     private String voteTitle;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "vote")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VoteItem> voteItems = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
 
-    public void setVoteItems(List<VoteItem> voteItems) {
-        this.voteItems = voteItems;
-    }
-
-    public void setNotice(Notice notice) {
-        this.notice = notice;
-    }
 }
