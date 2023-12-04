@@ -6,7 +6,11 @@ import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
 import com.koa.coremodule.auth.application.exception.AuthException;
 import com.koa.coremodule.auth.application.utils.TokenExtractUtils;
+import com.koa.coremodule.auth.domain.entity.Token;
+import com.koa.coremodule.auth.domain.entity.TokenType;
 import com.koa.coremodule.auth.domain.jwt.JWTProvider;
+import com.koa.coremodule.auth.domain.service.TokenDeleteService;
+import com.koa.coremodule.auth.domain.service.TokenQueryService;
 import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import java.util.Arrays;
@@ -20,9 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class AuthUseCase {
     private final JWTProvider jwtProvider;
     private final MemberQueryService memberQueryService;
+    private final TokenQueryService tokenQueryService;
+    private final TokenDeleteService tokenDeleteService;
 
     public AuthResponse authLogin(Authority authority, String email, String password){
         memberQueryService.checkAccountExist(authority, email, password);
+        deleteUnusedToken(email, TokenType.REFRESH_TOKEN);
         final String accessToken = attachAuthenticationType(jwtProvider::generateAccessToken, email);
         final String refreshToken = attachAuthenticationType(jwtProvider::generateRefreshToken, email);
         return AuthResponse.builder()
@@ -36,6 +43,7 @@ public class AuthUseCase {
         final String token = TokenExtractUtils.extractToken(refreshToken);
         String reIssueAccessToken = attachAuthenticationType(jwtProvider::reIssueAccessToken, token);
         String reIssueRefreshToken = attachAuthenticationType(jwtProvider::reIssueRefreshToken, token);
+        tokenDeleteService.deleteTokenByTokenValue(refreshToken);
         return AuthResponse.builder()
                 .accessToken(reIssueAccessToken)
                 .refreshToken(reIssueRefreshToken)
@@ -44,5 +52,10 @@ public class AuthUseCase {
 
     private <T> String attachAuthenticationType(Function<T, String> generateTokenMethod, T includeClaimData) {
         return AuthConsts.AUTHENTICATION_TYPE_PREFIX + generateTokenMethod.apply(includeClaimData);
+    }
+
+    private void deleteUnusedToken(String email, TokenType tokenType) {
+        final List<Token> allToken = tokenQueryService.findAllByEmailAndTokenType(email, tokenType);
+        tokenDeleteService.deleteAllToken(allToken);
     }
 }
