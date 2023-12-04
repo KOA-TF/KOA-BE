@@ -24,9 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class AuthUseCase {
     private final JWTProvider jwtProvider;
     private final MemberQueryService memberQueryService;
+    private final TokenQueryService tokenQueryService;
+    private final TokenDeleteService tokenDeleteService;
 
     public AuthResponse authLogin(Authority authority, String email, String password){
         memberQueryService.checkAccountExist(authority, email, password);
+        deleteUnusedToken(email, TokenType.REFRESH_TOKEN);
         final String accessToken = attachAuthenticationType(jwtProvider::generateAccessToken, email);
         final String refreshToken = attachAuthenticationType(jwtProvider::generateRefreshToken, email);
         return AuthResponse.builder()
@@ -49,5 +52,10 @@ public class AuthUseCase {
 
     private <T> String attachAuthenticationType(Function<T, String> generateTokenMethod, T includeClaimData) {
         return AuthConsts.AUTHENTICATION_TYPE_PREFIX + generateTokenMethod.apply(includeClaimData);
+    }
+
+    private void deleteUnusedToken(String email, TokenType tokenType) {
+        final List<Token> allToken = tokenQueryService.findAllByEmailAndTokenType(email, tokenType);
+        tokenDeleteService.deleteAllToken(allToken);
     }
 }

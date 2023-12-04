@@ -6,6 +6,7 @@ import com.koa.coremodule.auth.domain.entity.Token;
 import com.koa.coremodule.auth.domain.entity.TokenType;
 import com.koa.coremodule.auth.domain.exception.NotExistTokenException;
 import com.koa.coremodule.auth.domain.repository.TokenRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @DomainService
@@ -28,5 +29,9 @@ public class TokenQueryService {
         Token token = tokenRepository.findByTokenValueAndTokenType(value, tokenType)
                 .orElseThrow(() -> new NotExistTokenException(Error.NOT_EXIST_TOKEN));
         return token;
+    }
+
+    public List<Token> findAllByEmailAndTokenType(String email, TokenType tokenType){
+        return tokenRepository.findAllByEmailAndTokenType(email, tokenType);
     }
 }
