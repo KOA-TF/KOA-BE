@@ -5,9 +5,6 @@ import com.koa.coremodule.notice.domain.entity.Notice;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,9 +18,6 @@ public class Vote extends BaseEntity {
     private Long id;
 
     private String voteTitle;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<VoteItem> voteItems = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")

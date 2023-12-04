@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,29 +35,28 @@ public class VoteSaveUseCase {
         // 투표 제목 저장
         Vote voteEntity = voteMapper.toVoteEntity(voteRequest.title());
 
-        // 투표 항목 개수 체크 후 각자 저장
-        List<String> titles = voteRequest.item();
-        List<VoteItem> voteItems = new ArrayList<>();
-
-        for (String title : titles) {
-            //vote Item entity 생성
-            VoteItem voteItemEntity = voteMapper.toVoteItemEntity(title);
-            voteItems.add(voteItemEntity);
-            voteSaveService.saveVoteItem(voteItemEntity);
-        }
-
         //notice 조회
         Notice notice = noticeQueryService.findByNoticeId(voteRequest.noticeId());
 
         // Vote 엔티티 생성
         Vote vote = Vote.builder()
                 .voteTitle(voteEntity.getVoteTitle())
-                .voteItems(voteItems)
                 .notice(notice)
                 .build();
 
         // Vote 엔티티 저장
-        voteSaveService.saveVote(vote);
+        Vote savedVote = voteSaveService.saveVote(vote);
+
+        // 투표 항목 개수 체크 후 각자 저장
+        List<String> titles = voteRequest.item();
+
+        for (String title : titles) {
+            VoteItem voteItemEntity = VoteItem.builder()
+                    .voteItemName(title)
+                    .vote(savedVote) // Vote ID 설정
+                    .build();
+            voteSaveService.saveVoteItem(voteItemEntity);
+        }
 
         return vote.getId();
     }
