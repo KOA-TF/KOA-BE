@@ -12,7 +12,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -62,7 +61,6 @@ public class JWTProvider {
         Date expireDate = getExpiration(refreshToken);
         Date currentDate = new Date();
         if (expireDate.getTime() - currentDate.getTime() < jwtProperties.getReissueRefreshTokenExpirationTime()) {
-            tokenDeleteService.deleteTokenByTokenValue(refreshToken);
             final String email = extractEmailFromRefreshToken(refreshToken);
             return generateRefreshToken(email);
         }

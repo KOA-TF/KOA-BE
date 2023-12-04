@@ -6,7 +6,11 @@ import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
 import com.koa.coremodule.auth.application.exception.AuthException;
 import com.koa.coremodule.auth.application.utils.TokenExtractUtils;
+import com.koa.coremodule.auth.domain.entity.Token;
+import com.koa.coremodule.auth.domain.entity.TokenType;
 import com.koa.coremodule.auth.domain.jwt.JWTProvider;
+import com.koa.coremodule.auth.domain.service.TokenDeleteService;
+import com.koa.coremodule.auth.domain.service.TokenQueryService;
 import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import java.util.Arrays;
@@ -36,6 +40,7 @@ public class AuthUseCase {
         final String token = TokenExtractUtils.extractToken(refreshToken);
         String reIssueAccessToken = attachAuthenticationType(jwtProvider::reIssueAccessToken, token);
         String reIssueRefreshToken = attachAuthenticationType(jwtProvider::reIssueRefreshToken, token);
+        tokenDeleteService.deleteTokenByTokenValue(refreshToken);
         return AuthResponse.builder()
                 .accessToken(reIssueAccessToken)
                 .refreshToken(reIssueRefreshToken)
