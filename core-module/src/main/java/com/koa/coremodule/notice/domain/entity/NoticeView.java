@@ -23,10 +23,15 @@ public class NoticeView {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static NoticeView create(ViewType view, Member member) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id")
+    private Notice notice;
+
+    public static NoticeView create(ViewType view, Member member, Notice notice) {
         return NoticeView.builder()
                 .view(view)
                 .member(member)
+                .notice(notice)
                 .build();
     }
 

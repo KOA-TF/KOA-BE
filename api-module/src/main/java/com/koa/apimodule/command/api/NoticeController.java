@@ -67,8 +67,6 @@ public class NoticeController {
             @RequestPart(value = "dto") NoticeRequest request,
             @RequestPart(value = "file") MultipartFile multipartFile) {
 
-        Member memberRequest = memberUtils.getAccessMember();
-        request.setMemberId(memberRequest.getId());
         Long noticeId = noticeSaveUseCase.saveNotice(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
     }
@@ -103,12 +101,12 @@ public class NoticeController {
      * 공지 상세 조회 (내용)
      */
     @GetMapping(value = "/{noticeId}/detail")
-    public ApplicationResponse<NoticeListResponse> noticeDetail(
+    public ApplicationResponse<NoticeDetailListResponse> noticeDetail(
             @PathVariable Long noticeId) {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        NoticeListResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
+        NoticeDetailListResponse response = noticeSaveUseCase.selectNoticeDetail(memberRequest.getId(), noticeId);
         return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 

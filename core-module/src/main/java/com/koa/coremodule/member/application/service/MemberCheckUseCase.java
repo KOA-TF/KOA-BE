@@ -19,13 +19,14 @@ public class MemberCheckUseCase {
     private final MemberQueryService memberQueryService;
 
     public CheckRegisterResponse checkMemberRegistered(String email, String password) {
-        final boolean isRegistered = memberQueryService.checkMemberRegistered(email, password);
-        return new CheckRegisterResponse(isRegistered);
+        boolean isMember = memberQueryService.checkMemberExist(email, password);
+        Member member = isMember ? memberQueryService.findByEmail(email) : null;
+        return new CheckRegisterResponse(isMember, member != null && member.isRegistered());
     }
 
     public CheckPasswordResponse checkPassword(String password) {
         Member member = memberUtils.getAccessMember();
-        return new CheckPasswordResponse(member.getPassword().equals(password));
+        return new CheckPasswordResponse(member.checkPassword(password));
     }
 
     public CheckEmailResponse checkEmail(String email) {

@@ -20,11 +20,13 @@ public class IgnoredPathConsts {
 
         map.put("/v1/auth/reissue", Set.of(HttpMethod.GET));
         map.put("/v1/member/register", Set.of(HttpMethod.POST));
+        map.put("/v1/member/check/register", Set.of(HttpMethod.POST));
         map.put("/h2-console/**", Set.of(HttpMethod.GET, HttpMethod.POST));
         map.put("/v1/auth/login/**", Set.of(HttpMethod.GET, HttpMethod.POST));
         map.put("/v1/member/email", Set.of(HttpMethod.POST));
         map.put("/v1/member/verify", Set.of(HttpMethod.POST));
         map.put("/v1/member/verify/code", Set.of(HttpMethod.POST));
+        map.put("/v1/member/password/unauthenticated", Set.of(HttpMethod.PUT));
         map.put("/api-docs/**", Set.of(HttpMethod.GET, HttpMethod.POST));
         map.put("/error", Set.of(HttpMethod.GET, HttpMethod.POST));
         map.put("/favicon.ico", Set.of(HttpMethod.GET, HttpMethod.POST));

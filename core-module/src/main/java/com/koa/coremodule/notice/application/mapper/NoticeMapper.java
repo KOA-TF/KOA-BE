@@ -3,6 +3,7 @@ package com.koa.coremodule.notice.application.mapper;
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import org.mapstruct.*;
 
@@ -21,26 +22,24 @@ public interface NoticeMapper {
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "imageUrl", target = "imageUrl"),
-            @Mapping(source = "curriculumName", target = "curriculum"),
-            @Mapping(source = "teamName", target = "team"),
+            @Mapping(source = "curriculumName", target = "curriculumName"),
+            @Mapping(source = "teamName", target = "teamName"),
             @Mapping(source = "date", target = "date")
     })
-    List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> company);
+    List<NoticeListResponse> toNoticeListDTO(List<NoticeListProjection> notice);
 
     @Mappings({
             @Mapping(source = "curriculumId", target = "curriculumId"),
             @Mapping(source = "curriculumName", target = "curriculumName"),
-            @Mapping(source = "name", target = "name"),
             @Mapping(source = "title", target = "title")
     })
-    List<CurriculumResponse> toCurriculumDTO(List<CurriculumProjection> company);
+    List<CurriculumResponse> toCurriculumDTO(List<CurriculumProjection> notice);
 
     @Mappings({
             @Mapping(source = "title", target = "title"),
-            @Mapping(source = "content", target = "content"),
-            @Mapping(source = "createdAt", target = "date")
+            @Mapping(source = "content", target = "content")
     })
-    List<CurriculumListResponse> toCurriculumListDTO(List<Notice> company);
+    List<CurriculumListResponse> toCurriculumListDTO(List<Notice> notice);
 
     @Mappings({
             @Mapping(source = "title", target = "title"),
@@ -57,6 +56,8 @@ public interface NoticeMapper {
 
     @Mappings({
             @Mapping(source = "noticeId", target = "noticeId"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "profileImage", target = "profileImage"),
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "content", target = "content"),
             @Mapping(source = "imageUrl", target = "imageUrl"),
@@ -64,6 +65,6 @@ public interface NoticeMapper {
             @Mapping(source = "teamName", target = "team"),
             @Mapping(source = "date", target = "date")
     })
-    NoticeListResponse toNoticeDetailDTO(NoticeListProjection projection);
+    NoticeDetailListResponse toNoticeDetailDTO(NoticeDetailListProjection projection);
 
 }

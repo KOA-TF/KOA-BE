@@ -1,6 +1,5 @@
 package com.koa.coremodule.notice.domain.repository;
 
-import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +13,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeDyn
     @Query("select n.id from Notice n where n.member.id = :memberId")
     List<Long> findIdsByMemberId(Long memberId);
 
-    @Query("select v.imageUrl from Notice n join NoticeImage v on n.noticeView.id = v.id where n.id = :noticeId")
+    @Query("select v.imageUrl from Notice n join NoticeImage v on n.noticeImage.id = v.id where n.id = :noticeId")
     String findImageByNoticeId(Long noticeId);
 
     @Modifying
@@ -33,8 +32,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeDyn
     @Query("update Notice n set n.title = :title, n.content = :content where n.id = :noticeId")
     void updateNotice(Long noticeId, String title, String content);
 
-    @Query("select v.id, v.view from Notice n join NoticeView v on n.noticeView.id = v.id where n.id = :noticeId and v.member.id = :memberId")
-    NoticeViewResponse findSingleViewYn(Long memberId, Long noticeId);
+    @Query("select v.id from NoticeView v where v.notice.id = :noticeId and v.member.id = :memberId")
+    Long findSingleViewId(Long memberId, Long noticeId);
+
+    @Query("select v.view from NoticeView v where v.notice.id = :noticeId and v.member.id = :memberId")
+    ViewType findSingleViewType(Long memberId, Long noticeId);
 
     @Modifying
     @Query("update NoticeView v set v.view = :viewType where v.member.id = :memberId and v.id = :noticeViewId")

@@ -1,6 +1,7 @@
 package com.koa.coremodule.member.domain.service;
 
 import com.koa.commonmodule.annotation.DomainService;
+import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -21,13 +22,17 @@ public class MemberQueryService {
         }
     }
 
-    public boolean checkMemberRegistered(String email, String password) {
+    public boolean checkMemberExist(String email, String password) {
         return memberRepository.existsByEmailAndPassword(email, password);
     }
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(Error.MEMBER_NOT_FOUND));
+    }
+
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new BusinessException(Error.MEMBER_NOT_FOUND));
     }
 
     public boolean checkEmailExist(String email) {

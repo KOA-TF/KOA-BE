@@ -7,6 +7,8 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+import static com.koa.coremodule.member.domain.entity.QMember.member;
+import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;

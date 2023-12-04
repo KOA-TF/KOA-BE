@@ -36,7 +36,7 @@ public class MemberGetUseCase {
 
     public MemberDetailInfoResponse getMemberDetailInfo(){
         final Member member = memberUtils.getAccessMember();
-        final MemberDetail memberDetail = memberDetailQueryService.findMemberDatailByMemberId(member.getId());
+        final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
         final List<Interest> interests = interestQueryService.findInterestsByMemberDetailId(memberDetail.getId());
         final List<InterestInfoResponse> interestInfoResponses = interests.stream()
                 .map(MemberMapper::mapToInterestInfoResponse)

@@ -16,10 +16,10 @@ public class VoteItem extends BaseEntity {
     @Column(name = "vote_item_id")
     private Long id;
 
-    private String voteItemName;
-    private Integer count;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote_id")
     private Vote vote;
+
+    private String voteItemName;
+
 }

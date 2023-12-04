@@ -3,16 +3,14 @@ package com.koa.coremodule.notice.application.service;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.application.dto.NoticeRequest;
-import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
-import com.koa.coremodule.notice.application.dto.NoticeViewResponse;
+import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
@@ -45,13 +43,14 @@ public class NoticeSaveUseCase {
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeEntity(request);
         final Member member = noticeQueryService.findMemberById(request.getMemberId()).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+        Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId()).orElseThrow(() -> new EntityNotFoundException("팀을 찾을 수 없습니다."));
         final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId()).orElseThrow(() -> new EntityNotFoundException("커리큘럼을 찾을 수 없습니다."));
-        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum);
+        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
 
-        Notice savedNotice = noticeQueryService.save(noticeEntity);
+        noticeQueryService.save(noticeEntity);
         return savedNotice.getId();
     }
 
@@ -95,16 +94,17 @@ public class NoticeSaveUseCase {
         noticeDeleteService.deleteNoticeBySingleNoticeId(noticeId);
     }
 
-    public NoticeListResponse selectNoticeDetail(Long memberId, Long noticeId) {
+    public NoticeDetailListResponse selectNoticeDetail(Long memberId, Long noticeId) {
 
-        NoticeListProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
-        NoticeListResponse response = noticeMapper.toNoticeDetailDTO(projection);
+        NoticeDetailListProjection projection = noticeQueryService.selectNoticeDetail(noticeId);
+        NoticeDetailListResponse response = noticeMapper.toNoticeDetailDTO(projection);
 
         // 조회 여부 기록 업데이트
-        NoticeViewResponse viewResponse = noticeQueryService.findSingleViewYn(noticeId, memberId);
+        ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
+        Long viewId = noticeQueryService.findSingleViewId(noticeId, memberId);
 
-        if (viewResponse.viewType().equals(ViewType.NONE)) {
-            noticeQueryService.updateSingleViewYn(viewResponse.id(), memberId, ViewType.VIEWED);
+        if (viewResponse.equals(ViewType.NONE)) {
+            noticeQueryService.updateSingleViewYn(viewId, memberId, ViewType.VIEWED);
         }
 
         return response;
