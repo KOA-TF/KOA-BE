@@ -1,5 +1,5 @@
 package com.koa.coremodule.notice.application.dto.fcm;
 
-public record SendNotificationRequest(String title, String content) {
+public record SendNotificationRequest(String content, Long noticeId) {
 
 }
