@@ -8,7 +8,7 @@ import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.domain.entity.Alarm;
 import com.koa.coremodule.fcm.domain.entity.AlarmType;
 import com.koa.coremodule.fcm.domain.entity.AlarmView;
-import com.koa.coremodule.fcm.domain.service.AlarmFindService;
+import com.koa.coremodule.fcm.domain.service.AlarmQueryService;
 import com.koa.coremodule.fcm.domain.service.AlarmSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
@@ -33,7 +33,7 @@ public class AlarmUseCase {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberUtils memberUtils;
     private final AlarmSaveService alarmSaveService;
-    private final AlarmFindService alarmFindService;
+    private final AlarmQueryService alarmQueryService;
     private final NoticeQueryService noticeQueryService;
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
@@ -163,8 +163,8 @@ public class AlarmUseCase {
     public List<AlarmLists> getAlarmLists() {
 
         Member memberRequest = memberUtils.getAccessMember();
-        List<Alarm> alarmList = alarmFindService.findAll();
-        List<AlarmView> alarmViews = alarmFindService.findViews(memberRequest.getId());
+        List<Alarm> alarmList = alarmQueryService.findAll();
+        List<AlarmView> alarmViews = alarmQueryService.findViews(memberRequest.getId());
         List<AlarmLists> result = new ArrayList<>();
 
         for (Alarm a : alarmList) {
@@ -195,8 +195,8 @@ public class AlarmUseCase {
     public void saveAlarmView(Long alarmId) {
 
         Member memberRequest = memberUtils.getAccessMember();
-        Member member = alarmFindService.findMember(memberRequest.getId());
-        Alarm alarm = alarmFindService.findAlarmById(alarmId);
+        Member member = alarmQueryService.findMember(memberRequest.getId());
+        Alarm alarm = alarmQueryService.findAlarmById(alarmId);
 
         AlarmView alarmView = AlarmView.builder().alarm(alarm).view(ViewType.VIEWED).member(member).build();
         alarmSaveService.saveAlarmView(alarmView);
@@ -213,18 +213,18 @@ public class AlarmUseCase {
     }
 
     private Member findMember(Long memberId) {
-        return alarmFindService.findMember(memberId);
+        return alarmQueryService.findMember(memberId);
     }
 
     private List<Member> findAllMember() {
-        return alarmFindService.findAllMember();
+        return alarmQueryService.findAllMember();
     }
 
     private Member findNoticeMember(Long noticeId) {
-        return alarmFindService.findNoticeMember(noticeId);
+        return alarmQueryService.findNoticeMember(noticeId);
     }
 
     private Member findCommentMember(Long memberId) {
-        return alarmFindService.findMember(memberId);
+        return alarmQueryService.findMember(memberId);
     }
 }

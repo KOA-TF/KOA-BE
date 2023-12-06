@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AlarmFindService {
+public class AlarmQueryService {
 
     private final MemberRepository memberRepository;
     private final NoticeRepository noticeRepository;
