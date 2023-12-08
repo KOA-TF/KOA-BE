@@ -31,9 +31,9 @@ public class AttendFindUseCase {
         String passYn;
 
         Map<AttendStatus, Integer> attendStatusMap = attendQueryService.getAttendStatus(memberRequest.getId());
-        Integer present = attendStatusMap.get(AttendStatus.PRESENT);
-        Integer absent = attendStatusMap.get(AttendStatus.ABSENT);
-        Integer late = attendStatusMap.get(AttendStatus.LATE);
+        int present = attendStatusMap.getOrDefault(AttendStatus.PRESENT, 0);
+        int absent = attendStatusMap.getOrDefault(AttendStatus.ABSENT, 0);
+        int late = attendStatusMap.getOrDefault(AttendStatus.LATE, 0);
 
         penalty = absent * 2 + late;
         if (penalty <= 5) {
@@ -62,7 +62,7 @@ public class AttendFindUseCase {
     public Boolean checkText(String text) {
 
         String correctText = "https://www.kusitmskoa.link";
-        return correctText == text;
+        return correctText.equals(text);
     }
 
 }
