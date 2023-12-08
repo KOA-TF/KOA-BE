@@ -3,21 +3,8 @@ package com.koa.apimodule.command.api;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.application.service.AlarmUseCase;
-import com.koa.coremodule.fcm.domain.entity.Alarm;
-import com.koa.coremodule.fcm.domain.entity.AlarmType;
-import com.koa.coremodule.fcm.domain.repository.AlarmRepository;
-import com.koa.coremodule.member.domain.entity.Authority;
-import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendNotificationRequest;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
-import com.koa.coremodule.notice.domain.entity.Notice;
-import com.koa.coremodule.notice.domain.entity.NoticeTeam;
-import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -31,50 +18,6 @@ import java.util.List;
 public class AlarmController {
 
     private final AlarmUseCase alarmUseCase;
-
-    private final MemberRepository memberRepository;
-    private final NoticeTeamRepository noticeTeamRepository;
-    private final CurriculumRepository curriculumRepository;
-    private final NoticeRepository noticeRepository;
-    private final AlarmRepository alarmRepository;
-
-    @PostConstruct
-    public void test() {
-        final Member member = Member.builder()
-                .authority(Authority.MEMBER)
-                .email("austinan123@gmail.com")
-                .password("001215")
-                .name("안정후")
-                .build();
-        memberRepository.save(member);
-        final Curriculum curriculum = Curriculum.builder()
-                .curriculumName("기업프로젝트")
-                .build();
-        curriculumRepository.save(curriculum);
-        final NoticeTeam noticeTeam = NoticeTeam.builder()
-                .teamName("경영총괄팀")
-                .build();
-        noticeTeamRepository.save(noticeTeam);
-        final Notice notice = Notice.builder()
-                .member(member)
-                .title("sampletitle")
-                .content("samplecontent")
-                .curriculum(curriculum)
-                .build();
-        noticeRepository.save(notice);
-        final Notice notice2 = Notice.builder()
-                .member(member)
-                .title("sampletitle22")
-                .content("samplecontent22")
-                .curriculum(curriculum)
-                .build();
-        noticeRepository.save(notice2);
-        final Alarm alarm = Alarm.builder().type(AlarmType.NOTICE).title("공지알림").content("notice content").build();
-        alarmRepository.save(alarm);
-        final Alarm alar2 = Alarm.builder().type(AlarmType.COMMENT).title("댓글알림").content("comment content").build();
-        alarmRepository.save(alar2);
-    }
-
 
     /**
      * 토큰 등록
