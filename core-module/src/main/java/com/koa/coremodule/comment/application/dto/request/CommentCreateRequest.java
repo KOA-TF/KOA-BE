@@ -7,5 +7,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentCreateRequest {
     private String content;
-    private Boolean isAnonymous;
 }
