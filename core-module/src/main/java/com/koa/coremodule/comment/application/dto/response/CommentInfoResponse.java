@@ -13,7 +13,6 @@ public class CommentInfoResponse {
     private final String writer;
     private final String createdAt;
     private final Boolean isMine;
-    private final Boolean isAnonymous;
     private final String profileImageUrl;
     private final Long writerId;
 }

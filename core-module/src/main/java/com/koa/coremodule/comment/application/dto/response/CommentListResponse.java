@@ -14,7 +14,6 @@ public class CommentListResponse {
     private final String createdAt;
     private final Integer commentCount;
     private final Boolean isMine;
-    private final Boolean isAnonymous;
     private final String profileImageUrl;
     private final Long writerId;
 }
