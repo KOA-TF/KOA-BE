@@ -20,6 +20,9 @@ public enum Error {
     VOTE_ITEM_NOT_FOUND("투표 항목이 존재하지 않습니다.", 400),
     VOTE_ITEM_RECORD_NOT_FOUND("투표 항목 참여자가 존재하지 않습니다.", 400),
 
+    // ALARM
+    ALARM_NOT_FOUND("알림이 존재하지 않습니다.", 400),
+
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
     WRONG_PASSWORD("비밀번호가 틀렸습니다.", 2001),
