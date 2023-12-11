@@ -9,6 +9,7 @@ import com.koa.coremodule.attend.application.service.AttendFindUseCase;
 import com.koa.coremodule.attend.application.service.AttendSaveUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/v1/attend")
 public class AttendController {
+
+    @Value("${cloud.aws.s3.url}")
+    private String QR_TEXT;
 
     private final AttendFindUseCase attendFindUseCase;
     private final AttendSaveUseCase attendSaveUseCase;
@@ -68,7 +72,7 @@ public class AttendController {
     @GetMapping(value = "/code", produces = MediaType.IMAGE_PNG_VALUE)
     public ApplicationResponse<byte[]> generateQRCode() {
 
-        String data = "https://www.kusitmskoa.link";
+        String data = QR_TEXT;
         int width = 300;
         int height = 300;
 

@@ -9,6 +9,7 @@ import com.koa.coremodule.attend.domain.service.AttendQueryService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AttendFindUseCase {
 
+    @Value("${cloud.aws.s3.url}")
+    private String QR_TEXT;
+
     private final MemberUtils memberUtils;
     private final AttendQueryService attendQueryService;
-
-    private final static String PASS = "수료 가능한 점수에요";
-    private final static String FAIL = "수료 불가능한 점수에요.";
 
     public AttendContent getAttendStatus() {
 
@@ -30,16 +31,16 @@ public class AttendFindUseCase {
         int penalty;
         String passYn;
 
-        Map<AttendStatus, Integer> attendStatusMap = attendQueryService.getAttendStatus(memberRequest.getId());
-        int present = attendStatusMap.getOrDefault(AttendStatus.PRESENT, 0);
-        int absent = attendStatusMap.getOrDefault(AttendStatus.ABSENT, 0);
-        int late = attendStatusMap.getOrDefault(AttendStatus.LATE, 0);
+        Map<AttendStatus, Long> attendStatusMap = attendQueryService.getAttendStatus(memberRequest.getId());
+        int present = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.PRESENT, 0L));
+        int absent = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.ABSENT, 0L));
+        int late = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.LATE, 0L));
 
         penalty = absent * 2 + late;
         if (penalty <= 5) {
-            passYn = PASS;
+            passYn = LateStatus.PASS.getMessage();
         } else {
-            passYn = FAIL;
+            passYn = LateStatus.FAIL.getMessage();
         }
 
         AttendContent attendContent = AttendContent.builder()
@@ -61,7 +62,7 @@ public class AttendFindUseCase {
 
     public Boolean checkText(String text) {
 
-        String correctText = "https://www.kusitmskoa.link";
+        String correctText = QR_TEXT;
         return correctText.equals(text);
     }
 
