@@ -1,6 +1,8 @@
 package com.koa.coremodule.attend.domain.repository;
 
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
+import com.koa.coremodule.attend.domain.repository.projection.AttendStatusProjection;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +24,21 @@ public class AttendDynamicRepositoryImpl implements AttendDynamicRepository {
                 .on(attend.curriculum.id.eq(curriculum.id))
                 .where(attend.member.id.eq(memberId))
                 .fetch();
+    }
+
+    @Override
+    public List<AttendStatusProjection> findAttendStatusCountByMemberId(Long memberId) {
+        List<AttendStatusProjection> result = jpaQueryFactory
+                .select(Projections.constructor(
+                        AttendStatusProjection.class,
+                        attend.status,
+                        attend.count()
+                ))
+                .from(attend)
+                .where(attend.member.id.eq(memberId))
+                .groupBy(attend.status)
+                .fetch();
+        return result;
     }
 
 }
