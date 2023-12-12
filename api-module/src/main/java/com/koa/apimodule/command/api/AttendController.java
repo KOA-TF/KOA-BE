@@ -25,7 +25,7 @@ import java.util.List;
 @RequestMapping("/v1/attend")
 public class AttendController {
 
-    @Value("${cloud.aws.s3.url}")
+    @Value("${qr.text}")
     private String QR_TEXT;
 
     private final AttendFindUseCase attendFindUseCase;

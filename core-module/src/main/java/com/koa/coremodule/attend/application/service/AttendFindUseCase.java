@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AttendFindUseCase {
 
-    @Value("${cloud.aws.s3.url}")
+    @Value("${qr.text}")
     private String QR_TEXT;
 
     private final MemberUtils memberUtils;
@@ -28,20 +28,14 @@ public class AttendFindUseCase {
     public AttendContent getAttendStatus() {
 
         Member memberRequest = memberUtils.getAccessMember();
-        int penalty;
-        String passYn;
 
         Map<AttendStatus, Long> attendStatusMap = attendQueryService.getAttendStatus(memberRequest.getId());
         int present = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.PRESENT, 0L));
         int absent = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.ABSENT, 0L));
         int late = Math.toIntExact(attendStatusMap.getOrDefault(AttendStatus.LATE, 0L));
 
-        penalty = absent * 2 + late;
-        if (penalty <= 5) {
-            passYn = LateStatus.PASS.getMessage();
-        } else {
-            passYn = LateStatus.FAIL.getMessage();
-        }
+        int penalty = (absent * 2) + late;
+        String passYn = LateStatus.calculatePassYn(penalty);
 
         AttendContent attendContent = AttendContent.builder()
                 .penalty(penalty)
