@@ -1,25 +1,30 @@
 package com.koa.coremodule.notice.application.service;
 
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.application.dto.NoticeDetailListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeRequest;
+import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2Request;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.ViewType;
-import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
-import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import jakarta.persistence.EntityNotFoundException;
+import com.koa.coremodule.vote.application.mapper.VoteMapper;
+import com.koa.coremodule.vote.domain.entity.Vote;
+import com.koa.coremodule.vote.domain.entity.VoteItem;
+import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -32,6 +37,8 @@ public class NoticeSaveUseCase {
     private final NoticeDeleteService noticeDeleteService;
     private final NoticeMapper noticeMapper;
     private final AwsS3Service awsS3Service;
+    private final VoteSaveService voteSaveService;
+    private final VoteMapper voteMapper;
 
     public Long saveNotice(NoticeRequest request, MultipartFile multipartFile) {
         // image 저장
@@ -51,6 +58,57 @@ public class NoticeSaveUseCase {
         noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
 
         noticeQueryService.save(noticeEntity);
+
+        return savedNotice.getId();
+    }
+
+    public Long saveNoticeV2(NoticeV2Request request, MultipartFile multipartFile) {
+        // image 저장
+        String imageUrl = null;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            imageUrl = awsS3Service.uploadFile(multipartFile);
+        }
+
+        // 공지 본문 저장
+        Notice noticeEntity = noticeMapper.toNoticeV2Entity(request);
+        final Member member = noticeQueryService.findMemberById(request.getMemberId());
+        Notice savedNotice = noticeQueryService.save(noticeEntity);
+
+        // 공지 저장 시 연관 테이블 모두 맵핑
+        final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
+        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
+
+        noticeQueryService.save(noticeEntity);
+
+        //TODO -- 투표도 이곳에서 생성
+
+        // 투표 제목 저장
+        Vote voteEntity = voteMapper.toVoteEntity(request.getVoteTitle());
+
+        //notice 조회
+        Notice notice = noticeQueryService.findByNoticeId(savedNotice.getId());
+
+        // Vote 엔티티 생성
+        Vote vote = Vote.builder()
+                .voteTitle(voteEntity.getVoteTitle())
+                .notice(notice)
+                .build();
+
+        // Vote 엔티티 저장
+        Vote savedVote = voteSaveService.saveVote(vote);
+
+        // 투표 항목 개수 체크 후 각자 저장
+        List<String> titles = request.getItem();
+
+        for (String title : titles) {
+            VoteItem voteItemEntity = VoteItem.builder()
+                    .voteItemName(title)
+                    .vote(savedVote) // Vote ID 설정
+                    .build();
+            voteSaveService.saveVoteItem(voteItemEntity);
+        }
+
         return savedNotice.getId();
     }
 
