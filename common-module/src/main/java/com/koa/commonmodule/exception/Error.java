@@ -30,6 +30,10 @@ public enum Error {
 
     //NOTICE
     NOTICE_NOT_FOUND("공지사항을 찾을 수 없습니다.", 3000),
+    NOTICE_TEAM_NOT_FOUND("공지 팀을 찾을 수 없습니다.", 400),
+
+    //CURRICULUM
+    CURRICULUM_NOT_FOUND("커리큘럼을 찾을 수 없습니다.", 400),
 
     //COMMENT
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", 4000),

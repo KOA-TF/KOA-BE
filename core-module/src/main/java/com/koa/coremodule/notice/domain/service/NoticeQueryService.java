@@ -1,11 +1,13 @@
 package com.koa.coremodule.notice.domain.service;
 
+import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.*;
+import com.koa.coremodule.notice.domain.exception.NoticeException;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeRepository;
@@ -53,7 +55,7 @@ public class NoticeQueryService {
                     response.set(i, updatedResponse);
                 }
             } else {
-                final Member member = findMemberById(memberId).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+                final Member member = findMemberById(memberId);
                 final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
                 NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
                 noticeViewRepository.save(noticeView);
@@ -113,16 +115,16 @@ public class NoticeQueryService {
         noticeRepository.updateSingleViewYn(noticeViewId, memberId, viewType);
     }
 
-    public Optional<Member> findMemberById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new BusinessException(Error.MEMBER_NOT_FOUND));
     }
 
-    public Optional<NoticeTeam> findNoticeTeamById(Long noticeTeamId) {
-        return noticeTeamRepository.findById(noticeTeamId);
+    public NoticeTeam findNoticeTeamById(Long noticeTeamId) {
+        return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeException(Error.NOTICE_TEAM_NOT_FOUND));
     }
 
-    public Optional<Curriculum> findCurriculumById(Long curriculumId) {
-        return curriculumRepository.findById(curriculumId);
+    public Curriculum findCurriculumById(Long curriculumId) {
+        return curriculumRepository.findById(curriculumId).orElseThrow(() -> new NoticeException(Error.CURRICULUM_NOT_FOUND));
     }
 
 }
