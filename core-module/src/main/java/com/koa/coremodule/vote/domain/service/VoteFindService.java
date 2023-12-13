@@ -111,4 +111,8 @@ public class VoteFindService {
         return voteRecordRepository.findVoteItemRecordByVoteItemId(voteItemId);
     }
 
+    public List<VoteItemRecord> findVoteItemRecordByMemberId (Long memberId) {
+        return voteRecordRepository.findVoteItemRecordByMemberId(memberId);
+    }
+
 }
