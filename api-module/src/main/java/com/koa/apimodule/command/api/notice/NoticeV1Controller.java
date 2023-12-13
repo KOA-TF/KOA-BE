@@ -1,4 +1,4 @@
-package com.koa.apimodule.command.api;
+package com.koa.apimodule.command.api.notice;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/notice")
-public class NoticeController {
+public class NoticeV1Controller {
 
     private final NoticeFindUseCase noticeFindUseCase;
     private final NoticeSaveUseCase noticeSaveUseCase;
