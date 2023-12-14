@@ -7,6 +7,8 @@ import com.koa.coremodule.attend.application.dto.AttendList;
 import com.koa.coremodule.attend.application.dto.AttendSaveRequest;
 import com.koa.coremodule.attend.application.service.AttendFindUseCase;
 import com.koa.coremodule.attend.application.service.AttendSaveUseCase;
+import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.domain.entity.Curriculum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ public class AttendController {
 
     private final AttendFindUseCase attendFindUseCase;
     private final AttendSaveUseCase attendSaveUseCase;
+    private final NoticeFindUseCase noticeFindUseCase;
 
     /**
      * 출석 적재
@@ -37,7 +40,7 @@ public class AttendController {
     @PostMapping
     public ApplicationResponse<Long> saveAttend(@RequestBody AttendSaveRequest attendSaveRequest) {
 
-        Boolean checkText = attendFindUseCase.checkText(attendSaveRequest.text());
+        Boolean checkText = attendFindUseCase.checkText(attendSaveRequest);
         if (checkText) {
             Long attendId = attendSaveUseCase.saveAttend(attendSaveRequest.curriculumId());
             return ApplicationResponse.ok(attendId, "출석을 정상적으로 완료하였습니다.");
@@ -70,9 +73,12 @@ public class AttendController {
      * qr 코드 생성
      */
     @GetMapping(value = "/code", produces = MediaType.IMAGE_PNG_VALUE)
-    public ApplicationResponse<byte[]> generateQRCode() {
+    @ResponseBody
+    public ApplicationResponse<byte[]> generateQRCode(Long curriculumId) {
 
-        String data = QR_TEXT;
+        Curriculum curriculum = noticeFindUseCase.findCurriculumById(curriculumId);
+
+        String data = QR_TEXT + curriculum.getCurriculumName();
         int width = 300;
         int height = 300;
 
@@ -85,6 +91,16 @@ public class AttendController {
         } catch (WriterException | IOException e) {
             return ApplicationResponse.server(null, "qr 코드 생성 중 서버 에러입니다.");
         }
+    }
+
+    /**
+     * 마감 버튼 클릭 시 일괄 결석 반영
+     */
+    @PostMapping(value = "/absent")
+    public ApplicationResponse<Void> saveAllAbsent(Long curriculumId) {
+
+        attendSaveUseCase.saveAllAbsent(curriculumId);
+        return ApplicationResponse.ok(null, "일괄 결석 처리 되었습니다.");
     }
 
 }
