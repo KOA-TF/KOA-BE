@@ -5,6 +5,7 @@ import com.koa.coremodule.notice.application.dto.CurriculumResponse;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
+import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
@@ -54,6 +55,11 @@ public class NoticeFindUseCase {
         }
 
         return response;
+    }
+
+    public Curriculum findCurriculumById(Long curriculumId) {
+
+        return noticeQueryService.findCurriculumById(curriculumId);
     }
 
     private LocalDate convertDateString(String dateString) {

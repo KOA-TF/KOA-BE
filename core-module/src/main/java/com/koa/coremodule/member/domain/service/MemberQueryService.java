@@ -7,6 +7,9 @@ import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.exception.UserNotFoundException;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.BooleanSupplier;
 import lombok.RequiredArgsConstructor;
@@ -53,4 +56,9 @@ public class MemberQueryService {
                 ? memberRepository.existsByEmailAndPassword(email, password)
                 : memberRepository.existsByAuthorityAndEmailAndPassword(authority, email, password);
     }
+
+    public List<Member> findAllMember() {
+        return memberRepository.findAll();
+    }
+
 }
