@@ -2,13 +2,10 @@ package com.koa.coremodule.notice.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.NoticeRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,10 +38,6 @@ public class Notice extends BaseEntity {
     private NoticeTeam noticeTeam;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "notice_image_id")
-    private NoticeImage noticeImage;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "notice_view_id")
     private NoticeView noticeView;
 
@@ -55,10 +48,9 @@ public class Notice extends BaseEntity {
         this.member = member;
         this.curriculum = curriculum;
     }
-    
-    public void settingInfo(String imageUrl, Member member, NoticeTeam team, Curriculum curriculum, Notice notice) {
+
+    public void settingInfo(Member member, NoticeTeam team, Curriculum curriculum, Notice notice) {
         this.noticeTeam = team;
-        this.noticeImage = NoticeImage.create(imageUrl);
         this.curriculum = curriculum;
         this.noticeView = NoticeView.create(ViewType.NONE, member, notice);
         this.member = member;

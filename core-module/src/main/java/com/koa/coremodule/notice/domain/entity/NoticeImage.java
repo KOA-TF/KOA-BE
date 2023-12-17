@@ -24,6 +24,10 @@ public class NoticeImage extends BaseEntity {
 
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notice_id")
+    private Notice notice;
+
     private Boolean isDeleted = Boolean.FALSE;
 
     public static NoticeImage create(String imageUrl) {
@@ -32,4 +36,13 @@ public class NoticeImage extends BaseEntity {
                 .imageUrl(imageUrl)
                 .build();
     }
+
+    public static NoticeImage createNoticeImage(String imageUrl, Notice notice) {
+        NoticeImage noticeImage = new NoticeImage();
+        noticeImage.setImageUrl(imageUrl);
+        noticeImage.setNotice(notice);
+        noticeImage.setIsDeleted(false);
+        return noticeImage;
+    }
+
 }
