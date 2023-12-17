@@ -9,7 +9,6 @@ import com.koa.coremodule.attend.domain.repository.projection.AttendListProjecti
 import com.koa.coremodule.attend.domain.service.AttendQueryService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
 import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AttendFindUseCase {
+public class AttendGetUseCase {
 
     @Value("${qr.text}")
     private String QR_TEXT;
