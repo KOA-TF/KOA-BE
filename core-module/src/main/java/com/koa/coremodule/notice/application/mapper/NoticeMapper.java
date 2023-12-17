@@ -48,7 +48,7 @@ public interface NoticeMapper {
     Notice toNoticeEntity(NoticeRequest request);
 
     @Mappings({
-            @Mapping(source = "title", target = "title"),
+            @Mapping(source = "noticeTitle", target = "title"),
             @Mapping(source = "content", target = "content")
     })
     Notice toNoticeV2Entity(NoticeV2Request request);

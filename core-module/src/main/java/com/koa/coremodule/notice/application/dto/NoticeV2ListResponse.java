@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class NoticeV2ListResponse {
     private String teamName;
     private String title;
     private String content;
-    private String imageUrl;
+    private List<String> imageUrl;
     private LocalDate date;
     private Boolean viewYn;
     private Boolean voteYn;
