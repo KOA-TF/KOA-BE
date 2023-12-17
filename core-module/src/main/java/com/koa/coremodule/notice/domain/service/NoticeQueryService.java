@@ -10,10 +10,7 @@ import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.*;
 import com.koa.coremodule.notice.domain.exception.NoticeException;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
-import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeViewRepository;
+import com.koa.coremodule.notice.domain.repository.*;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
@@ -31,6 +28,7 @@ public class NoticeQueryService {
     private final NoticeTeamRepository noticeTeamRepository;
     private final CurriculumRepository curriculumRepository;
     private final NoticeViewRepository noticeViewRepository;
+    private final NoticeImageRepository noticeImageRepository;
 
     public List<NoticeListProjection> selectNotice() {
 
@@ -91,6 +89,11 @@ public class NoticeQueryService {
         return noticeRepository.save(notice);
     }
 
+    public NoticeImage saveImage(NoticeImage noticeImage) {
+
+        return noticeImageRepository.save(noticeImage);
+    }
+
     public NoticeDetailListProjection selectNoticeDetail(Long noticeId) {
 
         NoticeDetailListProjection projection = noticeRepository.findAllNoticeDetail(noticeId);
@@ -108,6 +111,10 @@ public class NoticeQueryService {
 
     public String findImageByNoticeId(Long noticeId) {
         return noticeRepository.findImageByNoticeId(noticeId);
+    }
+
+    public List<String> findImagesByNoticeId(Long noticeId) {
+        return noticeRepository.findImagesByNoticeId(noticeId);
     }
 
     public Long findSingleViewId(Long noticeId, Long memberId) {

@@ -13,8 +13,11 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeDyn
     @Query("select n.id from Notice n where n.member.id = :memberId")
     List<Long> findIdsByMemberId(Long memberId);
 
-    @Query("select v.imageUrl from Notice n join NoticeImage v on n.noticeImage.id = v.id where n.id = :noticeId")
+    @Query("select v.imageUrl from NoticeImage v where v.notice.id = :noticeId")
     String findImageByNoticeId(Long noticeId);
+
+    @Query("select v.imageUrl from NoticeImage v where v.notice.id = :noticeId")
+    List<String> findImagesByNoticeId(Long noticeId);
 
     @Modifying
     @Query("update Notice n set n.isDeleted=true where n.id in (:noticeIds)")

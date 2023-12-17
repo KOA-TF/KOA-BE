@@ -18,6 +18,7 @@ import static com.koa.coremodule.member.domain.entity.QMember.member;
 import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
 import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
+import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
 import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
 
 @RequiredArgsConstructor
@@ -33,12 +34,14 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                                 notice.title,
                                 notice.content,
                                 notice.createdAt,
-                                notice.noticeImage.imageUrl,
+                                noticeImage.imageUrl,
                                 notice.curriculum.curriculumName,
                                 notice.noticeTeam.teamName
                         )
                 )
                 .from(notice)
+                .leftJoin(noticeImage)
+                .on(notice.id.eq(noticeImage.notice.id))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
     }
@@ -53,12 +56,14 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                                 notice.title,
                                 notice.content,
                                 notice.createdAt,
-                                notice.noticeImage.imageUrl,
+                                noticeImage.imageUrl,
                                 notice.curriculum.curriculumName,
                                 notice.noticeTeam.teamName
                         )
                 )
                 .from(notice)
+                .leftJoin(noticeImage)
+                .on(notice.id.eq(noticeImage.notice.id))
                 .where(cursorCondition)
                 .orderBy(notice.createdAt.desc())
                 .limit(request.size())
