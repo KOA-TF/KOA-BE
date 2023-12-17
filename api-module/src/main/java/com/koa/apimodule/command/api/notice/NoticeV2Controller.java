@@ -7,7 +7,7 @@ import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeV2Request;
-import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
 import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/v2/notice")
 public class NoticeV2Controller {
 
-    private final NoticeFindUseCase noticeFindUseCase;
+    private final NoticeGetUseCase noticeGetUseCase;
     private final NoticeSaveUseCase noticeSaveUseCase;
     private final MemberUtils memberUtils;
 
@@ -37,7 +37,7 @@ public class NoticeV2Controller {
         Member memberRequest = memberUtils.getAccessMember();
         NoticeSelectRequest request = new NoticeSelectRequest(memberRequest.getId(), params.getCursor(), params.getSize());
 
-        List<NoticeV2ListResponse> response = noticeFindUseCase.selectNoticeV2(request);
+        List<NoticeV2ListResponse> response = noticeGetUseCase.selectNoticeV2(request);
         return ApplicationResponse.ok(response, "공지 전체 조회에 성공했습니다.");
     }
 
@@ -45,11 +45,11 @@ public class NoticeV2Controller {
      * 공지 작성
      */
     @PostMapping
-    public ApplicationResponse<List<Long>> saveNotice(
+    public ApplicationResponse<Long> saveNotice(
             @RequestPart(value = "dto") NoticeV2Request request,
             @RequestPart(value = "file") List<MultipartFile> multipartFile) {
 
-        List<Long> noticeId = noticeSaveUseCase.saveNoticeV2(request, multipartFile);
+        Long noticeId = noticeSaveUseCase.saveNoticeV2(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
     }
 

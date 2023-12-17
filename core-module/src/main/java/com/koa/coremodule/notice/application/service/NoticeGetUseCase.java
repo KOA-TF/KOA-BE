@@ -15,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class NoticeFindUseCase {
+public class NoticeGetUseCase {
 
     private final NoticeQueryService noticeQueryService;
     private final VoteFindService voteFindService;
@@ -37,37 +39,44 @@ public class NoticeFindUseCase {
     }
 
     public List<NoticeV2ListResponse> selectNoticeV2(NoticeSelectRequest request) {
-
         List<NoticeListProjection> projection = noticeQueryService.selectNoticeV2(request);
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
         List<NoticeV2ListResponse> results = new ArrayList<>();
+        Map<Long, NoticeV2ListResponse> noticeMap = new HashMap<>();
 
         noticeQueryService.findViewYn(response, request.memberId(), projection);
 
         for (NoticeListResponse p : response) {
+            if (!noticeMap.containsKey(p.noticeId())) {
+                final NoticeV2ListResponse v2ListResponse = NoticeV2ListResponse.builder()
+                        .noticeId(p.noticeId())
+                        .curriculumName(p.curriculumName())
+                        .teamName(p.teamName())
+                        .title(p.title())
+                        .content(p.content())
+                        .date(p.date())
+                        .viewYn(p.viewYn())
+                        .voteYn(false)
+                        .voteAttendYn(false)
+                        .imageUrl(new ArrayList<>()) // Initialize the list of imageUrls
+                        .build();
 
-            final NoticeV2ListResponse v2ListResponse = NoticeV2ListResponse.builder()
-                    .noticeId(p.noticeId())
-                    .curriculumName(p.curriculumName())
-                    .teamName(p.teamName())
-                    .title(p.title())
-                    .content(p.content())
-                    .imageUrl(p.imageUrl())
-                    .date(p.date())
-                    .viewYn(p.viewYn())
-                    .build();
+                if (voteFindService.findVoteByNoticeId(p.noticeId()) != null) {
+                    v2ListResponse.setVoteYn(true);
+                }
 
-            if (voteFindService.findVoteByNoticeId(p.noticeId()) != null) {
-                v2ListResponse.setVoteYn(true);
+                if (voteFindService.findVoteItemRecordByMemberId(request.memberId()) != null) {
+                    v2ListResponse.setVoteAttendYn(true);
+                }
+
+                noticeMap.put(p.noticeId(), v2ListResponse);
             }
 
-            if (voteFindService.findVoteItemRecordByMemberId(request.memberId()) != null) {
-                v2ListResponse.setVoteAttendYn(true);
-            }
-
-            results.add(v2ListResponse);
+            // Add imageUrl to the list in case there are multiple values
+            noticeMap.get(p.noticeId()).getImageUrl().add(p.imageUrl());
         }
 
+        results.addAll(noticeMap.values());
         return results;
     }
 
