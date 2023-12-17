@@ -5,6 +5,7 @@ import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.*;
 import com.koa.coremodule.notice.domain.exception.NoticeException;
@@ -34,6 +35,13 @@ public class NoticeQueryService {
     public List<NoticeListProjection> selectNotice() {
 
         List<NoticeListProjection> projection = noticeRepository.findAllNotice();
+
+        return projection;
+    }
+
+    public List<NoticeListProjection> selectNoticeV2(NoticeSelectRequest request) {
+
+        List<NoticeListProjection> projection = noticeRepository.findAllNoticeV2(request);
 
         return projection;
     }

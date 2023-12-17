@@ -1,10 +1,13 @@
 package com.koa.coremodule.notice.domain.repository;
 
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.QNotice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.repository.projection.*;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
 
     @Override
     public List<NoticeListProjection> findAllNotice() {
+
         return jpaQueryFactory.select(new QNoticeListProjection(
                                 notice.id,
                                 notice.title,
@@ -36,6 +40,28 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                 )
                 .from(notice)
                 .orderBy(notice.createdAt.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<NoticeListProjection> findAllNoticeV2(NoticeSelectRequest request) {
+
+        BooleanBuilder cursorCondition = getCursorCondition(request.cursor(), notice.id);
+
+        return jpaQueryFactory.select(new QNoticeListProjection(
+                                notice.id,
+                                notice.title,
+                                notice.content,
+                                notice.createdAt,
+                                notice.noticeImage.imageUrl,
+                                notice.curriculum.curriculumName,
+                                notice.noticeTeam.teamName
+                        )
+                )
+                .from(notice)
+                .where(cursorCondition)
+                .orderBy(notice.createdAt.desc())
+                .limit(request.size())
                 .fetch();
     }
 
@@ -84,6 +110,13 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
                 .join(curriculum).on(notice.curriculum.id.eq(curriculumId))
                 .orderBy(notice.createdAt.desc())
                 .fetch();
+    }
+
+    private BooleanBuilder getCursorCondition(Long cursor, NumberPath<Long> id) {
+        if (cursor == null) {
+            return new BooleanBuilder();
+        }
+        return new BooleanBuilder(id.lt(cursor));
     }
 
 }
