@@ -25,4 +25,13 @@ public class AttendSaveService {
         return attendRepository.save(attend);
     }
 
+    public Attend saveAttendForLate(Long curriculumId, Long memberId) {
+
+        Member member = noticeQueryService.findMemberById(memberId);
+        Curriculum curriculum = noticeQueryService.findCurriculumById(curriculumId);
+        final Attend attend = Attend.builder().curriculum(curriculum).member(member).status(AttendStatus.LATE).build();
+
+        return attendRepository.save(attend);
+    }
+
 }

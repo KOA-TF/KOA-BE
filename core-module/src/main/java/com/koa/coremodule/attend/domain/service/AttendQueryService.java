@@ -1,5 +1,6 @@
 package com.koa.coremodule.attend.domain.service;
 
+import com.koa.coremodule.attend.domain.entity.Attend;
 import com.koa.coremodule.attend.domain.entity.AttendStatus;
 import com.koa.coremodule.attend.domain.repository.AttendRepository;
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
@@ -32,6 +33,11 @@ public class AttendQueryService {
     public List<AttendListProjection> getAttendList(Long memberId) {
 
         return attendRepository.getAttendList(memberId);
+    }
+
+    public Attend findAttendByMemberId(Long memberId, Long curriculumId) {
+
+        return attendRepository.findAttendByMemberIdAndCurriculumId(memberId, curriculumId);
     }
 
 }

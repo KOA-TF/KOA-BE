@@ -5,13 +5,16 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.koa.coremodule.attend.domain.entity.Attend;
+import com.koa.coremodule.attend.domain.service.AttendQueryService;
 import com.koa.coremodule.attend.domain.service.AttendSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,8 @@ public class AttendSaveUseCase {
 
     private final MemberUtils memberUtils;
     private final AttendSaveService attendSaveService;
+    private final AttendQueryService attendQueryService;
+    private final MemberQueryService memberQueryService;
 
     public BufferedImage generateQRCodeImage(String text, int width, int height)
             throws WriterException {
@@ -41,6 +46,20 @@ public class AttendSaveUseCase {
         Attend attend = attendSaveService.saveAttend(curriculumId, memberRequest.getId());
 
         return attend.getId();
+    }
+
+    public void saveAllAbsent(Long curriculumId) {
+
+        List<Member> memberList = memberQueryService.findAllMember();
+
+        for (Member m : memberList) {
+
+            Attend attendExist = attendQueryService.findAttendByMemberId(m.getId(), curriculumId);
+            if (attendExist == null) {
+                Attend attend = attendSaveService.saveAttendForLate(curriculumId, m.getId());
+            }
+        }
+
     }
 
 }
