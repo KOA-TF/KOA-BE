@@ -1,8 +1,10 @@
 package com.koa.apimodule.command.api.notice;
 
 import com.koa.commonmodule.common.ApplicationResponse;
+import com.koa.commonmodule.common.paging.PagingParams;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeV2Request;
 import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
@@ -28,23 +30,26 @@ public class NoticeV2Controller {
      * 공지 전체 조회
      */
     @GetMapping
-    public ApplicationResponse<List<NoticeV2ListResponse>> selectAllNotice() {
+    public ApplicationResponse<List<NoticeV2ListResponse>> selectAllNotice(
+            @ModelAttribute PagingParams params
+    ) {
 
         Member memberRequest = memberUtils.getAccessMember();
+        NoticeSelectRequest request = new NoticeSelectRequest(memberRequest.getId(), params.getCursor(), params.getSize());
 
-        List<NoticeV2ListResponse> response = noticeFindUseCase.selectNoticeV2(memberRequest.getId());
+        List<NoticeV2ListResponse> response = noticeFindUseCase.selectNoticeV2(request);
         return ApplicationResponse.ok(response, "공지 전체 조회에 성공했습니다.");
     }
 
     /**
      * 공지 작성
      */
-    @PostMapping(value = "")
-    public ApplicationResponse<Long> saveNotice(
+    @PostMapping
+    public ApplicationResponse<List<Long>> saveNotice(
             @RequestPart(value = "dto") NoticeV2Request request,
-            @RequestPart(value = "file") MultipartFile multipartFile) {
+            @RequestPart(value = "file") List<MultipartFile> multipartFile) {
 
-        Long noticeId = noticeSaveUseCase.saveNoticeV2(request, multipartFile);
+        List<Long> noticeId = noticeSaveUseCase.saveNoticeV2(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
     }
 

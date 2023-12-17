@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,54 +63,60 @@ public class NoticeSaveUseCase {
         return savedNotice.getId();
     }
 
-    public Long saveNoticeV2(NoticeV2Request request, MultipartFile multipartFile) {
-        // image 저장
-        String imageUrl = null;
-        if (multipartFile != null && !multipartFile.isEmpty()) {
-            imageUrl = awsS3Service.uploadFile(multipartFile);
-        }
+    public List<Long> saveNoticeV2(NoticeV2Request request, List<MultipartFile> multipartFiles) {
 
-        // 공지 본문 저장
-        Notice noticeEntity = noticeMapper.toNoticeV2Entity(request);
-        final Member member = noticeQueryService.findMemberById(request.getMemberId());
-        Notice savedNotice = noticeQueryService.save(noticeEntity);
+        List<Long> savedNoticeIds = new ArrayList<>();
 
-        // 공지 저장 시 연관 테이블 모두 맵핑
-        final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
-        noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
+        // Iterate through each multipart file
+        for (MultipartFile multipartFile : multipartFiles) {
+            // image 저장
+            String imageUrl = null;
+            if (multipartFile != null && !multipartFile.isEmpty()) {
+                imageUrl = awsS3Service.uploadFile(multipartFile);
+            }
 
-        noticeQueryService.save(noticeEntity);
+            // 공지 본문 저장
+            Notice noticeEntity = noticeMapper.toNoticeV2Entity(request);
+            final Member member = noticeQueryService.findMemberById(request.getMemberId());
+            Notice savedNotice = noticeQueryService.save(noticeEntity);
 
-        //TODO -- 투표도 이곳에서 생성
+            // 공지 저장 시 연관 테이블 모두 맵핑
+            final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
+            final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+            noticeEntity.settingInfo(imageUrl, member, noticeTeam, curriculum, savedNotice);
 
-        // 투표 제목 저장
-        Vote voteEntity = voteMapper.toVoteEntity(request.getVoteTitle());
+            noticeQueryService.save(noticeEntity);
 
-        //notice 조회
-        Notice notice = noticeQueryService.findByNoticeId(savedNotice.getId());
+            // 투표 제목 저장
+            Vote voteEntity = voteMapper.toVoteEntity(request.getVoteTitle());
 
-        // Vote 엔티티 생성
-        Vote vote = Vote.builder()
-                .voteTitle(voteEntity.getVoteTitle())
-                .notice(notice)
-                .build();
+            //notice 조회
+            Notice notice = noticeQueryService.findByNoticeId(savedNotice.getId());
 
-        // Vote 엔티티 저장
-        Vote savedVote = voteSaveService.saveVote(vote);
-
-        // 투표 항목 개수 체크 후 각자 저장
-        List<String> titles = request.getItem();
-
-        for (String title : titles) {
-            VoteItem voteItemEntity = VoteItem.builder()
-                    .voteItemName(title)
-                    .vote(savedVote) // Vote ID 설정
+            // Vote 엔티티 생성
+            Vote vote = Vote.builder()
+                    .voteTitle(voteEntity.getVoteTitle())
+                    .notice(notice)
                     .build();
-            voteSaveService.saveVoteItem(voteItemEntity);
+
+            // Vote 엔티티 저장
+            Vote savedVote = voteSaveService.saveVote(vote);
+
+            // 투표 항목 개수 체크 후 각자 저장
+            List<String> titles = request.getItem();
+
+            for (String title : titles) {
+                VoteItem voteItemEntity = VoteItem.builder()
+                        .voteItemName(title)
+                        .vote(savedVote) // Vote ID 설정
+                        .build();
+                voteSaveService.saveVoteItem(voteItemEntity);
+            }
+
+            savedNoticeIds.add(savedNotice.getId());
         }
 
-        return savedNotice.getId();
+        return savedNoticeIds;
     }
 
     public Long updateNotice(NoticeUpdateRequest request, MultipartFile multipartFile) {

@@ -1,9 +1,6 @@
 package com.koa.coremodule.notice.application.service;
 
-import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
-import com.koa.coremodule.notice.application.dto.CurriculumResponse;
-import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
+import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.Notice;
@@ -39,13 +36,13 @@ public class NoticeFindUseCase {
         return response;
     }
 
-    public List<NoticeV2ListResponse> selectNoticeV2(Long memberId) {
+    public List<NoticeV2ListResponse> selectNoticeV2(NoticeSelectRequest request) {
 
-        List<NoticeListProjection> projection = noticeQueryService.selectNotice();
+        List<NoticeListProjection> projection = noticeQueryService.selectNoticeV2(request);
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
         List<NoticeV2ListResponse> results = new ArrayList<>();
 
-        noticeQueryService.findViewYn(response, memberId, projection);
+        noticeQueryService.findViewYn(response, request.memberId(), projection);
 
         for (NoticeListResponse p : response) {
 
@@ -64,7 +61,7 @@ public class NoticeFindUseCase {
                 v2ListResponse.setVoteYn(true);
             }
 
-            if (voteFindService.findVoteItemRecordByMemberId(memberId) != null) {
+            if (voteFindService.findVoteItemRecordByMemberId(request.memberId()) != null) {
                 v2ListResponse.setVoteAttendYn(true);
             }
 
