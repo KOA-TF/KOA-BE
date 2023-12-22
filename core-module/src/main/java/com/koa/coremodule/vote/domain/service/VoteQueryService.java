@@ -3,6 +3,7 @@ package com.koa.coremodule.vote.domain.service;
 import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.vote.application.dto.VoteStatus;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
@@ -20,14 +21,16 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class VoteFindService {
+public class VoteQueryService {
 
     private final VoteRepository voteRepository;
     private final VoteItemRepository voteItemRepository;
     private final VoteRecordRepository voteRecordRepository;
+    private final MemberUtils memberUtils;
 
     public VoteStatus findVoteStatus(Long noticeId) {
 
+        Member myMember = memberUtils.getAccessMember();
         VoteStatus voteStatus = new VoteStatus();
         List<VoteStatus.VoteItemStatus> voteItemStatusList = new ArrayList<>();
 
@@ -54,7 +57,7 @@ public class VoteFindService {
                 Optional<VoteItem> voteItem = findVoteItemByItem(v.getItem());
                 List<VoteItemRecord> voteItemRecord = findVoteItemRecordById(voteItem.get().getId());
 
-                for(VoteItemRecord vr : voteItemRecord) {
+                for (VoteItemRecord vr : voteItemRecord) {
                     VoteStatus.MemberList memberListBuilder = VoteStatus.MemberList.builder()
                             .memberId(vr.getMember().getId())
                             .build();
@@ -80,6 +83,30 @@ public class VoteFindService {
         }
 
         voteStatus.setItems(voteItemStatusList);
+
+        //TODO -- 투표 참여여부 + 투표 전체 참여자
+        for (VoteStatus.VoteItemStatus v : voteStatus.getItems()) {
+            int count = 0;
+            boolean hasMyVote = false;
+
+            List<VoteStatus.MemberList> members = v.getMembers();
+
+            if (members != null) {
+                for (VoteStatus.MemberList m : members) {
+                    // 투표 참여여부
+                    if (m.getMemberId().equals(myMember.getId())) {
+                        hasMyVote = true;
+                        break;
+                    }
+
+                    // 투표 전체 참여자 수
+                    count++;
+                }
+            }
+
+            voteStatus.setVoteAttendYn(hasMyVote);
+            voteStatus.setTotal(count);
+        }
 
         return voteStatus;
     }
@@ -111,7 +138,7 @@ public class VoteFindService {
         return voteRecordRepository.findVoteItemRecordByVoteItemId(voteItemId);
     }
 
-    public List<VoteItemRecord> findVoteItemRecordByMemberId (Long memberId) {
+    public List<VoteItemRecord> findVoteItemRecordByMemberId(Long memberId) {
         return voteRecordRepository.findVoteItemRecordByMemberId(memberId);
     }
 
