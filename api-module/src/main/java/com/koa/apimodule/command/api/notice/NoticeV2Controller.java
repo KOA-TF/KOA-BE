@@ -5,6 +5,7 @@ import com.koa.commonmodule.common.paging.PagingParams;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2DetailListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeV2Request;
 import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
@@ -51,6 +52,19 @@ public class NoticeV2Controller {
 
         Long noticeId = noticeSaveUseCase.saveNoticeV2(request, multipartFile);
         return ApplicationResponse.ok(noticeId, "공지 작성에 성공했습니다.");
+    }
+
+    /**
+     * 공지 상세 조회 (내용)
+     */
+    @GetMapping(value = "/{noticeId}/detail")
+    public ApplicationResponse<NoticeV2DetailListResponse> noticeDetail(
+            @PathVariable Long noticeId) {
+
+        Member memberRequest = memberUtils.getAccessMember();
+
+        NoticeV2DetailListResponse response = noticeSaveUseCase.selectNoticeDetailV2(memberRequest.getId(), noticeId);
+        return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
 }

@@ -2,18 +2,18 @@ package com.koa.coremodule.notice.application.service;
 
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.NoticeDetailListResponse;
-import com.koa.coremodule.notice.application.dto.NoticeRequest;
-import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
-import com.koa.coremodule.notice.application.dto.NoticeV2Request;
+import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.application.mapper.NoticeDetailMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.*;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
+import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +33,7 @@ public class NoticeSaveUseCase {
     private String S3_URL;
     private final NoticeQueryService noticeQueryService;
     private final NoticeDeleteService noticeDeleteService;
+    private final VoteQueryService voteQueryService;
     private final NoticeMapper noticeMapper;
     private final AwsS3Service awsS3Service;
     private final VoteSaveService voteSaveService;
@@ -174,6 +175,33 @@ public class NoticeSaveUseCase {
         }
 
         return response;
+    }
+
+    public NoticeV2DetailListResponse selectNoticeDetailV2(Long memberId, Long noticeId) {
+
+        NoticeV2DetailListProjection projection = noticeQueryService.selectNoticeDetailV2(noticeId);
+        NoticeDetailInfoResponse response = noticeMapper.toNoticeV2DetailDTO(projection);
+
+        //투표 있을때 ID 넣기
+        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response);
+        Vote voteResult = voteQueryService.findVoteByNoticeId(noticeId);
+        if (voteResult != null) {
+            results.setVoteId(voteResult.getId());
+        }
+
+        //이미지 리스트로 넣기
+        List<String> imageUrls = noticeQueryService.findImagesByNoticeId(response.noticeId());
+        results.setImageUrl(imageUrls);
+
+        // 조회 여부 기록 업데이트
+        ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
+        Long viewId = noticeQueryService.findSingleViewId(noticeId, memberId);
+
+        if (viewResponse.equals(ViewType.NONE)) {
+            noticeQueryService.updateSingleViewYn(viewId, memberId, ViewType.VIEWED);
+        }
+
+        return results;
     }
 
 }

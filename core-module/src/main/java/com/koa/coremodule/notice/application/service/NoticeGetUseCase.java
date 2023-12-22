@@ -2,12 +2,13 @@ package com.koa.coremodule.notice.application.service;
 
 import com.koa.coremodule.notice.application.dto.*;
 import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
+import com.koa.coremodule.notice.application.mapper.NoticeListMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import com.koa.coremodule.vote.domain.service.VoteFindService;
+import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class NoticeGetUseCase {
 
     private final NoticeQueryService noticeQueryService;
-    private final VoteFindService voteFindService;
+    private final VoteQueryService voteQueryService;
     private final NoticeMapper noticeMapper;
 
     public List<NoticeListResponse> selectNotice(Long memberId) {
@@ -48,31 +49,11 @@ public class NoticeGetUseCase {
 
         for (NoticeListResponse p : response) {
             if (!noticeMap.containsKey(p.noticeId())) {
-                final NoticeV2ListResponse v2ListResponse = NoticeV2ListResponse.builder()
-                        .noticeId(p.noticeId())
-                        .curriculumName(p.curriculumName())
-                        .teamName(p.teamName())
-                        .title(p.title())
-                        .content(p.content())
-                        .date(p.date())
-                        .viewYn(p.viewYn())
-                        .voteYn(false)
-                        .voteAttendYn(false)
-                        .imageUrl(new ArrayList<>()) // Initialize the list of imageUrls
-                        .build();
 
-                if (voteFindService.findVoteByNoticeId(p.noticeId()) != null) {
-                    v2ListResponse.setVoteYn(true);
-                }
-
-                if (voteFindService.findVoteItemRecordByMemberId(request.memberId()) != null) {
-                    v2ListResponse.setVoteAttendYn(true);
-                }
-
+                NoticeV2ListResponse v2ListResponse = NoticeListMapper.toListResponse(p);
                 noticeMap.put(p.noticeId(), v2ListResponse);
             }
 
-            // Add imageUrl to the list in case there are multiple values
             noticeMap.get(p.noticeId()).getImageUrl().add(p.imageUrl());
         }
 
