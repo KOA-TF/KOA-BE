@@ -82,6 +82,18 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
     }
 
     @Override
+    public NoticeV2DetailListProjection findAllNoticeV2Detail(Long noticeId) {
+        return jpaQueryFactory.select(NoticeV2DetailListProjection.CONSTRUCTOR_EXPRESSION)
+                .from(notice)
+                .leftJoin(noticeImage).on(noticeImage.notice.id.eq(notice.id))
+                .join(member).on(notice.member.id.eq(member.id))
+                .join(memberDetail).on(memberDetail.member.id.eq(member.id))
+                .where(notice.id.eq(noticeId))
+                .orderBy(notice.createdAt.desc())
+                .fetchOne();
+    }
+
+    @Override
     public ViewType findViewYn(NoticeViewRequest request) {
         return jpaQueryFactory.select(noticeView.view)
                 .from(noticeView)

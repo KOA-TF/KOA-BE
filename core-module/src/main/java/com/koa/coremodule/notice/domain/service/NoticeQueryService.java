@@ -14,6 +14,7 @@ import com.koa.coremodule.notice.domain.repository.*;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -97,6 +98,13 @@ public class NoticeQueryService {
     public NoticeDetailListProjection selectNoticeDetail(Long noticeId) {
 
         NoticeDetailListProjection projection = noticeRepository.findAllNoticeDetail(noticeId);
+
+        return projection;
+    }
+
+    public NoticeV2DetailListProjection selectNoticeDetailV2(Long noticeId) {
+
+        NoticeV2DetailListProjection projection = noticeRepository.findAllNoticeV2Detail(noticeId);
 
         return projection;
     }
