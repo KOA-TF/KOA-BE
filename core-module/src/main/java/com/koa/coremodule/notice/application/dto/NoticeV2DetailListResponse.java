@@ -12,15 +12,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NoticeV2ListResponse {
+public class NoticeV2DetailListResponse {
 
     private Long noticeId;
-    private String curriculumName;
-    private String teamName;
+    private String name;
+    private String profileImage;
+    private String curriculum;
+    private String team;
     private String title;
     private String content;
     private List<String> imageUrl;
     private LocalDate date;
     private Boolean viewYn;
+    private Long voteId;
 
 }
