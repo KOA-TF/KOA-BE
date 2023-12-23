@@ -122,6 +122,12 @@ public class VoteQueryService {
         }
     }
 
+    public Vote findVoteByNoticeIdWithEmpty(Long noticeId) {
+
+        Vote vote = voteRepository.findVoteByNoticeId(noticeId);
+        return vote;
+    }
+
     public VoteItem findVoteItemById(Long voteItemId) {
         return voteItemRepository.findById(voteItemId).orElseThrow(() -> new BusinessException(Error.VOTE_ITEM_NOT_FOUND));
     }

@@ -183,15 +183,12 @@ public class NoticeSaveUseCase {
         NoticeDetailInfoResponse response = noticeMapper.toNoticeV2DetailDTO(projection);
 
         //투표 있을때 ID 넣기
-        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response);
-        Vote voteResult = voteQueryService.findVoteByNoticeId(noticeId);
-        if (voteResult != null) {
-            results.setVoteId(voteResult.getId());
-        }
+        Vote voteResult = voteQueryService.findVoteByNoticeIdWithEmpty(noticeId);
 
         //이미지 리스트로 넣기
         List<String> imageUrls = noticeQueryService.findImagesByNoticeId(response.noticeId());
-        results.setImageUrl(imageUrls);
+
+        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteResult.getId(), imageUrls);
 
         // 조회 여부 기록 업데이트
         ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
