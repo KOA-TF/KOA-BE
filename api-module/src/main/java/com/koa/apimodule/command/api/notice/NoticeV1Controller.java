@@ -1,10 +1,10 @@
-package com.koa.apimodule.command.api;
+package com.koa.apimodule.command.api.notice;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.*;
-import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
 import com.koa.coremodule.notice.application.service.NoticeSaveUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/notice")
-public class NoticeController {
+public class NoticeV1Controller {
 
-    private final NoticeFindUseCase noticeFindUseCase;
+    private final NoticeGetUseCase noticeGetUseCase;
     private final NoticeSaveUseCase noticeSaveUseCase;
     private final MemberUtils memberUtils;
 
@@ -31,7 +31,7 @@ public class NoticeController {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        List<NoticeListResponse> response = noticeFindUseCase.selectNotice(memberRequest.getId());
+        List<NoticeListResponse> response = noticeGetUseCase.selectNotice(memberRequest.getId());
         return ApplicationResponse.ok(response, "공지 전체 조회에 성공했습니다.");
     }
 
@@ -41,7 +41,7 @@ public class NoticeController {
     @GetMapping(value = "/curriculum")
     public ApplicationResponse<List<CurriculumResponse>> selectCurriculum() {
 
-        List<CurriculumResponse> response = noticeFindUseCase.selectCurriculum();
+        List<CurriculumResponse> response = noticeGetUseCase.selectCurriculum();
 
         return ApplicationResponse.ok(response, "커리큘럼 공지 조회에 성공했습니다.");
     }
@@ -54,7 +54,7 @@ public class NoticeController {
             @RequestParam Long curriculumId
     ) {
 
-        List<CurriculumListResponse> responses = noticeFindUseCase.selectCurriculumList(curriculumId);
+        List<CurriculumListResponse> responses = noticeGetUseCase.selectCurriculumList(curriculumId);
 
         return ApplicationResponse.ok(responses, "공지 조회에 성공했습니다.");
     }
@@ -77,7 +77,7 @@ public class NoticeController {
     @PatchMapping(value = "")
     public ApplicationResponse<Long> updateNotice(
             @RequestPart(value = "dto") NoticeUpdateRequest request,
-            @RequestPart(value = "file") MultipartFile multipartFile) {
+            @RequestPart(value = "file") List<MultipartFile> multipartFile) {
 
         Member memberRequest = memberUtils.getAccessMember();
         request.setMemberId(memberRequest.getId());

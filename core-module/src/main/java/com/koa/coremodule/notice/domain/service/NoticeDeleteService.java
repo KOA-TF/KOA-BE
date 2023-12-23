@@ -3,8 +3,9 @@ package com.koa.coremodule.notice.domain.service;
 import com.koa.commonmodule.annotation.DomainService;
 import com.koa.coremodule.notice.domain.repository.NoticeRepository;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @DomainService
 @Transactional
