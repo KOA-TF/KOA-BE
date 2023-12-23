@@ -20,12 +20,20 @@ public enum Error {
     VOTE_ITEM_NOT_FOUND("투표 항목이 존재하지 않습니다.", 400),
     VOTE_ITEM_RECORD_NOT_FOUND("투표 항목 참여자가 존재하지 않습니다.", 400),
 
+    // ALARM
+    ALARM_NOT_FOUND("알림이 존재하지 않습니다.", 400),
+
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),
     WRONG_PASSWORD("비밀번호가 틀렸습니다.", 2001),
+    MEMBER_DEAITL_NOT_FOUND("사용자 상세 정보를 찾을 수 없습니다.", 2002),
 
     //NOTICE
     NOTICE_NOT_FOUND("공지사항을 찾을 수 없습니다.", 3000),
+    NOTICE_TEAM_NOT_FOUND("공지 팀을 찾을 수 없습니다.", 400),
+
+    //CURRICULUM
+    CURRICULUM_NOT_FOUND("커리큘럼을 찾을 수 없습니다.", 400),
 
     //COMMENT
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다.", 4000),

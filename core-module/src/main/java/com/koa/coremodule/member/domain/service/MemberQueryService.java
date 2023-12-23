@@ -7,6 +7,11 @@ import com.koa.coremodule.member.domain.entity.Authority;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.exception.UserNotFoundException;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.BooleanSupplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberQueryService {
     private final MemberRepository memberRepository;
 
-    public void checkAccountExist(Authority authority, String email, String password) {
-        if(!memberRepository.existsByAuthorityAndEmailAndPassword(authority,email,password)) {
+    public void checkExecutiveAccountExist(Authority authority, String email, String password) {
+        BooleanSupplier existenceCheckFunction = getExistenceCheckFunction(authority, email, password);
+        if (!existenceCheckFunction.getAsBoolean()) {
+            throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
+        }
+    }
+
+    public void checkMemberAccountExist(String email, String password) {
+        if (!memberRepository.existsByEmailAndPassword(email, password)) {
             throw new UserNotFoundException(Error.MEMBER_NOT_FOUND);
         }
     }
@@ -38,4 +50,15 @@ public class MemberQueryService {
     public boolean checkEmailExist(String email) {
         return memberRepository.existsByEmail(email);
     }
+
+    private BooleanSupplier getExistenceCheckFunction(Authority authority, String email, String password) {
+        return () -> (authority == Authority.MEMBER)
+                ? memberRepository.existsByEmailAndPassword(email, password)
+                : memberRepository.existsByAuthorityAndEmailAndPassword(authority, email, password);
+    }
+
+    public List<Member> findAllMember() {
+        return memberRepository.findAll();
+    }
+
 }

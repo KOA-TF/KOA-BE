@@ -11,7 +11,7 @@ import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
-import com.koa.coremodule.vote.domain.service.VoteFindService;
+import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class VoteSaveUseCase {
 
     private final MemberUtils memberUtils;
     private final VoteSaveService voteSaveService;
-    private final VoteFindService voteFindService;
+    private final VoteQueryService voteQueryService;
     private final NoticeQueryService noticeQueryService;
     private final MemberQueryService memberQueryService;
     private final VoteMapper voteMapper;
@@ -65,7 +65,7 @@ public class VoteSaveUseCase {
     public Long attendVote(Long voteItemId) {
 
         Member memberRequest = memberUtils.getAccessMember();
-        VoteItem voteItem = voteFindService.findVoteItemById(voteItemId);
+        VoteItem voteItem = voteQueryService.findVoteItemById(voteItemId);
         Member member = memberQueryService.findMemberById(memberRequest.getId());
 
         VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItem, member);

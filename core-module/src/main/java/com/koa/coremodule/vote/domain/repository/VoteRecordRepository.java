@@ -9,4 +9,6 @@ public interface VoteRecordRepository extends JpaRepository<VoteItemRecord, Long
 
     List<VoteItemRecord> findVoteItemRecordByVoteItemId(Long voteItemId);
 
+    List<VoteItemRecord> findVoteItemRecordByMemberId(Long voteItemId);
+
 }

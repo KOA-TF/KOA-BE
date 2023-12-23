@@ -1,24 +1,24 @@
 package com.koa.coremodule.notice.domain.service;
 
+import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.*;
+import com.koa.coremodule.notice.domain.exception.NoticeException;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
-import com.koa.coremodule.notice.domain.repository.CurriculumRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
-import com.koa.coremodule.notice.domain.repository.NoticeViewRepository;
+import com.koa.coremodule.notice.domain.repository.*;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +29,18 @@ public class NoticeQueryService {
     private final NoticeTeamRepository noticeTeamRepository;
     private final CurriculumRepository curriculumRepository;
     private final NoticeViewRepository noticeViewRepository;
+    private final NoticeImageRepository noticeImageRepository;
 
     public List<NoticeListProjection> selectNotice() {
 
         List<NoticeListProjection> projection = noticeRepository.findAllNotice();
+
+        return projection;
+    }
+
+    public List<NoticeListProjection> selectNoticeV2(NoticeSelectRequest request) {
+
+        List<NoticeListProjection> projection = noticeRepository.findAllNoticeV2(request);
 
         return projection;
     }
@@ -53,7 +61,7 @@ public class NoticeQueryService {
                     response.set(i, updatedResponse);
                 }
             } else {
-                final Member member = findMemberById(memberId).orElseThrow(() -> new NoticeNotFoundException(Error.MEMBER_NOT_FOUND));
+                final Member member = findMemberById(memberId);
                 final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
                 NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
                 noticeViewRepository.save(noticeView);
@@ -82,9 +90,21 @@ public class NoticeQueryService {
         return noticeRepository.save(notice);
     }
 
+    public NoticeImage saveImage(NoticeImage noticeImage) {
+
+        return noticeImageRepository.save(noticeImage);
+    }
+
     public NoticeDetailListProjection selectNoticeDetail(Long noticeId) {
 
         NoticeDetailListProjection projection = noticeRepository.findAllNoticeDetail(noticeId);
+
+        return projection;
+    }
+
+    public NoticeV2DetailListProjection selectNoticeDetailV2(Long noticeId) {
+
+        NoticeV2DetailListProjection projection = noticeRepository.findAllNoticeV2Detail(noticeId);
 
         return projection;
     }
@@ -101,6 +121,10 @@ public class NoticeQueryService {
         return noticeRepository.findImageByNoticeId(noticeId);
     }
 
+    public List<String> findImagesByNoticeId(Long noticeId) {
+        return noticeRepository.findImagesByNoticeId(noticeId);
+    }
+
     public Long findSingleViewId(Long noticeId, Long memberId) {
         return noticeRepository.findSingleViewId(memberId, noticeId);
     }
@@ -113,16 +137,16 @@ public class NoticeQueryService {
         noticeRepository.updateSingleViewYn(noticeViewId, memberId, viewType);
     }
 
-    public Optional<Member> findMemberById(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new BusinessException(Error.MEMBER_NOT_FOUND));
     }
 
-    public Optional<NoticeTeam> findNoticeTeamById(Long noticeTeamId) {
-        return noticeTeamRepository.findById(noticeTeamId);
+    public NoticeTeam findNoticeTeamById(Long noticeTeamId) {
+        return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeException(Error.NOTICE_TEAM_NOT_FOUND));
     }
 
-    public Optional<Curriculum> findCurriculumById(Long curriculumId) {
-        return curriculumRepository.findById(curriculumId);
+    public Curriculum findCurriculumById(Long curriculumId) {
+        return curriculumRepository.findById(curriculumId).orElseThrow(() -> new NoticeException(Error.CURRICULUM_NOT_FOUND));
     }
 
 }

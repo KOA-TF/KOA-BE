@@ -12,23 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentMapper {
 
-    public static Comment mapToCommentWithUserAndAlbum(String content, Notice notice, Member member, Boolean isAnonymous) {
+    public static Comment mapToCommentWithUserAndAlbum(String content, Notice notice, Member member) {
         Comment comment = Comment.builder()
                 .content(content)
                 .notice(notice)
                 .writer(member)
-                .isAnonymous(isAnonymous)
                 .build();
         return comment;
     }
 
-    public static Comment mapToCommentWithUserAndNoticeAndParent(String content, Notice notice, Member member, Comment parent, Boolean isAnonymous) {
+    public static Comment mapToCommentWithUserAndNoticeAndParent(String content, Notice notice, Member member, Comment parent) {
         Comment comment = Comment.builder()
                 .content(content)
                 .notice(notice)
                 .writer(member)
                 .parent(parent)
-                .isAnonymous(isAnonymous)
                 .build();
         return comment;
     }
@@ -40,7 +38,6 @@ public class CommentMapper {
                 .writer(member.getName())
                 .createdAt(comment.getCreatedAtByFormat())
                 .isMine(comment.getWriter().equals(member))
-                .isAnonymous(comment.getIsAnonymous())
                 .profileImageUrl(memberDetail.getProfileImage())
                 .writerId(member.getId())
                 .build();

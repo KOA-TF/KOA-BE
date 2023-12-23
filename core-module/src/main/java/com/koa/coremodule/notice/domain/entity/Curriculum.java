@@ -19,4 +19,8 @@ public class Curriculum extends BaseEntity {
 
     private String curriculumName;
 
+    private String date;
+    private String time;
+    private String place;
+
 }
