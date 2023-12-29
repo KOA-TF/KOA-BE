@@ -2,7 +2,7 @@ package com.koa.coremodule.attend.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import jakarta.persistence.*;
 import lombok.*;
 

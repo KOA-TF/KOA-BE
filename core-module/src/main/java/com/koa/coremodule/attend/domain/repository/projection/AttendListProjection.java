@@ -1,15 +1,14 @@
 package com.koa.coremodule.attend.domain.repository.projection;
 
+import static com.koa.coremodule.attend.domain.entity.QAttend.attend;
+import static com.koa.coremodule.curriculum.domain.entity.QCurriculum.curriculum;
+
 import com.koa.coremodule.attend.domain.entity.AttendStatus;
 import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
-
-import static com.koa.coremodule.attend.domain.entity.QAttend.attend;
-import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 
 @AllArgsConstructor
 @Getter
@@ -20,7 +19,7 @@ public class AttendListProjection {
                     attend.id,
                     attend.status,
                     attend.createdAt,
-                    curriculum.date,
+                    curriculum.startTime,
                     curriculum.curriculumName
             );
 

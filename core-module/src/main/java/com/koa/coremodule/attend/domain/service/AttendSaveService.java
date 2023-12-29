@@ -4,7 +4,7 @@ import com.koa.coremodule.attend.domain.entity.Attend;
 import com.koa.coremodule.attend.domain.entity.AttendStatus;
 import com.koa.coremodule.attend.domain.repository.AttendRepository;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

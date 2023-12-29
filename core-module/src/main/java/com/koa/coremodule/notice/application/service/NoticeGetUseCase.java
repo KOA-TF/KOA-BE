@@ -1,25 +1,28 @@
 package com.koa.coremodule.notice.application.service;
 
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
+import com.koa.coremodule.notice.application.dto.CurriculumResponse;
+import com.koa.coremodule.notice.application.dto.NoticeListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
 import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeListMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

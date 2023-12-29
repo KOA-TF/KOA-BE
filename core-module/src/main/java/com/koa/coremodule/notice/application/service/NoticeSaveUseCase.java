@@ -1,11 +1,20 @@
 package com.koa.coremodule.notice.application.service;
 
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.notice.application.dto.NoticeDetailInfoResponse;
+import com.koa.coremodule.notice.application.dto.NoticeDetailListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeRequest;
+import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2DetailListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeV2Request;
 import com.koa.coremodule.notice.application.mapper.NoticeDetailMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
-import com.koa.coremodule.notice.domain.entity.*;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
@@ -15,14 +24,13 @@ import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
