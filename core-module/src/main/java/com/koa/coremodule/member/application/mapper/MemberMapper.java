@@ -6,6 +6,7 @@ import com.koa.coremodule.member.application.dto.request.MemberDetailCreateReque
 import com.koa.coremodule.member.application.dto.response.InterestInfoResponse;
 import com.koa.coremodule.member.application.dto.response.LinkInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
+import com.koa.coremodule.member.application.dto.response.MemberHomeResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.domain.entity.Category;
 import com.koa.coremodule.member.domain.entity.Interest;
@@ -66,6 +67,10 @@ public class MemberMapper {
                 .profileImage(memberDetail.getProfileImage())
                 .links(links)
                 .build();
+    }
+
+    public static MemberHomeResponse mapToMemberHomeResponse(Member member, MemberDetail memberDetail){
+        return new MemberHomeResponse(member.getName(), member.getPeriod(), memberDetail.getPart());
     }
 
     public static InterestInfoResponse mapToInterestInfoResponse(Interest interest){

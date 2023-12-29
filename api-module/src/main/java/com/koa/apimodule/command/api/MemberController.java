@@ -5,15 +5,16 @@ import com.koa.coremodule.member.application.dto.request.MemberDetailCreateReque
 import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
 import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
-import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
-import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.dto.response.CheckRegisterResponse;
+import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
+import com.koa.coremodule.member.application.dto.response.MemberHomeResponse;
+import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
+import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
-import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberRegisterUseCase;
 import lombok.RequiredArgsConstructor;
@@ -114,5 +115,11 @@ public class MemberController {
     public ApplicationResponse<Void> putPasswordUnauthenticated(@RequestParam String email, @RequestBody MemberPasswordChangeRequest memberPasswordChangeRequest) {
         memberPasswordChangeUseCase.changePasswordUnauthenticated(email, memberPasswordChangeRequest);
         return ApplicationResponse.ok(null);
+    }
+
+    @GetMapping("/info/home")
+    public ApplicationResponse<MemberHomeResponse> getMemberInfoHome() {
+        MemberHomeResponse response = memberGetUseCase.getMemberHomeInfo();
+        return ApplicationResponse.ok(response);
     }
 }

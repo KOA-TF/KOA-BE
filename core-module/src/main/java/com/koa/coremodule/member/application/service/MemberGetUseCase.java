@@ -4,6 +4,7 @@ import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.member.application.dto.response.InterestInfoResponse;
 import com.koa.coremodule.member.application.dto.response.LinkInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
+import com.koa.coremodule.member.application.dto.response.MemberHomeResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.mapper.MemberMapper;
 import com.koa.coremodule.member.domain.entity.Interest;
@@ -46,5 +47,11 @@ public class MemberGetUseCase {
                 .map(MemberMapper::mapToLinkInfoResponse)
                 .toList();
         return MemberMapper.mapToMemberDetailInfoResponse(memberDetail, interestInfoResponses, linkInfoResponses);
+    }
+
+    public MemberHomeResponse getMemberHomeInfo(){
+        final Member member = memberUtils.getAccessMember();
+        final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
+        return MemberMapper.mapToMemberHomeResponse(member, memberDetail);
     }
 }
