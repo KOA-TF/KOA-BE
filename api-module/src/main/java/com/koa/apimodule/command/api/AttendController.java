@@ -7,7 +7,7 @@ import com.koa.coremodule.attend.application.dto.AttendList;
 import com.koa.coremodule.attend.application.dto.AttendSaveRequest;
 import com.koa.coremodule.attend.application.service.AttendGetUseCase;
 import com.koa.coremodule.attend.application.service.AttendSaveUseCase;
-import com.koa.coremodule.notice.application.service.NoticeFindUseCase;
+import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
 import com.koa.coremodule.notice.domain.entity.Curriculum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class AttendController {
 
     private final AttendGetUseCase attendGetUseCase;
     private final AttendSaveUseCase attendSaveUseCase;
-    private final NoticeFindUseCase noticeFindUseCase;
+    private final NoticeGetUseCase noticeGetUseCase;
 
     /**
      * 출석 적재
@@ -76,7 +76,7 @@ public class AttendController {
     @ResponseBody
     public ApplicationResponse<byte[]> generateQRCode(Long curriculumId) {
 
-        Curriculum curriculum = noticeFindUseCase.findCurriculumById(curriculumId);
+        Curriculum curriculum = noticeGetUseCase.findCurriculumById(curriculumId);
 
         String data = QR_TEXT + curriculum.getCurriculumName();
         int width = 300;
