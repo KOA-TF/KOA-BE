@@ -7,6 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +37,17 @@ public class Curriculum extends BaseEntity {
     private String place;
     private String wifiName;
     private String wifiPassword;
+
+    public String getCurriculumTimeFormat() {
+        return formatCurriculumTime();
+    }
+
+    private String formatCurriculumTime() {
+        int month = startTime.getMonthValue();
+        int day = startTime.getDayOfMonth();
+        String dayOfWeek = startTime.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+        String endTimeStr = (endTime != null) ? "~" + endTime.format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+        return String.format("%d월 %d일 %s %s%s", month, day, dayOfWeek, startTimeStr, endTimeStr);
+    }
 }

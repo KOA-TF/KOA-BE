@@ -1,6 +1,7 @@
 package com.koa.coremodule.curriculum.application.mapper;
 
 import com.koa.coremodule.curriculum.application.dto.request.CurriculumCreateRequest;
+import com.koa.coremodule.curriculum.application.dto.response.RecentCurriculumResponse;
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,16 @@ public class CurriculumMapper {
                 .wifiPassword(curriculumCreateRequest.wifiPassword())
                 .build();
         return curriculum;
+    }
+
+    public static RecentCurriculumResponse mapToRecentCurriculumResponse(Curriculum curriculum) {
+        return new RecentCurriculumResponse(
+                curriculum.getCurriculumName(),
+                curriculum.getCurriculumTimeFormat(),
+                curriculum.getPlace(),
+                curriculum.getWifiName(),
+                curriculum.getCurriculumName()
+        );
     }
 
 }
