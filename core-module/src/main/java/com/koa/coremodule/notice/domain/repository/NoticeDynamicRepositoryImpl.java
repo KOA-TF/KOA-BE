@@ -138,4 +138,12 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
         return new BooleanBuilder(id.lt(cursor));
     }
 
+    @Override
+    public List<Notice> getRecentNotice() {
+        return jpaQueryFactory.selectFrom(notice)
+                .orderBy(notice.createdAt.desc())
+                .limit(3)
+                .fetch();
+    }
+
 }

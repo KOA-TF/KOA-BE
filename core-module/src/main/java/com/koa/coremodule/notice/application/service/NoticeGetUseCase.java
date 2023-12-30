@@ -3,6 +3,7 @@ package com.koa.coremodule.notice.application.service;
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
 import com.koa.coremodule.notice.application.dto.CurriculumResponse;
+import com.koa.coremodule.notice.application.dto.NoticePreviewResponse;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
@@ -97,6 +98,11 @@ public class NoticeGetUseCase {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(datePart, formatter);
+    }
+
+    public List<NoticePreviewResponse> getRecentNotice() {
+        List<Notice> notices = noticeQueryService.getRecentNotice();
+        return notices.stream().map(NoticeListMapper::toPreviewResponse).toList();
     }
 
 }

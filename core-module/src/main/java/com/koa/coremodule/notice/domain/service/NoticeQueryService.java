@@ -125,6 +125,10 @@ public class NoticeQueryService {
         return noticeRepository.findIdsByMemberId(memberId);
     }
 
+    public List<Notice> getRecentNotice() {
+        return noticeRepository.getRecentNotice();
+    }
+
     public String findImageByNoticeId(Long noticeId) {
         return noticeRepository.findImageByNoticeId(noticeId);
     }

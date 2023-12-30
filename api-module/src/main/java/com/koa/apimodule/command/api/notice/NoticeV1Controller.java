@@ -110,4 +110,15 @@ public class NoticeV1Controller {
         return ApplicationResponse.ok(response, "공지 상세 조회에 성공했습니다.");
     }
 
+    /**
+     * 최근 공지 조회
+     */
+    @GetMapping(value = "/recent")
+    public ApplicationResponse<List<NoticePreviewResponse>> getRecentNotice() {
+
+        List<NoticePreviewResponse> response = noticeGetUseCase.getRecentNotice();
+
+        return ApplicationResponse.ok(response, "최근 공지 조회에 성공했습니다.");
+    }
+
 }
