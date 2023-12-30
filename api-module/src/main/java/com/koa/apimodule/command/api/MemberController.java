@@ -13,6 +13,7 @@ import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
+import com.koa.coremodule.member.application.service.MemberDetailChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
 import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
@@ -38,6 +39,7 @@ public class MemberController {
 
     private final MemberGetUseCase memberGetUseCase;
     private final MemberDetailCreateUseCase memberDetailCreateUseCase;
+    private final MemberDetailChangeUseCase memberDetailChangeUseCase;
     private final MemberCheckUseCase memberCheckUseCase;
     private final MemberDeleteUseCase memberDeleteUseCase;
     private final EmailVerificationUseCase emailVerificationUseCase;
@@ -51,8 +53,8 @@ public class MemberController {
     }
 
     @PostMapping
-    public ApplicationResponse<Void> postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberInfoCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
-        memberDetailCreateUseCase.createMemberDetail(memberInfoCreateRequest, multipartFile);
+    public ApplicationResponse<Void> postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberDetailCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
+        memberDetailCreateUseCase.createMemberDetail(memberDetailCreateRequest, multipartFile);
         return ApplicationResponse.ok(null);
     }
 

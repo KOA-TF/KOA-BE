@@ -28,19 +28,19 @@ public class MemberDetailCreateUseCase {
     private final LinkSaveService linkSaveService;
     private final AwsS3Service awsS3Service;
 
-    public void createMemberDetail(MemberDetailCreateRequest memberInfoCreateRequest, MultipartFile multipartFile) {
+    public void createMemberDetail(MemberDetailCreateRequest memberDetailCreateRequest, MultipartFile multipartFile) {
         String imageUrl = Optional.ofNullable(multipartFile)
                 .map(awsS3Service::uploadFile)
                 .orElse(null);
 
         Member member = memberUtils.getAccessMember();
-        MemberDetail memberDetail = MemberMapper.mapToMemberInfo(member, memberInfoCreateRequest, imageUrl);
+        MemberDetail memberDetail = MemberMapper.mapToMemberInfo(member, memberDetailCreateRequest, imageUrl);
         memberDetailSaveService.saveMemberInfoEntity(memberDetail);
-        memberInfoCreateRequest.getInterests().forEach(interestRequest -> {
+        memberDetailCreateRequest.getInterests().forEach(interestRequest -> {
             Interest interest = MemberMapper.mapToInterest(interestRequest, memberDetail);
             interestSaveService.saveInterestEntity(interest);
         });
-        memberInfoCreateRequest.getLinks().forEach(linkRequest -> {
+        memberDetailCreateRequest.getLinks().forEach(linkRequest -> {
             Link link = MemberMapper.mapToLink(linkRequest, memberDetail);
             linkSaveService.saveLinkEntity(link);
         });
