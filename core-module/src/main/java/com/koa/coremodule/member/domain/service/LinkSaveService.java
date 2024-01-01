@@ -15,4 +15,8 @@ public class LinkSaveService {
     public void saveLinkEntity(Link link){
         linkRepository.save(link);
     }
+
+    public void saveAll(Iterable<Link> links) {
+        linkRepository.saveAll(links);
+    }
 }
