@@ -13,7 +13,6 @@ import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.entity.MemberDetail;
-import com.koa.coremodule.member.domain.entity.Part;
 import com.koa.coremodule.member.domain.entity.Type;
 import java.util.List;
 import lombok.AccessLevel;
@@ -35,7 +34,7 @@ public class MemberMapper {
     public static MemberDetail mapToMemberInfo(Member member, MemberDetailCreateRequest memberInfoCreateRequest, String imageUrl){
         return MemberDetail.builder()
                 .major(memberInfoCreateRequest.getMajor())
-                .part(Part.valueOf(memberInfoCreateRequest.getPart()))
+                .part(memberInfoCreateRequest.getPart())
                 .description(memberInfoCreateRequest.getDescription())
                 .profileImage(imageUrl)
                 .member(member)

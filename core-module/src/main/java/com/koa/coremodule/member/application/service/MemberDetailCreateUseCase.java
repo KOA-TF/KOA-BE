@@ -13,7 +13,6 @@ import com.koa.coremodule.member.domain.service.LinkSaveService;
 import com.koa.coremodule.member.domain.service.MemberDetailSaveService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import jakarta.transaction.Transactional;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,10 +28,7 @@ public class MemberDetailCreateUseCase {
     private final AwsS3Service awsS3Service;
 
     public void createMemberDetail(MemberDetailCreateRequest memberDetailCreateRequest, MultipartFile multipartFile) {
-        String imageUrl = Optional.ofNullable(multipartFile)
-                .map(awsS3Service::uploadFile)
-                .orElse(null);
-
+        String imageUrl = awsS3Service.uploadFile(multipartFile);
         Member member = memberUtils.getAccessMember();
         MemberDetail memberDetail = MemberMapper.mapToMemberInfo(member, memberDetailCreateRequest, imageUrl);
         memberDetailSaveService.saveMemberInfoEntity(memberDetail);
