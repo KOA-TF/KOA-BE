@@ -4,7 +4,8 @@ import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.member.application.dto.response.InterestInfoResponse;
 import com.koa.coremodule.member.application.dto.response.LinkInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
-import com.koa.coremodule.member.application.mapper.MemberMapper;
+import com.koa.coremodule.member.application.dto.response.MemberInfoListResponse;
+import com.koa.coremodule.member.application.mapper.MemberDetailMapper;
 import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -33,12 +34,12 @@ public class MemberDetailGetUseCase {
         final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
         final List<Interest> interests = interestQueryService.findInterestsByMemberDetailId(memberDetail.getId());
         final List<InterestInfoResponse> interestInfoResponses = interests.stream()
-                .map(MemberMapper::mapToInterestInfoResponse)
+                .map(MemberDetailMapper::mapToInterestInfoResponse)
                 .toList();
         final List<Link> links =  linkQueryService.findLinksByMemberDetailId(memberDetail.getId());
         final List<LinkInfoResponse> linkInfoResponses = links.stream()
-                .map(MemberMapper::mapToLinkInfoResponse)
+                .map(MemberDetailMapper::mapToLinkInfoResponse)
                 .toList();
-        return MemberMapper.mapToMemberDetailInfoResponse(memberDetail, interestInfoResponses, linkInfoResponses);
+        return MemberDetailMapper.mapToMemberDetailInfoResponse(memberDetail, interestInfoResponses, linkInfoResponses);
     }
 }

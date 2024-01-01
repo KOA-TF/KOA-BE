@@ -3,7 +3,7 @@ package com.koa.coremodule.member.application.service;
 import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
-import com.koa.coremodule.member.application.mapper.MemberMapper;
+import com.koa.coremodule.member.application.mapper.MemberDetailMapper;
 import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -30,14 +30,14 @@ public class MemberDetailCreateUseCase {
     public void createMemberDetail(MemberDetailCreateRequest memberDetailCreateRequest, MultipartFile multipartFile) {
         String imageUrl = awsS3Service.uploadFile(multipartFile);
         Member member = memberUtils.getAccessMember();
-        MemberDetail memberDetail = MemberMapper.mapToMemberInfo(member, memberDetailCreateRequest, imageUrl);
+        MemberDetail memberDetail = MemberDetailMapper.mapToMemberDetail(member, memberDetailCreateRequest, imageUrl);
         memberDetailSaveService.saveMemberInfoEntity(memberDetail);
         memberDetailCreateRequest.getInterests().forEach(interestRequest -> {
-            Interest interest = MemberMapper.mapToInterest(interestRequest, memberDetail);
+            Interest interest = MemberDetailMapper.mapToInterest(interestRequest, memberDetail);
             interestSaveService.saveInterestEntity(interest);
         });
         memberDetailCreateRequest.getLinks().forEach(linkRequest -> {
-            Link link = MemberMapper.mapToLink(linkRequest, memberDetail);
+            Link link = MemberDetailMapper.mapToLink(linkRequest, memberDetail);
             linkSaveService.saveLinkEntity(link);
         });
     }

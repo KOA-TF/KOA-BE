@@ -5,7 +5,7 @@ import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.application.dto.request.MemberDetailUpdateRequest;
 import com.koa.coremodule.member.application.handler.event.InterestUpdateEvent;
 import com.koa.coremodule.member.application.handler.event.LinkUpdateEvent;
-import com.koa.coremodule.member.application.mapper.MemberMapper;
+import com.koa.coremodule.member.application.mapper.MemberDetailMapper;
 import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -43,11 +43,11 @@ public class MemberDetailChangeUseCase {
     }
 
     private List<Interest> createNewInterest(MemberDetailUpdateRequest memberDetailUpdateRequest, MemberDetail memberDetail) {
-        return createNewList(memberDetailUpdateRequest.getInterests(), MemberMapper::mapToInterest, memberDetail);
+        return createNewList(memberDetailUpdateRequest.getInterests(), MemberDetailMapper::mapToInterest, memberDetail);
     }
 
     private List<Link> createNewLink(MemberDetailUpdateRequest memberDetailUpdateRequest, MemberDetail memberDetail) {
-        return createNewList(memberDetailUpdateRequest.getLinks(), MemberMapper::mapToLink, memberDetail);
+        return createNewList(memberDetailUpdateRequest.getLinks(), MemberDetailMapper::mapToLink, memberDetail);
     }
 
     private <T, R> List<R> createNewList(List<T> requestList, BiFunction<T, MemberDetail, R> mapperFunction, MemberDetail memberDetail) {
