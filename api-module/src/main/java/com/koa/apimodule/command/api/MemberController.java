@@ -16,6 +16,7 @@ import com.koa.coremodule.member.application.service.MemberCheckUseCase;
 import com.koa.coremodule.member.application.service.MemberDeleteUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
+import com.koa.coremodule.member.application.service.MemberDetailGetUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
 import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberRegisterUseCase;
@@ -39,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
 
     private final MemberGetUseCase memberGetUseCase;
+    private final MemberDetailGetUseCase memberDetailGetUseCase;
     private final MemberDetailCreateUseCase memberDetailCreateUseCase;
     private final MemberDetailChangeUseCase memberDetailChangeUseCase;
     private final MemberCheckUseCase memberCheckUseCase;
@@ -80,7 +82,7 @@ public class MemberController {
 
     @GetMapping("/info/detail")
     public ApplicationResponse<MemberDetailInfoResponse> getMemberDetailInfo() {
-        MemberDetailInfoResponse response = memberGetUseCase.getMemberDetailInfo();
+        MemberDetailInfoResponse response = memberDetailGetUseCase.getMemberDetailInfo();
         return ApplicationResponse.ok(response);
     }
 
