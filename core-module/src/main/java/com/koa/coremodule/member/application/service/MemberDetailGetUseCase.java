@@ -42,4 +42,12 @@ public class MemberDetailGetUseCase {
                 .toList();
         return MemberDetailMapper.mapToMemberDetailInfoResponse(memberDetail, interestInfoResponses, linkInfoResponses);
     }
+
+    public List<MemberInfoListResponse> getMemberInfoList(){
+        final List<MemberDetail> memberDetails = memberDetailQueryService.findAllMemberDetailSorted();
+        final List<MemberInfoListResponse> memberInfoListResponses = memberDetails.stream()
+                .map(MemberDetailMapper::mapToMemberInfoListResponse)
+                .toList();
+        return memberInfoListResponses;
+    }
 }

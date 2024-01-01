@@ -9,6 +9,7 @@ import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.CheckRegisterResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberHomeResponse;
+import com.koa.coremodule.member.application.dto.response.MemberInfoListResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
 import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
@@ -20,6 +21,7 @@ import com.koa.coremodule.member.application.service.MemberDetailGetUseCase;
 import com.koa.coremodule.member.application.service.MemberGetUseCase;
 import com.koa.coremodule.member.application.service.MemberPasswordChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberRegisterUseCase;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -131,6 +133,12 @@ public class MemberController {
     @GetMapping("/info/home")
     public ApplicationResponse<MemberHomeResponse> getMemberInfoHome() {
         MemberHomeResponse response = memberGetUseCase.getMemberHomeInfo();
+        return ApplicationResponse.ok(response);
+    }
+
+    @GetMapping("/info/list")
+    public ApplicationResponse<List<MemberInfoListResponse>> getMemberInfoList() {
+        List<MemberInfoListResponse> response = memberDetailGetUseCase.getMemberInfoList();
         return ApplicationResponse.ok(response);
     }
 }

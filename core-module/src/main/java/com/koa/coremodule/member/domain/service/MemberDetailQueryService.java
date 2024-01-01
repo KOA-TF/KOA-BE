@@ -27,4 +27,8 @@ public class MemberDetailQueryService {
     public boolean isMemberDetailExist(Long memberId){
         return memberDetailRepository.existsByMemberId(memberId);
     }
+
+    public List<MemberDetail> findAllMemberDetailSorted(){
+        return memberDetailRepository.findAllSortedByPartAndName();
+    }
 }
