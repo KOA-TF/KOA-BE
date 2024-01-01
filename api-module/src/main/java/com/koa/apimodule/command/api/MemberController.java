@@ -11,6 +11,7 @@ import com.koa.coremodule.member.application.dto.response.MemberDetailInfoRespon
 import com.koa.coremodule.member.application.dto.response.MemberHomeResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoListResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoResponse;
+import com.koa.coremodule.member.application.dto.response.MemberSearchResponse;
 import com.koa.coremodule.member.application.dto.response.VerifyCodeResponse;
 import com.koa.coremodule.member.application.service.EmailVerificationUseCase;
 import com.koa.coremodule.member.application.service.MemberCheckUseCase;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -139,6 +141,12 @@ public class MemberController {
     @GetMapping("/info/list")
     public ApplicationResponse<List<MemberInfoListResponse>> getMemberInfoList() {
         List<MemberInfoListResponse> response = memberDetailGetUseCase.getMemberInfoList();
+        return ApplicationResponse.ok(response);
+    }
+
+    @GetMapping("/info/{memberId}")
+    public ApplicationResponse<MemberSearchResponse> getMemberSearchInfo(@PathVariable Long memberId) {
+        MemberSearchResponse response = memberDetailGetUseCase.getMemberSearchInfo(memberId);
         return ApplicationResponse.ok(response);
     }
 }

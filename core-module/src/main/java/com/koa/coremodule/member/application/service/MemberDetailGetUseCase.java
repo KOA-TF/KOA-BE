@@ -5,6 +5,7 @@ import com.koa.coremodule.member.application.dto.response.InterestInfoResponse;
 import com.koa.coremodule.member.application.dto.response.LinkInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoListResponse;
+import com.koa.coremodule.member.application.dto.response.MemberSearchResponse;
 import com.koa.coremodule.member.application.mapper.MemberDetailMapper;
 import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
@@ -32,14 +33,8 @@ public class MemberDetailGetUseCase {
     public MemberDetailInfoResponse getMemberDetailInfo(){
         final Member member = memberUtils.getAccessMember();
         final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
-        final List<Interest> interests = interestQueryService.findInterestsByMemberDetailId(memberDetail.getId());
-        final List<InterestInfoResponse> interestInfoResponses = interests.stream()
-                .map(MemberDetailMapper::mapToInterestInfoResponse)
-                .toList();
-        final List<Link> links =  linkQueryService.findLinksByMemberDetailId(memberDetail.getId());
-        final List<LinkInfoResponse> linkInfoResponses = links.stream()
-                .map(MemberDetailMapper::mapToLinkInfoResponse)
-                .toList();
+        final List<InterestInfoResponse> interestInfoResponses = getInterestInfoResponses(memberDetail);
+        final List<LinkInfoResponse> linkInfoResponses = getLinkInfoResponses(memberDetail);
         return MemberDetailMapper.mapToMemberDetailInfoResponse(memberDetail, interestInfoResponses, linkInfoResponses);
     }
 
@@ -49,5 +44,26 @@ public class MemberDetailGetUseCase {
                 .map(MemberDetailMapper::mapToMemberInfoListResponse)
                 .toList();
         return memberInfoListResponses;
+    }
+
+    public MemberSearchResponse getMemberSearchInfo(Long memberId){
+        final MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(memberId);
+        final List<InterestInfoResponse> interestInfoResponses = getInterestInfoResponses(memberDetail);
+        final List<LinkInfoResponse> linkInfoResponses = getLinkInfoResponses(memberDetail);
+        return MemberDetailMapper.mapToMemberSearchResponse(memberDetail, interestInfoResponses, linkInfoResponses);
+    }
+
+    private List<InterestInfoResponse> getInterestInfoResponses(MemberDetail memberDetail){
+        final List<Interest> interests = interestQueryService.findInterestsByMemberDetailId(memberDetail.getId());
+        return interests.stream()
+                .map(MemberDetailMapper::mapToInterestInfoResponse)
+                .toList();
+    }
+
+    private List<LinkInfoResponse> getLinkInfoResponses(MemberDetail memberDetail){
+        final List<Link> links =  linkQueryService.findLinksByMemberDetailId(memberDetail.getId());
+        return links.stream()
+                .map(MemberDetailMapper::mapToLinkInfoResponse)
+                .toList();
     }
 }

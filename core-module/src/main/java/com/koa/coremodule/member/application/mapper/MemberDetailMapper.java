@@ -7,6 +7,7 @@ import com.koa.coremodule.member.application.dto.response.InterestInfoResponse;
 import com.koa.coremodule.member.application.dto.response.LinkInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberDetailInfoResponse;
 import com.koa.coremodule.member.application.dto.response.MemberInfoListResponse;
+import com.koa.coremodule.member.application.dto.response.MemberSearchResponse;
 import com.koa.coremodule.member.domain.entity.Category;
 import com.koa.coremodule.member.domain.entity.Interest;
 import com.koa.coremodule.member.domain.entity.Link;
@@ -74,5 +75,12 @@ public class MemberDetailMapper {
     public static MemberInfoListResponse mapToMemberInfoListResponse(MemberDetail memberDetail){
         return new MemberInfoListResponse(memberDetail.getMember().getId(),memberDetail.getMember().getName(), memberDetail.getPart(),
                 memberDetail.getProfileImage(), memberDetail.getDescription());
+    }
+
+    public static MemberSearchResponse mapToMemberSearchResponse(MemberDetail memberDetail, List<InterestInfoResponse> interests, List<LinkInfoResponse> links){
+        return new MemberSearchResponse(memberDetail.getMember().getName(), memberDetail.getPart(),
+                memberDetail.getMember().getPeriod(), memberDetail.getProfileImage(), memberDetail.getDescription(),
+                memberDetail.getMajor(), memberDetail.getMember().getEmail(), memberDetail.getMember().getPhoneNumber(),
+                interests, links);
     }
 }
