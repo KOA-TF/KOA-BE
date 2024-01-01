@@ -1,8 +1,9 @@
 package com.koa.coremodule.notice.application.mapper;
 
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
+import com.koa.coremodule.notice.application.dto.NoticePreviewResponse;
 import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
-
+import com.koa.coremodule.notice.domain.entity.Notice;
 import java.util.ArrayList;
 
 public final class NoticeListMapper {
@@ -21,6 +22,13 @@ public final class NoticeListMapper {
                 .viewYn(response.viewYn())
                 .imageUrl(new ArrayList<>())
                 .build();
+    }
+
+    public static NoticePreviewResponse toPreviewResponse(Notice notice) {
+        return new NoticePreviewResponse(
+                notice.getTitle(),
+                notice.getId()
+        );
     }
 
 }

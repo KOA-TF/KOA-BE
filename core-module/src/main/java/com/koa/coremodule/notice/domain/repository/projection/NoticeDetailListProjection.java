@@ -1,18 +1,17 @@
 package com.koa.coremodule.notice.domain.repository.projection;
 
-import com.querydsl.core.annotations.QueryProjection;
-import com.querydsl.core.types.ConstructorExpression;
-import com.querydsl.core.types.Projections;
-import lombok.Getter;
-
-import java.time.LocalDateTime;
-
+import static com.koa.coremodule.curriculum.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.member.domain.entity.QMember.member;
 import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
-import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
 import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
 import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
 import static com.koa.coremodule.notice.domain.entity.QNoticeTeam.noticeTeam;
+
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.ConstructorExpression;
+import com.querydsl.core.types.Projections;
+import java.time.LocalDateTime;
+import lombok.Getter;
 
 
 @Getter

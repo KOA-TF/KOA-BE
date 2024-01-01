@@ -8,7 +8,7 @@ import com.koa.coremodule.attend.application.dto.AttendSaveRequest;
 import com.koa.coremodule.attend.application.service.AttendGetUseCase;
 import com.koa.coremodule.attend.application.service.AttendSaveUseCase;
 import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -11,6 +11,7 @@ import com.koa.coremodule.image.exception.FileExtensionException;
 import com.koa.coremodule.image.exception.FileUploadException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,8 @@ public class AwsS3Service {
      */
     public String uploadFile(MultipartFile multipartFile) {
 
-        validateFileExists(multipartFile);
+        if(Objects.isNull(multipartFile)) return null;
+        if(multipartFile.isEmpty()) return null;
 
         String fileName = createFileName(multipartFile.getOriginalFilename());
 
@@ -45,15 +47,6 @@ public class AwsS3Service {
         }
 
         return amazonS3.getUrl(bucketName, fileName).toString();
-    }
-
-    /**
-     * 파일 존재 여부 체크 메서드
-     */
-    private void validateFileExists(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
-            throw new FileUploadException(Error.FILE_UPLOAD_FAIL);
-        }
     }
 
     /**

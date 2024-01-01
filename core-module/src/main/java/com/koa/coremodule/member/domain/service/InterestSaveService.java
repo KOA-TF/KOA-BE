@@ -15,4 +15,8 @@ public class InterestSaveService {
     public void saveInterestEntity(Interest interest){
         interestRepository.save(interest);
     }
+
+    public void saveAll(Iterable<Interest> interests) {
+        interestRepository.saveAll(interests);
+    }
 }

@@ -85,5 +85,4 @@ public interface NoticeMapper {
             @Mapping(source = "date", target = "date")
     })
     NoticeDetailInfoResponse toNoticeV2DetailDTO(NoticeV2DetailListProjection projection);
-
 }

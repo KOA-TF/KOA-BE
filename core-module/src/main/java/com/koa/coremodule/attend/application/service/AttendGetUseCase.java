@@ -9,7 +9,7 @@ import com.koa.coremodule.attend.domain.repository.projection.AttendListProjecti
 import com.koa.coremodule.attend.domain.service.AttendQueryService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

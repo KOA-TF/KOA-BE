@@ -2,23 +2,31 @@ package com.koa.coremodule.notice.domain.service;
 
 import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.repository.CurriculumRepository;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
-import com.koa.coremodule.notice.domain.entity.*;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
+import com.koa.coremodule.notice.domain.entity.NoticeView;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeException;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
-import com.koa.coremodule.notice.domain.repository.*;
+import com.koa.coremodule.notice.domain.repository.NoticeImageRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeViewRepository;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -115,6 +123,10 @@ public class NoticeQueryService {
 
     public List<Long> findNoticeIdsByMemberId(Long memberId) {
         return noticeRepository.findIdsByMemberId(memberId);
+    }
+
+    public List<Notice> getRecentNotice() {
+        return noticeRepository.getRecentNotice();
     }
 
     public String findImageByNoticeId(Long noticeId) {
