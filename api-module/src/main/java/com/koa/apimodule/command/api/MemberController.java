@@ -2,6 +2,7 @@ package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.member.application.dto.request.MemberDetailCreateRequest;
+import com.koa.coremodule.member.application.dto.request.MemberDetailUpdateRequest;
 import com.koa.coremodule.member.application.dto.request.MemberPasswordChangeRequest;
 import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
@@ -55,6 +56,12 @@ public class MemberController {
     @PostMapping
     public ApplicationResponse<Void> postMemberDetail(@RequestPart(value = "dto") MemberDetailCreateRequest memberDetailCreateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
         memberDetailCreateUseCase.createMemberDetail(memberDetailCreateRequest, multipartFile);
+        return ApplicationResponse.ok(null);
+    }
+
+    @PutMapping
+    public ApplicationResponse<Void> putMemberDetail(@RequestPart(value = "dto") MemberDetailUpdateRequest memberDetailUpdateRequest, @RequestPart(value = "file") MultipartFile multipartFile){
+        memberDetailChangeUseCase.updateMemberDetail(memberDetailUpdateRequest, multipartFile);
         return ApplicationResponse.ok(null);
     }
 

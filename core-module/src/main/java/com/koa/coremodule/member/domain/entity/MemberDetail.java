@@ -1,8 +1,11 @@
 package com.koa.coremodule.member.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
+import com.koa.commonmodule.utils.DomainFieldUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +33,7 @@ public class MemberDetail extends BaseEntity {
     private Long id;
 
     private String major;
+    @Enumerated(EnumType.STRING)
     private Part part;
     private String description;
     private String profileImage;
@@ -48,4 +52,24 @@ public class MemberDetail extends BaseEntity {
         this.profileImage = profileImage;
         this.member = member;
     }
+
+    public void updateMemberDetail(String major, String part, String description, String profileImage) {
+        this.major = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
+            .newValue(major)
+            .currentValue(this.major)
+            .validate();
+        this.part = Part.valueOf(DomainFieldUtils.DomainValidateBuilder.builder(String.class)
+            .newValue(part)
+            .currentValue(this.part.name())
+            .validate());
+        this.description = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
+            .newValue(description)
+            .currentValue(this.description)
+            .validate();
+        this.profileImage = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
+            .newValue(profileImage)
+            .currentValue(this.profileImage)
+            .validate();
+    }
+
 }
