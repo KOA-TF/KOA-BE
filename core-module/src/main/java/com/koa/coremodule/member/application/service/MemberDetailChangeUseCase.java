@@ -32,6 +32,7 @@ public class MemberDetailChangeUseCase {
     public void  updateMemberDetail(MemberDetailUpdateRequest memberDetailUpdateRequest, MultipartFile multipartFile){
         String imageUrl = awsS3Service.uploadFile(multipartFile);
         Member member = memberUtils.getAccessMember();
+        member.updatePhoneNumber(memberDetailUpdateRequest.getPhoneNumber());
         MemberDetail memberDetail = memberDetailQueryService.findMemberDetailByMemberId(member.getId());
         memberDetail.updateMemberDetail(memberDetailUpdateRequest.getMajor(), memberDetailUpdateRequest.getPart(),
                 memberDetailUpdateRequest.getDescription(), imageUrl);

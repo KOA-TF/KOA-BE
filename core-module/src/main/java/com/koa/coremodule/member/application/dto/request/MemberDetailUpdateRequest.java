@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class MemberDetailUpdateRequest {
+    private String phoneNumber;
     private String major;
     private String part;
     private List<InterestCreateRequest> interests;
