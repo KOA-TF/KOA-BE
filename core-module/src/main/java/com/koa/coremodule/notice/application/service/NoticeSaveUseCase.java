@@ -190,13 +190,16 @@ public class NoticeSaveUseCase {
         NoticeV2DetailListProjection projection = noticeQueryService.selectNoticeDetailV2(noticeId);
         NoticeDetailInfoResponse response = noticeMapper.toNoticeV2DetailDTO(projection);
 
-        //투표 있을때 ID 넣기
+        // 투표 있을 때 ID 넣기
         Vote voteResult = voteQueryService.findVoteByNoticeIdWithEmpty(noticeId);
 
-        //이미지 리스트로 넣기
+        // 이미지 리스트로 넣기
         List<String> imageUrls = noticeQueryService.findImagesByNoticeId(response.noticeId());
 
-        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteResult.getId(), imageUrls);
+        // null 체크
+        Long voteId = (voteResult != null) ? voteResult.getId() : null;
+
+        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteId, imageUrls);
 
         // 조회 여부 기록 업데이트
         ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
