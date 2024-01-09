@@ -24,8 +24,10 @@ import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -196,10 +198,11 @@ public class NoticeSaveUseCase {
         // 이미지 리스트로 넣기
         List<String> imageUrls = noticeQueryService.findImagesByNoticeId(response.noticeId());
 
-        // null 체크
+        // null 체크 ( vote & image )
         Long voteId = (voteResult != null) ? voteResult.getId() : null;
+        List<String> imageUrlList = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls : null;
 
-        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteId, imageUrls);
+        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteId, imageUrlList);
 
         // 조회 여부 기록 업데이트
         ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);
