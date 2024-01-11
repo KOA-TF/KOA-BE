@@ -91,7 +91,7 @@ public class VoteQueryService {
         //TODO -- 투표 참여여부 + 투표 전체 참여자
         for (VoteStatus.VoteItemStatus v : voteStatus.getItems()) {
             int count = 0;
-            boolean hasMyVote = false;
+            Long voteAttendId = null;
 
             List<VoteStatus.MemberList> members = v.getMembers();
 
@@ -99,7 +99,7 @@ public class VoteQueryService {
                 for (VoteStatus.MemberList m : members) {
                     // 투표 참여여부
                     if (m.getMemberId().equals(myMember.getId())) {
-                        hasMyVote = true;
+                        voteAttendId = v.getVoteItemId(); // 해당 항목의 ID를 가져옴
                         break;
                     }
 
@@ -108,7 +108,7 @@ public class VoteQueryService {
                 }
             }
 
-            voteStatus.setVoteAttendYn(hasMyVote);
+            voteStatus.setVoteAttendId(voteAttendId);
             voteStatus.setTotal(count);
         }
 
