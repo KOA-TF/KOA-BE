@@ -3,6 +3,7 @@ package com.koa.coremodule.vote.domain.service;
 import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.repository.MemberDetailRepository;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.vote.application.dto.VoteStatus;
 import com.koa.coremodule.vote.domain.entity.Vote;
@@ -26,6 +27,7 @@ public class VoteQueryService {
     private final VoteRepository voteRepository;
     private final VoteItemRepository voteItemRepository;
     private final VoteRecordRepository voteRecordRepository;
+    private final MemberDetailRepository memberDetailRepository;
     private final MemberUtils memberUtils;
 
     public VoteStatus findVoteStatus(Long noticeId) {
@@ -50,11 +52,11 @@ public class VoteQueryService {
                     .build();
 
             List<VoteStatus.MemberList> memberLists = new ArrayList<>(); // 항목별로 멤버 초기화
+            Optional<VoteItem> voteItem = findVoteItemByItem(v.getItem());
 
             if (v.getCount() >= 1) {
 
                 // 항목별 멤버 명단 나열
-                Optional<VoteItem> voteItem = findVoteItemByItem(v.getItem());
                 List<VoteItemRecord> voteItemRecord = findVoteItemRecordById(voteItem.get().getId());
 
                 for (VoteItemRecord vr : voteItemRecord) {
@@ -66,20 +68,22 @@ public class VoteQueryService {
                     Member member = voteRepository.findVoteMemberByMemberId(memberListBuilder.getMemberId(), vr.getId());
                     memberListBuilder.setName(member.getName());
 
+                    memberDetailRepository.findByMemberId(member.getId()).ifPresent(memberDetail -> {
+                        memberListBuilder.setProfileImageUrl(memberDetail.getProfileImage());
+                    });
+
                     memberLists.add(memberListBuilder);
                 }
 
                 voteItemStatus.setVoteItemId(voteItem.get().getId());
                 voteItemStatus.setMembers(memberLists);
 
-                voteItemStatusList.add(voteItemStatus);
             } else {
 
-                Optional<VoteItem> voteItem = findVoteItemByItem(v.getItem());
                 voteItemStatus.setVoteItemId(voteItem.get().getId());
 
-                voteItemStatusList.add(voteItemStatus);
             }
+            voteItemStatusList.add(voteItemStatus);
         }
 
         voteStatus.setItems(voteItemStatusList);

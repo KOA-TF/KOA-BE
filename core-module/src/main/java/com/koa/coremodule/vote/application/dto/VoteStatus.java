@@ -37,6 +37,7 @@ public class VoteStatus {
     public static class MemberList {
         private Long memberId;
         private String name;
+        private String profileImageUrl;
     }
 
 }
