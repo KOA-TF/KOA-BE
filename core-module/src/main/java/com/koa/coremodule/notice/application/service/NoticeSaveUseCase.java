@@ -1,8 +1,10 @@
 package com.koa.coremodule.notice.application.service;
 
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.notice.application.dto.NoticeDetailInfoResponse;
 import com.koa.coremodule.notice.application.dto.NoticeDetailListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeRequest;
@@ -46,6 +48,8 @@ public class NoticeSaveUseCase {
     private final AwsS3Service awsS3Service;
     private final VoteSaveService voteSaveService;
     private final VoteMapper voteMapper;
+    private final MemberQueryService memberQueryService;
+    private final CurriculumQueryService curriculumQueryService;
 
     public Long saveNotice(NoticeRequest request, MultipartFile multipartFile) {
         // image 저장
@@ -56,12 +60,12 @@ public class NoticeSaveUseCase {
 
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeEntity(request);
-        final Member member = noticeQueryService.findMemberById(request.getMemberId());
+        final Member member = memberQueryService.findMemberById(request.getMemberId());
         Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         noticeEntity.settingInfo(member, noticeTeam, curriculum, savedNotice);
 
         noticeQueryService.save(noticeEntity);
@@ -86,12 +90,12 @@ public class NoticeSaveUseCase {
 
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeV2Entity(request);
-        final Member member = noticeQueryService.findMemberById(request.getMemberId());
+        final Member member = memberQueryService.findMemberById(request.getMemberId());
         Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         noticeEntity.settingInfo(member, noticeTeam, curriculum, savedNotice);
 
         noticeQueryService.save(noticeEntity);
@@ -141,7 +145,7 @@ public class NoticeSaveUseCase {
         uploadImages(multipartFiles);
 
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         findNotice.update(request.getTitle(), request.getContent(), noticeTeam, curriculum);
 
         return findNotice.getId();

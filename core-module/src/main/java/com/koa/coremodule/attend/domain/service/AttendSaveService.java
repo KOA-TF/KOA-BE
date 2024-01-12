@@ -3,9 +3,10 @@ package com.koa.coremodule.attend.domain.service;
 import com.koa.coremodule.attend.domain.entity.Attend;
 import com.koa.coremodule.attend.domain.entity.AttendStatus;
 import com.koa.coremodule.attend.domain.repository.AttendRepository;
-import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
-import com.koa.coremodule.notice.domain.service.NoticeQueryService;
+import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
+import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,13 @@ import org.springframework.stereotype.Service;
 public class AttendSaveService {
 
     private final AttendRepository attendRepository;
-    private final NoticeQueryService noticeQueryService;
+    private final CurriculumQueryService curriculumQueryService;
+    private final MemberQueryService memberQueryService;
 
     public Attend saveAttend(Long curriculumId, Long memberId) {
 
-        Member member = noticeQueryService.findMemberById(memberId);
-        Curriculum curriculum = noticeQueryService.findCurriculumById(curriculumId);
+        Member member = memberQueryService.findMemberById(memberId);
+        Curriculum curriculum = curriculumQueryService.findCurriculumById(curriculumId);
         final Attend attend = Attend.builder().curriculum(curriculum).member(member).status(AttendStatus.PRESENT).build();
 
         return attendRepository.save(attend);
@@ -27,8 +29,8 @@ public class AttendSaveService {
 
     public Attend saveAttendForLate(Long curriculumId, Long memberId) {
 
-        Member member = noticeQueryService.findMemberById(memberId);
-        Curriculum curriculum = noticeQueryService.findCurriculumById(curriculumId);
+        Member member = memberQueryService.findMemberById(memberId);
+        Curriculum curriculum = curriculumQueryService.findCurriculumById(curriculumId);
         final Attend attend = Attend.builder().curriculum(curriculum).member(member).status(AttendStatus.LATE).build();
 
         return attendRepository.save(attend);
