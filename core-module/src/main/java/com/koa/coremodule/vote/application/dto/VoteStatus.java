@@ -16,7 +16,7 @@ import java.util.List;
 public class VoteStatus {
 
     private Long voteId;
-    private Boolean voteAttendYn;
+    private Long voteAttendId;
     private Integer total;
     private String title;
     private List<VoteItemStatus> items;
@@ -37,6 +37,7 @@ public class VoteStatus {
     public static class MemberList {
         private Long memberId;
         private String name;
+        private String profileImageUrl;
     }
 
 }

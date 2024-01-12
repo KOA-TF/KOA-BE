@@ -94,6 +94,18 @@ public class AttendController {
     }
 
     /**
+     * qr text 생성
+     */
+    @GetMapping(value = "/text")
+    public ApplicationResponse<String> generateQrText(Long curriculumId) {
+
+        Curriculum curriculum = noticeGetUseCase.findCurriculumById(curriculumId);
+        String data = QR_TEXT + curriculum.getCurriculumName();
+
+        return ApplicationResponse.ok(data, "QR 텍스트 문구입니다.");
+    }
+
+    /**
      * 마감 버튼 클릭 시 일괄 결석 반영
      */
     @PostMapping(value = "/absent")

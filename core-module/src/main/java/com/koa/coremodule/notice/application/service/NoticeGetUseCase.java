@@ -1,111 +1,149 @@
-package com.koa.coremodule.notice.application.service;
+package com.koa.coremodule.notice.domain.service;
 
-import com.koa.coremodule.curriculum.domain.entity.Curriculum;
-import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
+import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.member.domain.service.MemberQueryService;
-import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
-import com.koa.coremodule.notice.application.dto.CurriculumResponse;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
-import com.koa.coremodule.notice.application.dto.NoticePreviewResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
-import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
-import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
-import com.koa.coremodule.notice.application.mapper.NoticeListMapper;
-import com.koa.coremodule.notice.application.mapper.NoticeMapper;
+import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
+import com.koa.coremodule.notice.domain.entity.NoticeView;
+import com.koa.coremodule.notice.domain.entity.ViewType;
+import com.koa.coremodule.notice.domain.exception.NoticeException;
+import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
+import com.koa.coremodule.notice.domain.repository.NoticeImageRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
+import com.koa.coremodule.notice.domain.repository.NoticeViewRepository;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
-import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class NoticeGetUseCase {
+public class NoticeQueryService {
 
-    private final NoticeQueryService noticeQueryService;
-    private final CurriculumQueryService curriculumQueryService;
-    private final NoticeMapper noticeMapper;
-    private final MemberQueryService memberQueryService;
+    private final NoticeRepository noticeRepository;
+    private final NoticeTeamRepository noticeTeamRepository;
+    private final NoticeViewRepository noticeViewRepository;
+    private final NoticeImageRepository noticeImageRepository;
 
-    public List<NoticeListResponse> selectNotice(Long memberId) {
+    public List<NoticeListProjection> selectNotice() {
 
-        List<NoticeListProjection> projection = noticeQueryService.selectNotice();
-        List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
-        final Member member = memberQueryService.findMemberById(memberId);
-        noticeQueryService.findViewYn(response, member, projection);
+        List<NoticeListProjection> projection = noticeRepository.findAllNotice();
 
-        return response;
+        return projection;
     }
 
-    public List<NoticeV2ListResponse> selectNoticeV2(NoticeSelectRequest request) {
-        List<NoticeListProjection> projection = noticeQueryService.selectNoticeV2(request);
-        List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
-        List<NoticeV2ListResponse> results = new ArrayList<>();
-        Map<Long, NoticeV2ListResponse> noticeMap = new HashMap<>();
-        final Member member = memberQueryService.findMemberById(request.memberId());
-        noticeQueryService.findViewYn(response, member, projection);
+    public List<NoticeListProjection> selectNoticeV2(NoticeSelectRequest request) {
 
-        for (NoticeListResponse p : response) {
-            if (!noticeMap.containsKey(p.noticeId())) {
+        List<NoticeListProjection> projection = noticeRepository.findAllNoticeV2(request);
 
-                NoticeV2ListResponse v2ListResponse = NoticeListMapper.toListResponse(p);
-                noticeMap.put(p.noticeId(), v2ListResponse);
+        return projection;
+    }
+
+    public void findViewYn(List<NoticeListResponse> response, Member member, List<NoticeListProjection> projection) {
+
+        int i = 0;
+        while (i < response.size()) {
+
+            NoticeViewRequest viewRequest = new NoticeViewRequest(member.getId(), projection.get(i).getNoticeId());
+            ViewType viewType = noticeRepository.findViewYn(viewRequest);
+
+            if (viewType != null) {
+
+                if (viewType.equals(ViewType.VIEWED)) {
+                    NoticeListResponse originalResponse = response.get(i);
+                    NoticeListResponse updatedResponse = originalResponse.withViewYn(true);
+                    response.set(i, updatedResponse);
+                }
+            } else {
+                final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+                NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
+                noticeViewRepository.save(noticeView);
             }
 
-            noticeMap.get(p.noticeId()).getImageUrl().add(p.imageUrl());
+            i++;
         }
-
-        results.addAll(noticeMap.values());
-        return results;
     }
 
-    public List<CurriculumResponse> selectCurriculum() {
+    public List<CurriculumProjection> selectCurriculum() {
 
-        List<CurriculumProjection> projection = noticeQueryService.selectCurriculum();
-        return projection.stream().map(CurriculumMapper::toResponse).toList();
+        List<CurriculumProjection> projection = noticeRepository.findByCurriculum();
+
+        return projection;
     }
 
-    public List<CurriculumListResponse> selectCurriculumList(Long curriculumId) {
+    public List<Notice> selectCurriculumList(Long curriculumId) {
 
-        List<Notice> entityResponse = noticeQueryService.selectCurriculumList(curriculumId);
-        int size = entityResponse.size();
+        List<Notice> entityResponse = noticeRepository.selectNoticeByCurriculum(curriculumId);
 
-        List<CurriculumListResponse> response = noticeMapper.toCurriculumListDTO(entityResponse);
-
-        for (int i = 0; i < size; i++) {
-            response.get(i).setNoticeId(entityResponse.get(i).getId());
-            response.get(i).setDate(convertDateString(entityResponse.get(i).getCreatedAt().toString()));
-        }
-
-        return response;
+        return entityResponse;
     }
 
-    public Curriculum findCurriculumById(Long curriculumId) {
+    public Notice save(Notice notice) {
 
-        return curriculumQueryService.findCurriculumById(curriculumId);
+        return noticeRepository.save(notice);
     }
 
-    private LocalDate convertDateString(String dateString) {
+    public NoticeImage saveImage(NoticeImage noticeImage) {
 
-        String datePart = dateString.substring(0, 10);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(datePart, formatter);
+        return noticeImageRepository.save(noticeImage);
     }
 
-    public List<NoticePreviewResponse> getRecentNotice() {
-        List<Notice> notices = noticeQueryService.getRecentNotice();
-        return notices.stream().map(NoticeListMapper::toPreviewResponse).toList();
+    public NoticeDetailListProjection selectNoticeDetail(Long noticeId) {
+
+        NoticeDetailListProjection projection = noticeRepository.findAllNoticeDetail(noticeId);
+
+        return projection;
+    }
+
+    public NoticeV2DetailListProjection selectNoticeDetailV2(Long noticeId) {
+
+        NoticeV2DetailListProjection projection = noticeRepository.findAllNoticeV2Detail(noticeId);
+
+        return projection;
+    }
+
+    public Notice findByNoticeId(Long noticeId) {
+        return noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+    }
+
+    public List<Long> findNoticeIdsByMemberId(Long memberId) {
+        return noticeRepository.findIdsByMemberId(memberId);
+    }
+
+    public List<Notice> getRecentNotice() {
+        return noticeRepository.getRecentNotice();
+    }
+
+    public String findImageByNoticeId(Long noticeId) {
+        return noticeRepository.findImageByNoticeId(noticeId);
+    }
+
+    public List<String> findImagesByNoticeId(Long noticeId) {
+        return noticeRepository.findImagesByNoticeId(noticeId);
+    }
+
+    public Long findSingleViewId(Long noticeId, Long memberId) {
+        return noticeRepository.findSingleViewId(memberId, noticeId);
+    }
+
+    public ViewType findSingleViewType(Long noticeId, Long memberId) {
+        return noticeRepository.findSingleViewType(memberId, noticeId);
+    }
+
+    public void updateSingleViewYn(Long noticeViewId, Long memberId, ViewType viewType) {
+        noticeRepository.updateSingleViewYn(noticeViewId, memberId, viewType);
+    }
+
+    public NoticeTeam findNoticeTeamById(Long noticeTeamId) {
+        return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeException(Error.NOTICE_TEAM_NOT_FOUND));
     }
 
 }
