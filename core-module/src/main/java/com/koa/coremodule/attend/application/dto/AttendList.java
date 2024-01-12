@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @Jacksonized
@@ -15,7 +13,7 @@ public class AttendList {
     private Long attendId;
     private String curriculum;
     private String date;
-    private LocalDateTime time;
+    private String time;
     private AttendStatus status;
 
 }
