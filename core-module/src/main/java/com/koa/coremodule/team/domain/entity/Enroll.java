@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Enrollment extends BaseEntity {
+public class Enroll extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "enrollment_id")
+    @Column(name = "enroll_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

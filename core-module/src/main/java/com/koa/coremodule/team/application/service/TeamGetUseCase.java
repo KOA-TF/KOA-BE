@@ -3,9 +3,9 @@ package com.koa.coremodule.team.application.service;
 import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.team.application.dto.response.TeamInfoResponse;
 import com.koa.coremodule.team.application.mapper.TeamMapper;
-import com.koa.coremodule.team.domain.entity.Enrollment;
+import com.koa.coremodule.team.domain.entity.Enroll;
 import com.koa.coremodule.team.domain.entity.Team;
-import com.koa.coremodule.team.domain.service.EnrollmentQueryService;
+import com.koa.coremodule.team.domain.service.EnrollQueryService;
 import com.koa.coremodule.team.domain.service.TeamQueryService;
 import java.util.Collections;
 import java.util.List;
@@ -20,11 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class TeamGetUseCase {
 
     private final TeamQueryService teamQueryService;
-    private final EnrollmentQueryService enrollmentQueryService;
+    private final EnrollQueryService enrollQueryService;
 
     public List<TeamInfoResponse> getTeamListByCurriculumId(Long curriculumId) {
         List<Team> teamList = teamQueryService.getTeamListByCurriculumId(curriculumId);
-        Map<Team, List<Enrollment>> enrollmentMap = createTeamEnrollmentMap();
+        Map<Team, List<Enroll>> enrollmentMap = createTeamEnrollmentMap();
 
         List<TeamInfoResponse> teamInfoResponses = teamList.stream()
                 .map(team -> TeamMapper.mapToTeamInfoResponse(team, enrollmentMap.getOrDefault(team, Collections.emptyList()).size()))
@@ -33,11 +33,11 @@ public class TeamGetUseCase {
         return teamInfoResponses;
     }
 
-    private Map<Team, List<Enrollment>> createTeamEnrollmentMap() {
-        List<Enrollment> enrollmentList = enrollmentQueryService.findAll();
-        Map<Team, List<Enrollment>> enrollmentMap = enrollmentList.stream()
-            .collect(Collectors.groupingBy(Enrollment::getTeam));
-        return enrollmentMap;
+    private Map<Team, List<Enroll>> createTeamEnrollmentMap() {
+        List<Enroll> enrollList = enrollQueryService.findAll();
+        Map<Team, List<Enroll>> enrollMap = enrollList.stream()
+            .collect(Collectors.groupingBy(Enroll::getTeam));
+        return enrollMap;
     }
 
 }
