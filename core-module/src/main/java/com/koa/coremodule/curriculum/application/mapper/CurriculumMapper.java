@@ -27,7 +27,7 @@ public class CurriculumMapper {
                 curriculum.getCurriculumTimeFormat(),
                 curriculum.getPlace(),
                 curriculum.getWifiName(),
-                curriculum.getCurriculumName()
+                curriculum.getWifiPassword()
         );
     }
 
