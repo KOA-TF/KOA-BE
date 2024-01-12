@@ -88,29 +88,32 @@ public class VoteQueryService {
 
         voteStatus.setItems(voteItemStatusList);
 
+        int count = 0;
+        Long voteAttendId = null;
+
         //TODO -- 투표 참여여부 + 투표 전체 참여자
         for (VoteStatus.VoteItemStatus v : voteStatus.getItems()) {
-            int count = 0;
-            Long voteAttendId = null;
 
             List<VoteStatus.MemberList> members = v.getMembers();
+            int itemCount = 0;
 
             if (members != null) {
+
                 for (VoteStatus.MemberList m : members) {
                     // 투표 참여여부
                     if (m.getMemberId().equals(myMember.getId())) {
                         voteAttendId = v.getVoteItemId(); // 해당 항목의 ID를 가져옴
-                        break;
                     }
 
-                    // 투표 전체 참여자 수
-                    count++;
+                    itemCount++;
                 }
             }
 
-            voteStatus.setVoteAttendId(voteAttendId);
-            voteStatus.setTotal(count);
+            count += itemCount;
         }
+
+        voteStatus.setVoteAttendId(voteAttendId);
+        voteStatus.setTotal(count);
 
         return voteStatus;
     }
