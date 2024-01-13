@@ -6,6 +6,10 @@ import com.koa.coremodule.curriculum.application.dto.response.RecentCurriculumRe
 import com.koa.coremodule.curriculum.application.mapper.CurriculumMapper;
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
+import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.utils.MemberUtils;
+import com.koa.coremodule.team.domain.entity.Enroll;
+import com.koa.coremodule.team.domain.service.EnrollQueryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CurriculumGetUseCase {
 
     private final CurriculumQueryService curriculumQueryService;
+    private final MemberUtils memberUtils;
 
     public RecentCurriculumResponse getRecentCurriculum() {
         Curriculum recentCurriculum = curriculumQueryService.getRecentCurriculum();
@@ -29,4 +34,5 @@ public class CurriculumGetUseCase {
             .toList();
         return curriculumInfoResponses;
     }
+
 }

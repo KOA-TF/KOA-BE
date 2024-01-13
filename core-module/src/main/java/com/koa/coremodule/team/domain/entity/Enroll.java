@@ -10,13 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@SQLDelete(sql = "UPDATE enroll SET is_deleted = true WHERE enroll_id = ?")
+@Where(clause = "is_deleted=false")
 public class Enroll extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +34,13 @@ public class Enroll extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    private Boolean isDeleted = Boolean.FALSE;
+
+    @Builder
+    public Enroll(Team team, Member member) {
+        this.team = team;
+        this.member = member;
+    }
+
 }

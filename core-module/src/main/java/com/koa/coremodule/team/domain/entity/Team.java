@@ -14,10 +14,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE team SET is_deleted = true WHERE team_id = ?")
+@Where(clause = "is_deleted=false")
 public class Team extends BaseEntity {
 
     @Id
@@ -36,6 +40,8 @@ public class Team extends BaseEntity {
         this.teamName = teamName;
         this.curriculum = curriculum;
     }
+
+    private Boolean isDeleted = Boolean.FALSE;
 
     public void updateTeamName(String teamName) {
         this.teamName = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
