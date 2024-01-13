@@ -46,7 +46,10 @@ public enum Error {
 
     //Email
     CREATE_CODE_FAIL("인증코드 생성에 실패했습니다.", 6000),
-    WRONG_CODE("잘못된 인증코드입니다.", 6001);
+    WRONG_CODE("잘못된 인증코드입니다.", 6001),
+
+    //Team
+    TEAM_NOT_FOUND("팀을 찾을 수 없습니다.", 7000);
 
     private final String message;
     private final int errorCode;

@@ -1,11 +1,7 @@
 package com.koa.coremodule.notice.domain.service;
 
-import com.koa.commonmodule.exception.BusinessException;
 import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.curriculum.domain.entity.Curriculum;
-import com.koa.coremodule.curriculum.domain.repository.CurriculumRepository;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.member.domain.repository.MemberRepository;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
@@ -33,9 +29,7 @@ import org.springframework.stereotype.Service;
 public class NoticeQueryService {
 
     private final NoticeRepository noticeRepository;
-    private final MemberRepository memberRepository;
     private final NoticeTeamRepository noticeTeamRepository;
-    private final CurriculumRepository curriculumRepository;
     private final NoticeViewRepository noticeViewRepository;
     private final NoticeImageRepository noticeImageRepository;
 
@@ -53,12 +47,12 @@ public class NoticeQueryService {
         return projection;
     }
 
-    public void findViewYn(List<NoticeListResponse> response, Long memberId, List<NoticeListProjection> projection) {
+    public void findViewYn(List<NoticeListResponse> response, Member member, List<NoticeListProjection> projection) {
 
         int i = 0;
         while (i < response.size()) {
 
-            NoticeViewRequest viewRequest = new NoticeViewRequest(memberId, projection.get(i).getNoticeId());
+            NoticeViewRequest viewRequest = new NoticeViewRequest(member.getId(), projection.get(i).getNoticeId());
             ViewType viewType = noticeRepository.findViewYn(viewRequest);
 
             if (viewType != null) {
@@ -69,7 +63,6 @@ public class NoticeQueryService {
                     response.set(i, updatedResponse);
                 }
             } else {
-                final Member member = findMemberById(memberId);
                 final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
                 NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
                 noticeViewRepository.save(noticeView);
@@ -149,16 +142,8 @@ public class NoticeQueryService {
         noticeRepository.updateSingleViewYn(noticeViewId, memberId, viewType);
     }
 
-    public Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new BusinessException(Error.MEMBER_NOT_FOUND));
-    }
-
     public NoticeTeam findNoticeTeamById(Long noticeTeamId) {
         return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeException(Error.NOTICE_TEAM_NOT_FOUND));
-    }
-
-    public Curriculum findCurriculumById(Long curriculumId) {
-        return curriculumRepository.findById(curriculumId).orElseThrow(() -> new NoticeException(Error.CURRICULUM_NOT_FOUND));
     }
 
 }

@@ -7,16 +7,15 @@ import com.koa.coremodule.attend.application.mapper.AttendListMapper;
 import com.koa.coremodule.attend.domain.entity.AttendStatus;
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
 import com.koa.coremodule.attend.domain.service.AttendQueryService;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.curriculum.domain.entity.Curriculum;
-import com.koa.coremodule.notice.domain.service.NoticeQueryService;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class AttendGetUseCase {
 
     private final MemberUtils memberUtils;
     private final AttendQueryService attendQueryService;
-    private final NoticeQueryService noticeQueryService;
+    private final CurriculumQueryService curriculumQueryService;
 
     public AttendContent getAttendStatus() {
 
@@ -60,7 +59,7 @@ public class AttendGetUseCase {
 
     public Boolean checkText(AttendSaveRequest attendSaveRequest) {
 
-        Curriculum curriculum = noticeQueryService.findCurriculumById(attendSaveRequest.curriculumId());
+        Curriculum curriculum = curriculumQueryService.findCurriculumById(attendSaveRequest.curriculumId());
 
         String correctText = QR_TEXT + curriculum.getCurriculumName();
         return correctText.equals(attendSaveRequest.text());
