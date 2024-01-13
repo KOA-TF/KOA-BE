@@ -1,7 +1,9 @@
 package com.koa.coremodule.attend.application.mapper;
 
+import com.koa.coremodule.attend.application.dto.AttendInfo;
 import com.koa.coremodule.attend.application.dto.AttendList;
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -20,5 +22,15 @@ public class AttendListMapper {
                 .status(projection.getStatus())
                 .build();
         return response;
+    }
+
+    public static AttendInfo toInfoResponse(Boolean isAttended, Curriculum curriculum) {
+        AttendInfo attendInfo = AttendInfo.builder()
+                .curriculumName(curriculum.getCurriculumName())
+                .isAttended(isAttended)
+                .date(curriculum.getCreatedAt().format(DATE_FORMATTER))
+                .time(curriculum.getCreatedAt().format(TIME_FORMATTER))
+                .build();
+        return attendInfo;
     }
 }
