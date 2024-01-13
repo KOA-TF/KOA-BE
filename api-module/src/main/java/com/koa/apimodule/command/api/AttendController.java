@@ -3,12 +3,13 @@ package com.koa.apimodule.command.api;
 import com.google.zxing.WriterException;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.attend.application.dto.AttendContent;
+import com.koa.coremodule.attend.application.dto.AttendInfo;
 import com.koa.coremodule.attend.application.dto.AttendList;
 import com.koa.coremodule.attend.application.dto.AttendSaveRequest;
 import com.koa.coremodule.attend.application.service.AttendGetUseCase;
 import com.koa.coremodule.attend.application.service.AttendSaveUseCase;
-import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
 import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.notice.application.service.NoticeGetUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -115,4 +116,13 @@ public class AttendController {
         return ApplicationResponse.ok(null, "일괄 결석 처리 되었습니다.");
     }
 
+    /**
+     * 다가오는 커리큘럼 정보 전달
+     */
+    @GetMapping(value = "/info")
+    public ApplicationResponse<AttendInfo> getAttendInfo() {
+
+        AttendInfo info = attendGetUseCase.getAttendInfo();
+        return ApplicationResponse.ok(info, "이번주 출석 커리큘럼 정보입니다.");
+    }
 }
