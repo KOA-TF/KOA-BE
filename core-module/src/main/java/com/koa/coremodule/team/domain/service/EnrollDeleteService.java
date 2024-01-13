@@ -16,4 +16,8 @@ public class EnrollDeleteService {
         enrollRepository.deleteByTeamIdAndMemberId(teamId, memberId);
     }
 
+    public void deleteAllByTeamId(Long teamId) {
+        enrollRepository.deleteAllByTeamId(teamId);
+    }
+
 }
