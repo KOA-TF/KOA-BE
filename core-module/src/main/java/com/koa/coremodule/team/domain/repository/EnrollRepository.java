@@ -19,4 +19,10 @@ public interface EnrollRepository extends JpaRepository<Enroll, Long> {
               """)
     List<Enroll> findAllByMemberId(@Param("memberId") Long memberId);
 
+    @Query("""
+             select e.member.id from Enroll e
+             where e.team.id = :teamId
+             """)
+    List<Long> findMemberIdListByTeamId(@Param("teamId") Long teamId);
+
 }

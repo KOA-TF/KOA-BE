@@ -15,6 +15,8 @@ import com.koa.coremodule.member.domain.service.InterestQueryService;
 import com.koa.coremodule.member.domain.service.LinkQueryService;
 import com.koa.coremodule.member.domain.service.MemberDetailQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
+import com.koa.coremodule.team.domain.entity.Enroll;
+import com.koa.coremodule.team.domain.service.EnrollQueryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class MemberDetailGetUseCase {
     private final MemberDetailQueryService memberDetailQueryService;
     private final InterestQueryService interestQueryService;
     private final LinkQueryService linkQueryService;
+    private final EnrollQueryService enrollQueryService;
 
 
     public MemberDetailInfoResponse getMemberDetailInfo(){
@@ -51,6 +54,15 @@ public class MemberDetailGetUseCase {
         final List<InterestInfoResponse> interestInfoResponses = getInterestInfoResponses(memberDetail);
         final List<LinkInfoResponse> linkInfoResponses = getLinkInfoResponses(memberDetail);
         return MemberDetailMapper.mapToMemberSearchResponse(memberDetail, interestInfoResponses, linkInfoResponses);
+    }
+
+    public List<MemberInfoListResponse> getMemberInfoListByTeamId(Long teamId){
+        final List<Long> memberIdList = enrollQueryService.findMemberIdListByTeamId(teamId);
+        final List<MemberDetail> memberDetails = memberDetailQueryService.findMemberDetailListByMemberIdList(memberIdList);
+        final List<MemberInfoListResponse> memberInfoListResponses = memberDetails.stream()
+                .map(MemberDetailMapper::mapToMemberInfoListResponse)
+                .toList();
+        return memberInfoListResponses;
     }
 
     private List<InterestInfoResponse> getInterestInfoResponses(MemberDetail memberDetail){

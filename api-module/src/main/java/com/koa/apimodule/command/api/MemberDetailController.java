@@ -9,6 +9,7 @@ import com.koa.coremodule.member.application.dto.response.MemberSearchResponse;
 import com.koa.coremodule.member.application.service.MemberDetailChangeUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailCreateUseCase;
 import com.koa.coremodule.member.application.service.MemberDetailGetUseCase;
+import com.koa.coremodule.team.domain.service.EnrollQueryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +59,12 @@ public class MemberDetailController {
     @GetMapping("/info/{memberId}")
     public ApplicationResponse<MemberSearchResponse> getMemberSearchInfo(@PathVariable Long memberId) {
         MemberSearchResponse response = memberDetailGetUseCase.getMemberSearchInfo(memberId);
+        return ApplicationResponse.ok(response);
+    }
+
+    @GetMapping("/info/list/{teamId}")
+    public ApplicationResponse<List<MemberInfoListResponse>> getMemberInfoListByTeamId(@PathVariable Long teamId) {
+        List<MemberInfoListResponse> response = memberDetailGetUseCase.getMemberInfoListByTeamId(teamId);
         return ApplicationResponse.ok(response);
     }
 
