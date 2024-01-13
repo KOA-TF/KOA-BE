@@ -51,6 +51,10 @@ public class MemberQueryService {
         return memberRepository.existsByEmail(email);
     }
 
+    public List<Member> findAllMemberByIds(List<Long> memberIds) {
+        return memberRepository.findAllById(memberIds);
+    }
+
     private BooleanSupplier getExistenceCheckFunction(Authority authority, String email, String password) {
         return () -> (authority == Authority.MEMBER)
                 ? memberRepository.existsByEmailAndPassword(email, password)
