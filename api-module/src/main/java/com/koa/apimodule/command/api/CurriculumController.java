@@ -42,4 +42,10 @@ public class CurriculumController {
         return ApplicationResponse.ok(response);
     }
 
+    @GetMapping("/match")
+    public ApplicationResponse<List<CurriculumInfoResponse>> getMatchCurriculumList() {
+        List<CurriculumInfoResponse> response = curriculumGetUseCase.getMatchCurriculumList();
+        return ApplicationResponse.ok(response);
+    }
+
 }

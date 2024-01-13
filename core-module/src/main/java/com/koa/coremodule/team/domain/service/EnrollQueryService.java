@@ -16,4 +16,8 @@ public class EnrollQueryService {
     public List<Enroll> findAll() {
         return enrollRepository.findAll();
     }
+
+    public List<Enroll> getAllEnrollByMemberId(Long memberId) {
+        return enrollRepository.findAllByMemberId(memberId);
+    }
 }
