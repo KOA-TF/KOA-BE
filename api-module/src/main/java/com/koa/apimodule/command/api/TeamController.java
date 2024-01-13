@@ -57,7 +57,7 @@ public class TeamController {
     }
 
     @GetMapping("/match")
-    public ApplicationResponse<List<TeamMatchResponse>> getMatchCurriculumList() {
+    public ApplicationResponse<List<TeamMatchResponse>> getMatchTeamList() {
         List<TeamMatchResponse> response = teamGetUseCase.getMatchTeamList();
         return ApplicationResponse.ok(response);
     }
