@@ -3,6 +3,7 @@ package com.koa.apimodule.command.api;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.team.application.dto.request.TeamCreateRequest;
 import com.koa.coremodule.team.application.dto.request.TeamNameChangeRequset;
+import com.koa.coremodule.team.application.dto.response.TeamMatchResponse;
 import com.koa.coremodule.team.application.dto.response.TeamInfoResponse;
 import com.koa.coremodule.team.application.service.TeamChangeUseCase;
 import com.koa.coremodule.team.application.service.TeamCreateUseCase;
@@ -53,5 +54,11 @@ public class TeamController {
     public ApplicationResponse<Void> deleteTeam(@PathVariable Long teamId) {
         teamDeleteUseCase.deleteTeam(teamId);
         return ApplicationResponse.ok(null);
+    }
+
+    @GetMapping("/match")
+    public ApplicationResponse<List<TeamMatchResponse>> getMatchCurriculumList() {
+        List<TeamMatchResponse> response = teamGetUseCase.getMatchTeamList();
+        return ApplicationResponse.ok(response);
     }
 }

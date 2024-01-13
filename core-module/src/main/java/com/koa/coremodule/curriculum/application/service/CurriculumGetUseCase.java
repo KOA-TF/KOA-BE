@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CurriculumGetUseCase {
 
     private final CurriculumQueryService curriculumQueryService;
-    private final EnrollQueryService enrollQueryService;
     private final MemberUtils memberUtils;
 
     public RecentCurriculumResponse getRecentCurriculum() {
@@ -36,12 +35,4 @@ public class CurriculumGetUseCase {
         return curriculumInfoResponses;
     }
 
-    public List<CurriculumInfoResponse> getMatchCurriculumList() {
-        Member member = memberUtils.getAccessMember();
-        List<Enroll> enrolls = enrollQueryService.getAllEnrollByMemberId(member.getId());
-        List<CurriculumInfoResponse> curriculumInfoResponses = enrolls.stream()
-            .map(enroll -> CurriculumMapper.mapToCurriculumInfoResponse(enroll.getTeam().getCurriculum()))
-            .toList();
-        return curriculumInfoResponses;
-    }
 }
