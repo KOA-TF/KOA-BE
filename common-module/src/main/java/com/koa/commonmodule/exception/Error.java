@@ -15,6 +15,9 @@ public enum Error {
     //REPORT
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
 
+    //ATTEND
+    DUPLICATE_ATTEND("이미 출석하였습니다.", 400),
+
     // VOTE
     VOTE_NOT_FOUND("투표가 존재하지 않습니다.", 400),
     VOTE_ITEM_NOT_FOUND("투표 항목이 존재하지 않습니다.", 400),
@@ -46,7 +49,10 @@ public enum Error {
 
     //Email
     CREATE_CODE_FAIL("인증코드 생성에 실패했습니다.", 6000),
-    WRONG_CODE("잘못된 인증코드입니다.", 6001);
+    WRONG_CODE("잘못된 인증코드입니다.", 6001),
+
+    //Team
+    TEAM_NOT_FOUND("팀을 찾을 수 없습니다.", 7000);
 
     private final String message;
     private final int errorCode;

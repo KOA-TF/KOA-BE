@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface LinkRepository extends JpaRepository<Link, Long> {
     @Query("select l from Link l where l.memberDetail.id = :memberDetailId")
     List<Link> findAllByMemberDetailId(Long memberDetailId);
+
+    void deleteByMemberDetailId(Long memberDetailId);
 }

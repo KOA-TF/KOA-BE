@@ -1,11 +1,22 @@
 package com.koa.coremodule.notice.application.service;
 
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
 import com.koa.coremodule.image.service.AwsS3Service;
 import com.koa.coremodule.member.domain.entity.Member;
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
+import com.koa.coremodule.notice.application.dto.NoticeDetailInfoResponse;
+import com.koa.coremodule.notice.application.dto.NoticeDetailListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeRequest;
+import com.koa.coremodule.notice.application.dto.NoticeUpdateRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2DetailListResponse;
+import com.koa.coremodule.notice.application.dto.NoticeV2Request;
 import com.koa.coremodule.notice.application.mapper.NoticeDetailMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
-import com.koa.coremodule.notice.domain.entity.*;
+import com.koa.coremodule.notice.domain.entity.Notice;
+import com.koa.coremodule.notice.domain.entity.NoticeImage;
+import com.koa.coremodule.notice.domain.entity.NoticeTeam;
+import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeDeleteService;
@@ -15,14 +26,15 @@ import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional
@@ -38,6 +50,8 @@ public class NoticeSaveUseCase {
     private final AwsS3Service awsS3Service;
     private final VoteSaveService voteSaveService;
     private final VoteMapper voteMapper;
+    private final MemberQueryService memberQueryService;
+    private final CurriculumQueryService curriculumQueryService;
 
     public Long saveNotice(NoticeRequest request, MultipartFile multipartFile) {
         // image 저장
@@ -48,12 +62,12 @@ public class NoticeSaveUseCase {
 
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeEntity(request);
-        final Member member = noticeQueryService.findMemberById(request.getMemberId());
+        final Member member = memberQueryService.findMemberById(request.getMemberId());
         Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         noticeEntity.settingInfo(member, noticeTeam, curriculum, savedNotice);
 
         noticeQueryService.save(noticeEntity);
@@ -78,12 +92,12 @@ public class NoticeSaveUseCase {
 
         // 공지 본문 저장
         Notice noticeEntity = noticeMapper.toNoticeV2Entity(request);
-        final Member member = noticeQueryService.findMemberById(request.getMemberId());
+        final Member member = memberQueryService.findMemberById(request.getMemberId());
         Notice savedNotice = noticeQueryService.save(noticeEntity);
 
         // 공지 저장 시 연관 테이블 모두 맵핑
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         noticeEntity.settingInfo(member, noticeTeam, curriculum, savedNotice);
 
         noticeQueryService.save(noticeEntity);
@@ -133,7 +147,7 @@ public class NoticeSaveUseCase {
         uploadImages(multipartFiles);
 
         final NoticeTeam noticeTeam = noticeQueryService.findNoticeTeamById(request.getTeamId());
-        final Curriculum curriculum = noticeQueryService.findCurriculumById(request.getCurriculumId());
+        final Curriculum curriculum = curriculumQueryService.findCurriculumById(request.getCurriculumId());
         findNotice.update(request.getTitle(), request.getContent(), noticeTeam, curriculum);
 
         return findNotice.getId();
@@ -182,13 +196,17 @@ public class NoticeSaveUseCase {
         NoticeV2DetailListProjection projection = noticeQueryService.selectNoticeDetailV2(noticeId);
         NoticeDetailInfoResponse response = noticeMapper.toNoticeV2DetailDTO(projection);
 
-        //투표 있을때 ID 넣기
+        // 투표 있을 때 ID 넣기
         Vote voteResult = voteQueryService.findVoteByNoticeIdWithEmpty(noticeId);
 
-        //이미지 리스트로 넣기
+        // 이미지 리스트로 넣기
         List<String> imageUrls = noticeQueryService.findImagesByNoticeId(response.noticeId());
 
-        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteResult.getId(), imageUrls);
+        // null 체크 ( vote & image )
+        Long voteId = (voteResult != null) ? voteResult.getId() : null;
+        List<String> imageUrlList = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls : null;
+
+        NoticeV2DetailListResponse results = NoticeDetailMapper.toDetailMapper(response, voteId, imageUrlList);
 
         // 조회 여부 기록 업데이트
         ViewType viewResponse = noticeQueryService.findSingleViewType(noticeId, memberId);

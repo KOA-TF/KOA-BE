@@ -27,4 +27,6 @@ public interface NoticeDynamicRepository {
 
     List<Notice> selectNoticeByCurriculum(Long curriculumId);
 
+    List<Notice> getRecentNotice();
+
 }

@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 import static com.koa.coremodule.attend.domain.entity.QAttend.attend;
-import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
+import static com.koa.coremodule.curriculum.domain.entity.QCurriculum.curriculum;
 
 @AllArgsConstructor
 @Getter
@@ -20,14 +20,14 @@ public class AttendListProjection {
                     attend.id,
                     attend.status,
                     attend.createdAt,
-                    curriculum.date,
+                    curriculum.startTime,
                     curriculum.curriculumName
             );
 
     private Long attendId;
     private AttendStatus status;
     private LocalDateTime attendTime;
-    private String date;
+    private LocalDateTime date;
     private String curriculumName;
 
 }

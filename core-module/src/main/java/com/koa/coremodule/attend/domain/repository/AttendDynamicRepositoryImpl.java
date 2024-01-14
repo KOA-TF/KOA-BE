@@ -1,15 +1,14 @@
 package com.koa.coremodule.attend.domain.repository;
 
+import static com.koa.coremodule.attend.domain.entity.QAttend.attend;
+import static com.koa.coremodule.curriculum.domain.entity.QCurriculum.curriculum;
+
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
 import com.koa.coremodule.attend.domain.repository.projection.AttendStatusProjection;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-
-import static com.koa.coremodule.attend.domain.entity.QAttend.attend;
-import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AttendDynamicRepositoryImpl implements AttendDynamicRepository {

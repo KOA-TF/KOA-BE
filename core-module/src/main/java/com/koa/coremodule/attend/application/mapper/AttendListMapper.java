@@ -1,21 +1,36 @@
 package com.koa.coremodule.attend.application.mapper;
 
+import com.koa.coremodule.attend.application.dto.AttendInfo;
 import com.koa.coremodule.attend.application.dto.AttendList;
 import com.koa.coremodule.attend.domain.repository.projection.AttendListProjection;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
 
-public final class AttendListMapper {
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-    private AttendListMapper() {
-    }
+public class AttendListMapper {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM월 dd일");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("a hh:mm", Locale.KOREA);
 
     public static AttendList toResponse(AttendListProjection projection) {
-        return AttendList.builder()
+        AttendList response = AttendList.builder()
                 .attendId(projection.getAttendId())
                 .curriculum(projection.getCurriculumName())
-                .date(projection.getDate())
+                .date(projection.getAttendTime().format(DATE_FORMATTER))
+                .time(projection.getAttendTime().format(TIME_FORMATTER))
                 .status(projection.getStatus())
-                .time(projection.getAttendTime())
                 .build();
+        return response;
     }
 
+    public static AttendInfo toInfoResponse(Boolean isAttended, Curriculum curriculum) {
+        AttendInfo attendInfo = AttendInfo.builder()
+                .curriculumName(curriculum.getCurriculumName())
+                .isAttended(isAttended)
+                .date(curriculum.getCreatedAt().format(DATE_FORMATTER))
+                .time(curriculum.getCreatedAt().format(TIME_FORMATTER))
+                .build();
+        return attendInfo;
+    }
 }

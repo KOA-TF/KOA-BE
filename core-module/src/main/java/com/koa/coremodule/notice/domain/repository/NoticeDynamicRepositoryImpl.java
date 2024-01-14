@@ -1,25 +1,29 @@
 package com.koa.coremodule.notice.domain.repository;
 
+import static com.koa.coremodule.curriculum.domain.entity.QCurriculum.curriculum;
+import static com.koa.coremodule.member.domain.entity.QMember.member;
+import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
+import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
+import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
+import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
+
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
 import com.koa.coremodule.notice.application.dto.NoticeViewRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.QNotice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
-import com.koa.coremodule.notice.domain.repository.projection.*;
+import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeDetailListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.NoticeV2DetailListProjection;
+import com.koa.coremodule.notice.domain.repository.projection.QCurriculumProjection;
+import com.koa.coremodule.notice.domain.repository.projection.QNoticeListProjection;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
-
-import static com.koa.coremodule.member.domain.entity.QMember.member;
-import static com.koa.coremodule.member.domain.entity.QMemberDetail.memberDetail;
-import static com.koa.coremodule.notice.domain.entity.QCurriculum.curriculum;
-import static com.koa.coremodule.notice.domain.entity.QNotice.notice;
-import static com.koa.coremodule.notice.domain.entity.QNoticeImage.noticeImage;
-import static com.koa.coremodule.notice.domain.entity.QNoticeView.noticeView;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
@@ -132,6 +136,14 @@ public class NoticeDynamicRepositoryImpl implements NoticeDynamicRepository {
             return new BooleanBuilder();
         }
         return new BooleanBuilder(id.lt(cursor));
+    }
+
+    @Override
+    public List<Notice> getRecentNotice() {
+        return jpaQueryFactory.selectFrom(notice)
+                .orderBy(notice.createdAt.desc())
+                .limit(3)
+                .fetch();
     }
 
 }

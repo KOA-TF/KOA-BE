@@ -1,25 +1,31 @@
 package com.koa.coremodule.notice.application.service;
 
-import com.koa.coremodule.notice.application.dto.*;
+import com.koa.coremodule.curriculum.domain.entity.Curriculum;
+import com.koa.coremodule.curriculum.domain.service.CurriculumQueryService;
+import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
+import com.koa.coremodule.notice.application.dto.CurriculumListResponse;
+import com.koa.coremodule.notice.application.dto.CurriculumResponse;
+import com.koa.coremodule.notice.application.dto.NoticeListResponse;
+import com.koa.coremodule.notice.application.dto.NoticePreviewResponse;
+import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
+import com.koa.coremodule.notice.application.dto.NoticeV2ListResponse;
 import com.koa.coremodule.notice.application.mapper.CurriculumMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeListMapper;
 import com.koa.coremodule.notice.application.mapper.NoticeMapper;
-import com.koa.coremodule.notice.domain.entity.Curriculum;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.repository.projection.CurriculumProjection;
 import com.koa.coremodule.notice.domain.repository.projection.NoticeListProjection;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
-import com.koa.coremodule.vote.domain.service.VoteQueryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -27,15 +33,16 @@ import java.util.Map;
 public class NoticeGetUseCase {
 
     private final NoticeQueryService noticeQueryService;
-    private final VoteQueryService voteQueryService;
+    private final CurriculumQueryService curriculumQueryService;
     private final NoticeMapper noticeMapper;
+    private final MemberQueryService memberQueryService;
 
     public List<NoticeListResponse> selectNotice(Long memberId) {
 
         List<NoticeListProjection> projection = noticeQueryService.selectNotice();
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
-
-        noticeQueryService.findViewYn(response, memberId, projection);
+        final Member member = memberQueryService.findMemberById(memberId);
+        noticeQueryService.findViewYn(response, member, projection);
 
         return response;
     }
@@ -45,8 +52,8 @@ public class NoticeGetUseCase {
         List<NoticeListResponse> response = noticeMapper.toNoticeListDTO(projection);
         List<NoticeV2ListResponse> results = new ArrayList<>();
         Map<Long, NoticeV2ListResponse> noticeMap = new HashMap<>();
-
-        noticeQueryService.findViewYn(response, request.memberId(), projection);
+        final Member member = memberQueryService.findMemberById(request.memberId());
+        noticeQueryService.findViewYn(response, member, projection);
 
         for (NoticeListResponse p : response) {
             if (!noticeMap.containsKey(p.noticeId())) {
@@ -85,7 +92,7 @@ public class NoticeGetUseCase {
 
     public Curriculum findCurriculumById(Long curriculumId) {
 
-        return noticeQueryService.findCurriculumById(curriculumId);
+        return curriculumQueryService.findCurriculumById(curriculumId);
     }
 
     private LocalDate convertDateString(String dateString) {
@@ -94,6 +101,11 @@ public class NoticeGetUseCase {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return LocalDate.parse(datePart, formatter);
+    }
+
+    public List<NoticePreviewResponse> getRecentNotice() {
+        List<Notice> notices = noticeQueryService.getRecentNotice();
+        return notices.stream().map(NoticeListMapper::toPreviewResponse).toList();
     }
 
 }
