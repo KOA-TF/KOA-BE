@@ -12,5 +12,4 @@ public class AttendInfo {
     private String curriculumName;
     private Boolean isAttended;
     private String date;
-    private String time;
 }
