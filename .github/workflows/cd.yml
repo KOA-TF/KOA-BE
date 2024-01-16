@@ -24,9 +24,8 @@ jobs:
           name: "kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json"
           json: ${{ secrets.FIREBASE_JSON }}
 
-      - name: move JSON file to resources directory
-        run: |
-          mv ${{ steps.create-json.outputs.file-path }} ./common-module/src/main/resources/kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
+      - name: Move JSON file to specified directory
+        run: mv kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json ./common-module/src/main/resources/kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
         shell: bash
 
       - name: make application yml
