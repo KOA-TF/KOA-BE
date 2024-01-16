@@ -20,7 +20,6 @@ jobs:
       - name: make firebase admin json file
         run: |
           cd ./common-module/src/main/resources
-          touch ./kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
           echo "${{ secrets.FIREBASE_JSON }}" > ./kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
         shell: bash
 
