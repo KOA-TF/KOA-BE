@@ -26,7 +26,7 @@ jobs:
 
       - name: move JSON file to resources directory
         run: |
-          mv ${{ steps.create-json.outputs.file-path }} ./common-module/src/main/resources/
+          mv ${{ steps.create-json.outputs.file-path }} ./common-module/src/main/resources/kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
         shell: bash
 
       - name: make application yml
