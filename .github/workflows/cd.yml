@@ -17,10 +17,16 @@ jobs:
       - name: 저장소 Checkout
         uses: actions/checkout@v3
 
-      - name: make firebase admin json file
+      - name: Create JSON file
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json"
+          json: ${{ secrets.FIREBASE_JSON }}
+
+      - name: move JSON file to resources directory
         run: |
-          cd ./common-module/src/main/resources
-          echo "${{ secrets.FIREBASE_JSON }}" > ./kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
+          mv ${{ steps.create-json.outputs.file-path }} ./common-module/src/main/resources/kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
         shell: bash
 
       - name: make application yml
