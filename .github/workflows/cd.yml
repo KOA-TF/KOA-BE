@@ -23,12 +23,6 @@ jobs:
           touch ./kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
           echo "${{ secrets.FIREBASE_JSON }}" > ./kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
 
-      - name: make docker-compose yml
-        run: |
-          cd ./
-          touch ./docker-compose.yml
-          echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
-
       - name: make application yml
         run: |
           cd ./api-module/src/main/resources
@@ -67,6 +61,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            touch ./docker-compose.yml
+            echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
             sudo docker stop $(sudo docker ps -a -q) 
             sudo docker rm -f $(sudo docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_IMG }}
