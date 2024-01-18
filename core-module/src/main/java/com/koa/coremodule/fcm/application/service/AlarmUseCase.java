@@ -113,6 +113,7 @@ public class AlarmUseCase {
                         .type(AlarmType.COMMENT)
                         .title(COMMENT_TITLE)
                         .content(request.content())
+                        .notice(noticeInfo)
                         .comment(comment)
                         .build();
                 alarmSaveService.save(alarm);
@@ -156,6 +157,7 @@ public class AlarmUseCase {
                             .type(AlarmType.RECOMMENT)
                             .title(COMMENT_TITLE)
                             .content(request.content())
+                            .notice(noticeInfo)
                             .comment(comment)
                             .build();
                     alarmSaveService.save(alarm);
@@ -195,7 +197,8 @@ public class AlarmUseCase {
 
             if (a.getNotice() != null) {
                 alarmLists.setNoticeId(a.getNotice().getId());
-            } else if (a.getComment() != null) {
+            }
+            if (a.getComment() != null) {
                 alarmLists.setCommentId(a.getComment().getId());
             }
 
