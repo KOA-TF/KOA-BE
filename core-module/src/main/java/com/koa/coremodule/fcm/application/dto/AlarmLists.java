@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class AlarmLists {
 
     private Long alarmId;
+    private Long noticeId;
+    private Long commentId;
     private String title;
     private String content;
     private LocalDateTime date;
