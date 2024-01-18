@@ -1,6 +1,7 @@
 package com.koa.coremodule.fcm.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
+import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import jakarta.persistence.*;
@@ -29,5 +30,9 @@ public class Alarm extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
 }

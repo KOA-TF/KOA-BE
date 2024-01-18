@@ -4,6 +4,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.koa.coremodule.comment.domain.entity.Comment;
+import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.domain.entity.Alarm;
 import com.koa.coremodule.fcm.domain.entity.AlarmType;
@@ -12,7 +14,8 @@ import com.koa.coremodule.fcm.domain.service.AlarmQueryService;
 import com.koa.coremodule.fcm.domain.service.AlarmSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
-import com.koa.coremodule.notice.application.dto.fcm.SendNotificationRequest;
+import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
+import com.koa.coremodule.notice.application.dto.fcm.SendNoticeNotificationRequest;
 import com.koa.coremodule.notice.domain.entity.Notice;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
@@ -35,6 +38,7 @@ public class AlarmUseCase {
     private final AlarmSaveService alarmSaveService;
     private final AlarmQueryService alarmQueryService;
     private final NoticeQueryService noticeQueryService;
+    private final CommentQueryService commentQueryService;
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
     private final static String COMMENT_TITLE = "새로운 댓글이 달렸어요";
@@ -48,7 +52,7 @@ public class AlarmUseCase {
         log.info("회원의 fcm 토큰이 등록되었습니다.");
     }
 
-    public void sendNoticeNotification(SendNotificationRequest request) {
+    public void sendNoticeNotification(SendNoticeNotificationRequest request) {
 
         List<Member> members = findAllMember();
 
@@ -84,9 +88,11 @@ public class AlarmUseCase {
         }
     }
 
-    public void sendCommentNotification(SendNotificationRequest request) {
+    public void sendCommentNotification(SendCommentNotificationRequest request) {
 
-        Member member = findNoticeMember(request.noticeId());
+        Comment comment = commentQueryService.getCommentById(request.commentId());
+        Notice noticeInfo = comment.getNotice();
+        Member member = findNoticeMember(noticeInfo.getId());
 
         Notification notification = Notification.builder()
                 .setTitle(COMMENT_TITLE)
@@ -102,13 +108,12 @@ public class AlarmUseCase {
             try {
                 firebaseMessaging.send(message);
 
-                Notice notice = noticeQueryService.findByNoticeId(request.noticeId());
                 // 알람 테이블 저장
                 Alarm alarm = Alarm.builder()
                         .type(AlarmType.COMMENT)
                         .title(COMMENT_TITLE)
                         .content(request.content())
-                        .notice(notice)
+                        .comment(comment)
                         .build();
                 alarmSaveService.save(alarm);
 
@@ -118,13 +123,16 @@ public class AlarmUseCase {
         }
     }
 
-    public void sendReCommentNotification(SendNotificationRequest request) {
+    public void sendReCommentNotification(SendCommentNotificationRequest request) {
 
-        Member memberRequest = memberUtils.getAccessMember();
         List<Member> members = new ArrayList<>();
 
-        Member noticeMember = findNoticeMember(request.noticeId());
-        Member commentMember = findCommentMember(memberRequest.getId());
+        Comment comment = commentQueryService.getCommentById(request.commentId());
+        Notice noticeInfo = comment.getNotice();
+        Member noticeMember = findNoticeMember(noticeInfo.getId());
+
+        Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
+        Member commentMember = findCommentMember(parentComment.getId());
         members.add(noticeMember);
         members.add(commentMember);
 
@@ -143,13 +151,12 @@ public class AlarmUseCase {
                 try {
                     firebaseMessaging.send(message);
 
-                    Notice notice = noticeQueryService.findByNoticeId(request.noticeId());
                     // 알람 테이블 저장
                     Alarm alarm = Alarm.builder()
                             .type(AlarmType.RECOMMENT)
                             .title(COMMENT_TITLE)
                             .content(request.content())
-                            .notice(notice)
+                            .comment(comment)
                             .build();
                     alarmSaveService.save(alarm);
 
@@ -185,6 +192,12 @@ public class AlarmUseCase {
                     .date(a.getCreatedAt())
                     .viewYn(isViewed)  // viewYn을 조회 여부에 따라 설정
                     .build();
+
+            if (a.getNotice() != null) {
+                alarmLists.setNoticeId(a.getNotice().getId());
+            } else if (a.getComment() != null) {
+                alarmLists.setCommentId(a.getComment().getId());
+            }
 
             result.add(alarmLists);
         }
