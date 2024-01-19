@@ -46,8 +46,8 @@ public class AlarmUseCase {
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
     private final static String COMMENT_TITLE = "새로운 댓글이 달렸어요";
-    private static final DateTimeFormatter LAST_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd HH:mm");
-    private static final DateTimeFormatter NOW_DATE_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+    private static final DateTimeFormatter LAST_DATE_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
+    private static final DateTimeFormatter NOW_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd HH:mm");
 
     public void registerFcmToken(String token) {
 

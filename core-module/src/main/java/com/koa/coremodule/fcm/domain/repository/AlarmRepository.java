@@ -9,7 +9,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     void deleteAlarmById(Long alarmId);
 
-    @Query("SELECT COUNT(a) > 0 FROM Alarm a WHERE a.id = :alarmId AND a.member.id = :memberId")
+    @Query("SELECT COUNT(a) > 0 FROM AlarmView a WHERE a.alarm.id = :alarmId AND a.member.id = :memberId")
     boolean existsByAlarmIdAndMemberId(@Param("alarmId") Long alarmId, @Param("memberId") Long memberId);
 
 }
