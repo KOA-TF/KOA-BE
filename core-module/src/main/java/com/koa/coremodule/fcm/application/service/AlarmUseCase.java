@@ -4,6 +4,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.koa.commonmodule.exception.Error;
+import com.koa.coremodule.attend.domain.exception.AttendException;
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
@@ -24,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,8 @@ public class AlarmUseCase {
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
     private final static String COMMENT_TITLE = "새로운 댓글이 달렸어요";
+    private static final DateTimeFormatter LAST_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd HH:mm");
+    private static final DateTimeFormatter NOW_DATE_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
 
     public void registerFcmToken(String token) {
 
@@ -181,17 +187,21 @@ public class AlarmUseCase {
 
             // 조회 여부 확인
             for (AlarmView al : alarmViews) {
-                if (a.getId().equals(al.getId())) {
+                if (a.getId().equals(al.getAlarm().getId())) {
                     isViewed = true;
                     break;
                 }
             }
 
+            DateTimeFormatter selectedFormatter = LocalDate.now().getYear() == a.getCreatedAt().getYear()
+                    ? NOW_DATE_FORMATTER
+                    : LAST_DATE_FORMATTER;
+
             AlarmLists alarmLists = AlarmLists.builder()
                     .alarmId(a.getId())
                     .title(a.getTitle())
                     .content(a.getContent())
-                    .date(a.getCreatedAt())
+                    .date(a.getCreatedAt().format(selectedFormatter))
                     .viewYn(isViewed)  // viewYn을 조회 여부에 따라 설정
                     .build();
 
@@ -213,6 +223,11 @@ public class AlarmUseCase {
         Member memberRequest = memberUtils.getAccessMember();
         Member member = alarmQueryService.findMember(memberRequest.getId());
         Alarm alarm = alarmQueryService.findAlarmById(alarmId);
+
+        //이미 적재 되어있으면 예외처리
+        if (alarmQueryService.existsByAlarmIdAndMemberId(alarm.getId(), member.getId())) {
+            throw new AttendException(Error.DUPLICATE_ALARM);
+        }
 
         AlarmView alarmView = AlarmView.builder().alarm(alarm).view(ViewType.VIEWED).member(member).build();
         alarmSaveService.saveAlarmView(alarmView);
