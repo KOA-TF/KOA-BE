@@ -48,6 +48,11 @@ public class AlarmQueryService {
         return findMember(memberId);
     }
 
+    public Boolean existsByAlarmIdAndMemberId(Long alarmId, Long memberId) {
+
+        return alarmRepository.existsByAlarmIdAndMemberId(alarmId, memberId);
+    }
+
     public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
