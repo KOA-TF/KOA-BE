@@ -30,6 +30,7 @@ public class AttendListMapper {
         String formattedDate = curriculum.getStartTime().format(formatter);
 
         AttendInfo attendInfo = AttendInfo.builder()
+                .curriculumId(curriculum.getId())
                 .curriculumName(curriculum.getCurriculumName())
                 .isAttended(isAttended)
                 .date(formattedDate)
