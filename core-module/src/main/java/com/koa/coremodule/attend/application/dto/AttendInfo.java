@@ -9,6 +9,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class AttendInfo {
 
+    private Long curriculumId;
     private String curriculumName;
     private Boolean isAttended;
     private String date;
