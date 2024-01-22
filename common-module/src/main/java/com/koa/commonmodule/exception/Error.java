@@ -14,6 +14,7 @@ public enum Error {
 
     //REPORT
     DUPLICATE_REPORT("이미 등록된 신고내용입니다.", 400),
+    REPORT_NOT_FOUND("신고가 존재하지 않습니다.", 400),
 
     // VOTE
     VOTE_NOT_FOUND("투표가 존재하지 않습니다.", 400),
