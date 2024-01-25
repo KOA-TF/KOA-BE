@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @Jacksonized
 public class AlarmLists {
 
     private Long alarmId;
+    private Long noticeId;
+    private Long commentId;
     private String title;
     private String content;
-    private LocalDateTime date;
+    private String date;
     private Boolean viewYn;
 
 }

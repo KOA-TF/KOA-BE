@@ -12,6 +12,8 @@ import com.koa.coremodule.member.domain.service.MemberQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AttendSaveService {
@@ -28,7 +30,23 @@ public class AttendSaveService {
 
         Member member = memberQueryService.findMemberById(memberId);
         Curriculum curriculum = curriculumQueryService.findCurriculumById(curriculumId);
-        final Attend attend = Attend.builder().curriculum(curriculum).member(member).status(AttendStatus.출석).build();
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        final Attend attend;
+
+        if (currentTime.isAfter(curriculum.getStartTime())) {
+            attend = Attend.builder()
+                    .curriculum(curriculum)
+                    .member(member)
+                    .status(AttendStatus.지각)
+                    .build();
+        } else {
+            attend = Attend.builder()
+                    .curriculum(curriculum)
+                    .member(member)
+                    .status(AttendStatus.출석)
+                    .build();
+        }
 
         return attendRepository.save(attend);
     }

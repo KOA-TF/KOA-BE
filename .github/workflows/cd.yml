@@ -17,6 +17,17 @@ jobs:
       - name: 저장소 Checkout
         uses: actions/checkout@v3
 
+      - name: Create JSON file
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json"
+          json: ${{ secrets.FIREBASE_JSON }}
+
+      - name: Move JSON file to specified directory
+        run: mv kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json ./common-module/src/main/resources/kusitms-plus-firebase-adminsdk-krn6f-5ef95443a1.json
+        shell: bash
+
       - name: make application yml
         run: |
           cd ./api-module/src/main/resources
@@ -55,6 +66,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            touch ./docker-compose.yml
+            echo "${{ secrets.DOCKER_COMPOSE }}" > ./docker-compose.yml
             sudo docker stop $(sudo docker ps -a -q) 
             sudo docker rm -f $(sudo docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_IMG }}

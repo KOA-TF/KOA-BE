@@ -25,6 +25,7 @@ public enum Error {
 
     // ALARM
     ALARM_NOT_FOUND("알림이 존재하지 않습니다.", 400),
+    DUPLICATE_ALARM("이미 조회 완료된 알림입니다.", 400),
 
     // MEMBER
     MEMBER_NOT_FOUND("사용자를 찾을 수 없습니다.", 2000),

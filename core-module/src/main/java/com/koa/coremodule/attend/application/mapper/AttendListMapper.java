@@ -25,11 +25,15 @@ public class AttendListMapper {
     }
 
     public static AttendInfo toInfoResponse(Boolean isAttended, Curriculum curriculum) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDate = curriculum.getStartTime().format(formatter);
+
         AttendInfo attendInfo = AttendInfo.builder()
+                .curriculumId(curriculum.getId())
                 .curriculumName(curriculum.getCurriculumName())
                 .isAttended(isAttended)
-                .date(curriculum.getCreatedAt().format(DATE_FORMATTER))
-                .time(curriculum.getCreatedAt().format(TIME_FORMATTER))
+                .date(formattedDate)
                 .build();
         return attendInfo;
     }

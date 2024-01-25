@@ -4,7 +4,8 @@ import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.application.service.AlarmUseCase;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
-import com.koa.coremodule.notice.application.dto.fcm.SendNotificationRequest;
+import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
+import com.koa.coremodule.notice.application.dto.fcm.SendNoticeNotificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class AlarmController {
      * 메세지 전달 ( 공지 알림 )
      */
     @PostMapping("/send/notice")
-    public ApplicationResponse<Void> sendNoticeNotification(@RequestBody SendNotificationRequest request) {
+    public ApplicationResponse<Void> sendNoticeNotification(@RequestBody SendNoticeNotificationRequest request) {
 
         alarmUseCase.sendNoticeNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 공지 알림을 보냈습니다.");
@@ -43,7 +44,7 @@ public class AlarmController {
      * 메세지 전달 ( 댓글 알림 )
      */
     @PostMapping("/send/comment")
-    public ApplicationResponse<Void> sendCommentNotification(@RequestBody SendNotificationRequest request) {
+    public ApplicationResponse<Void> sendCommentNotification(@RequestBody SendCommentNotificationRequest request) {
 
         alarmUseCase.sendCommentNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 댓글 알림을 보냈습니다.");
@@ -53,7 +54,7 @@ public class AlarmController {
      * 메세지 전달 ( 대댓글 알림 )
      */
     @PostMapping("/send/recomment")
-    public ApplicationResponse<Void> sendReCommentNotification(@RequestBody SendNotificationRequest request) {
+    public ApplicationResponse<Void> sendReCommentNotification(@RequestBody SendCommentNotificationRequest request) {
 
         alarmUseCase.sendReCommentNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 대댓글 알림을 보냈습니다.");
