@@ -30,7 +30,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -142,7 +141,7 @@ public class AlarmUseCase {
         Member noticeMember = findNoticeMember(noticeInfo.getId());
 
         Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
-        Member commentMember = findCommentMember(parentComment.getId());
+        Member commentMember = findCommentMember(parentComment.getWriter().getId());
         members.add(noticeMember);
         members.add(commentMember);
 
