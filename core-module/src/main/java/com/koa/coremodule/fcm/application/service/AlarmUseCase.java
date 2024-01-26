@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -84,6 +85,7 @@ public class AlarmUseCase {
                             .title(NOTICE_TITLE)
                             .content(request.content())
                             .notice(notice)
+                            .member(m)
                             .build();
                     alarmSaveService.save(alarm);
 
@@ -121,6 +123,7 @@ public class AlarmUseCase {
                         .content(request.content())
                         .notice(noticeInfo)
                         .comment(comment)
+                        .member(member)
                         .build();
                 alarmSaveService.save(alarm);
 
@@ -165,6 +168,7 @@ public class AlarmUseCase {
                             .content(request.content())
                             .notice(noticeInfo)
                             .comment(comment)
+                            .member(m)
                             .build();
                     alarmSaveService.save(alarm);
 
@@ -179,10 +183,14 @@ public class AlarmUseCase {
 
         Member memberRequest = memberUtils.getAccessMember();
         List<Alarm> alarmList = alarmQueryService.findAll();
+        List<Alarm> filteredAlarmList = alarmList.stream()
+                .filter(alarm -> !alarm.getMember().getId().equals(memberRequest.getId()))
+                .toList();
+
         List<AlarmView> alarmViews = alarmQueryService.findViews(memberRequest.getId());
         List<AlarmLists> result = new ArrayList<>();
 
-        for (Alarm a : alarmList) {
+        for (Alarm a : filteredAlarmList) {
             boolean isViewed = false;
 
             // 조회 여부 확인
