@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -184,6 +185,7 @@ public class AlarmUseCase {
         List<Alarm> alarmList = alarmQueryService.findAll();
         List<Alarm> filteredAlarmList = alarmList.stream()
                 .filter(alarm -> !alarm.getMember().getId().equals(memberRequest.getId()))
+                .sorted(Comparator.comparing(Alarm::getCreatedAt).reversed())
                 .toList();
 
         List<AlarmView> alarmViews = alarmQueryService.findViews(memberRequest.getId());
