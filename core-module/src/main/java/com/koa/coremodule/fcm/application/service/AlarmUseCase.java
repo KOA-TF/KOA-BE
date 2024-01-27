@@ -61,6 +61,7 @@ public class AlarmUseCase {
 
     public void sendNoticeNotification(SendNoticeNotificationRequest request) {
 
+        Member memberRequest = memberUtils.getAccessMember();
         List<Member> members = findAllMember();
 
         Notification notification = Notification.builder()
@@ -85,7 +86,7 @@ public class AlarmUseCase {
                             .title(NOTICE_TITLE)
                             .content(request.content())
                             .notice(notice)
-                            .member(m)
+                            .member(memberRequest)
                             .build();
                     alarmSaveService.save(alarm);
 
@@ -97,6 +98,8 @@ public class AlarmUseCase {
     }
 
     public void sendCommentNotification(SendCommentNotificationRequest request) {
+
+        Member memberRequest = memberUtils.getAccessMember();
 
         Comment comment = commentQueryService.getCommentById(request.commentId());
         Notice noticeInfo = comment.getNotice();
@@ -123,7 +126,7 @@ public class AlarmUseCase {
                         .content(request.content())
                         .notice(noticeInfo)
                         .comment(comment)
-                        .member(member)
+                        .member(memberRequest)
                         .build();
                 alarmSaveService.save(alarm);
 
@@ -135,11 +138,11 @@ public class AlarmUseCase {
 
     public void sendReCommentNotification(SendCommentNotificationRequest request) {
 
+        Member memberRequest = memberUtils.getAccessMember();
         List<Member> members = new ArrayList<>();
 
         Comment comment = commentQueryService.getCommentById(request.commentId());
-        Notice noticeInfo = comment.getNotice();
-        Member noticeMember = findNoticeMember(noticeInfo.getId());
+        Member noticeMember = findNoticeMember(comment.getWriter().getId());
 
         Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
         Member commentMember = findCommentMember(parentComment.getWriter().getId());
@@ -166,9 +169,9 @@ public class AlarmUseCase {
                             .type(AlarmType.RECOMMENT)
                             .title(COMMENT_TITLE)
                             .content(request.content())
-                            .notice(noticeInfo)
+                            .notice(comment.getNotice())
                             .comment(comment)
-                            .member(m)
+                            .member(memberRequest)
                             .build();
                     alarmSaveService.save(alarm);
 
@@ -260,8 +263,8 @@ public class AlarmUseCase {
         return alarmQueryService.findAllMember();
     }
 
-    private Member findNoticeMember(Long noticeId) {
-        return alarmQueryService.findNoticeMember(noticeId);
+    private Member findNoticeMember(Long memberId) {
+        return alarmQueryService.findMember(memberId);
     }
 
     private Member findCommentMember(Long memberId) {
