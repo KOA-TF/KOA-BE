@@ -147,9 +147,14 @@ public class AlarmUseCase {
         Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
         Member commentMember = parentComment.getWriter();
 
-        members.add(noticeMember);
-        members.add(commentMember);
 
+        if (noticeMember.getId().equals(commentMember.getId())) {
+            members.add(noticeMember);
+        } else {
+            members.add(noticeMember);
+            members.add(commentMember);
+        }
+        
         Notification notification = Notification.builder()
                 .setTitle(COMMENT_TITLE)
                 .setBody(request.content())
