@@ -142,10 +142,11 @@ public class AlarmUseCase {
         List<Member> members = new ArrayList<>();
 
         Comment comment = commentQueryService.getCommentById(request.commentId());
-        Member noticeMember = findNoticeMember(comment.getWriter().getId());
+        Member noticeMember = findNoticeMember(comment.getNotice().getId());
 
         Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
-        Member commentMember = findCommentMember(parentComment.getWriter().getId());
+        Member commentMember = parentComment.getWriter();
+
         members.add(noticeMember);
         members.add(commentMember);
 
@@ -263,8 +264,8 @@ public class AlarmUseCase {
         return alarmQueryService.findAllMember();
     }
 
-    private Member findNoticeMember(Long memberId) {
-        return alarmQueryService.findMember(memberId);
+    private Member findNoticeMember(Long noticeId) {
+        return alarmQueryService.findNoticeMember(noticeId);
     }
 
     private Member findCommentMember(Long memberId) {
