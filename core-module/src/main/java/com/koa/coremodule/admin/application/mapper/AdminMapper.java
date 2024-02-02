@@ -1,6 +1,7 @@
 package com.koa.coremodule.admin.application.mapper;
 
 import com.koa.coremodule.admin.application.dto.AdminMemberList;
+import com.koa.coremodule.admin.application.dto.AdminMemberReq;
 import com.koa.coremodule.admin.application.dto.AdminReportList;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.report.domain.entity.Report;
@@ -20,6 +21,19 @@ public class AdminMapper {
                 .period(member.getPeriod())
                 .phoneNumber(member.getPhoneNumber())
                 .birthday(member.getPassword())
+                .authority(member.getAuthority())
+                .build();
+        return memberList;
+    }
+
+    public static Member mapToMember(AdminMemberReq member) {
+
+        Member memberList = Member.builder()
+                .password(member.getPassword())
+                .name(member.getName())
+                .email(member.getEmail())
+                .period(member.getPeriod())
+                .phoneNumber(member.getPhoneNumber())
                 .authority(member.getAuthority())
                 .build();
         return memberList;
