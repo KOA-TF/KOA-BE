@@ -2,6 +2,7 @@ package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.admin.application.dto.AdminMemberList;
+import com.koa.coremodule.admin.application.dto.AdminMemberReq;
 import com.koa.coremodule.admin.application.dto.AdminReportList;
 import com.koa.coremodule.admin.application.service.AdminGetUseCase;
 import com.koa.coremodule.admin.application.service.AdminSaveUseCase;
@@ -43,14 +44,37 @@ public class AdminController {
     /**
      * 학회원 추가
      */
+    @PostMapping(value = "/addmember")
+    public ApplicationResponse<Long> addMember(
+            @RequestBody AdminMemberReq memberList
+    ) {
+
+        Long memberId = adminSaveUseCase.addMember(memberList);
+        return ApplicationResponse.ok(memberId, "학회원이 추가되었습니다.");
+    }
 
     /**
      * 학회원 수정
      */
+    @PutMapping("/updatemember")
+    public ApplicationResponse<Long> updateMember(
+            @RequestBody AdminMemberList memberList
+    ) {
+
+        Long memberId = adminSaveUseCase.updateMember(memberList);
+        return ApplicationResponse.ok(memberId, "학회원 정보를 수정하였습니다.");
+    }
 
     /**
      * 학회원 삭제
      */
+    @DeleteMapping("/{memberId}/deletemember")
+    public ApplicationResponse<Void> deleteMember(
+            @PathVariable Long memberId) {
+
+        adminSaveUseCase.deleteMember(memberId);
+        return ApplicationResponse.ok(null, "학회원이 삭제되었습니다.");
+    }
 
     /**
      * 신고 접수 리스트
