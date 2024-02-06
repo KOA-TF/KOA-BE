@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,19 +43,19 @@ public class MemberController {
         return ApplicationResponse.ok(response);
     }
 
-    @GetMapping("/check/register")
+    @PostMapping("/check/register")
     public ApplicationResponse<CheckRegisterResponse> checkMemberRegistered(@RequestBody MemberRegisterRequest memberRegisterRequest) {
          CheckRegisterResponse response = memberCheckUseCase.checkMemberRegistered(memberRegisterRequest);
          return ApplicationResponse.ok(response);
     }
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     public ApplicationResponse<Void> getMemberRegister(@RequestBody MemberRegisterRequest memberRegisterRequest){
         memberRegisterUseCase.registerMember(memberRegisterRequest);
         return ApplicationResponse.ok(null);
     }
 
-    @GetMapping("/email")
+    @PostMapping("/email")
     public ApplicationResponse<CheckEmailResponse> checkEmail(@RequestBody CheckEmailRequest checkEmailRequest) {
         CheckEmailResponse response = memberCheckUseCase.checkEmail(checkEmailRequest);
         return ApplicationResponse.ok(response);
@@ -66,7 +67,7 @@ public class MemberController {
         return ApplicationResponse.ok(null);
     }
 
-    @GetMapping("/password")
+    @PostMapping("/password")
     public ApplicationResponse<CheckPasswordResponse> checkPassword(@RequestBody CheckPasswordRequest checkPasswordRequest) {
         CheckPasswordResponse response = memberCheckUseCase.checkPassword(checkPasswordRequest);
         return ApplicationResponse.ok(response);

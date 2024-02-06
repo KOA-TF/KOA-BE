@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthUseCase authUseCase;
     private final LogoutUseCase logoutUseCase;
 
-    @GetMapping("/login/{authority}")
+    @PostMapping("/login/{authority}")
     public ApplicationResponse<AuthResponse> authLogin(@PathVariable Authority authority, @RequestBody LoginRequest loginRequest){
         AuthResponse response = authUseCase.authLogin(authority, loginRequest);
         return ApplicationResponse.ok(response);
