@@ -8,9 +8,11 @@ import com.koa.coremodule.auth.domain.exception.NotExistTokenException;
 import com.koa.coremodule.auth.domain.repository.TokenRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @DomainService
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TokenQueryService {
 
     private final TokenRepository tokenRepository;
