@@ -26,7 +26,7 @@ public class EmailController {
         return ApplicationResponse.ok(null);
     }
 
-    @GetMapping("/verify/code")
+    @PostMapping("/verify/code")
     public ApplicationResponse<VerifyCodeResponse> verifyCode(@RequestBody VerifyCodeRequest verifyCodeRequest) {
         VerifyCodeResponse response = emailVerificationUseCase.verifyCode(verifyCodeRequest);
         return ApplicationResponse.ok(response);
