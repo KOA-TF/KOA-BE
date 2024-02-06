@@ -1,4 +1,4 @@
-package com.koa.coremodule.member.application.dto.response;
+package com.koa.coremodule.email.application.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
