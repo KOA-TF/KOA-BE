@@ -2,21 +2,13 @@ package com.koa.coremodule.member.domain.entity;
 
 import com.koa.commonmodule.domain.BaseEntity;
 import com.koa.commonmodule.utils.DomainFieldUtils;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.util.Objects;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.koa.coremodule.admin.application.dto.AdminMemberList;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import java.util.Objects;
 
 
 @Getter
@@ -56,10 +48,11 @@ public class Member extends BaseEntity {
     }
 
     public void updateFcmToken(String fcmToken) {
-        if(Objects.nonNull(fcmToken)) {
+        if (Objects.nonNull(fcmToken)) {
             this.fcmToken = fcmToken;
         }
     }
+
     public boolean checkPassword(String password) {
         return this.password.equals(password);
     }
@@ -74,15 +67,25 @@ public class Member extends BaseEntity {
 
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
-            .newValue(phoneNumber)
-            .currentValue(this.phoneNumber)
-            .validate();
+                .newValue(phoneNumber)
+                .currentValue(this.phoneNumber)
+                .validate();
     }
 
     public void updatePassword(String password) {
         this.password = DomainFieldUtils.DomainValidateBuilder.builder(String.class)
-            .newValue(password)
-            .currentValue(this.password)
-            .validate();
+                .newValue(password)
+                .currentValue(this.password)
+                .validate();
+    }
+
+    public void updateMember(AdminMemberList memberList) {
+
+        this.period = memberList.getPeriod();
+        this.name = memberList.getName();
+        this.phoneNumber = memberList.getPhoneNumber();
+        this.password = memberList.getPassword();
+        this.email = memberList.getEmail();
+        this.authority = memberList.getAuthority();
     }
 }

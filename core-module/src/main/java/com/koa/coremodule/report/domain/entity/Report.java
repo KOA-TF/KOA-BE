@@ -19,6 +19,7 @@ public class Report {
     private Long id;
 
     private String content;
+    private Boolean isHided = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -28,5 +29,8 @@ public class Report {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    public void hide() { this.isHided = true; }
+
+    public boolean isHided() { return this.isHided; }
 
 }

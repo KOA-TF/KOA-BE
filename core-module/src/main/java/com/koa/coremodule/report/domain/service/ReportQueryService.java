@@ -10,16 +10,24 @@ import com.koa.coremodule.report.domain.entity.Report;
 import com.koa.coremodule.report.domain.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReportQueryService {
 
     private final ReportRepository reportRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
+
+    public List<Report> findAll() {
+
+        return reportRepository.findAll();
+    }
 
     public Optional<Report> findByIds(Long memberId, Long commentId) {
 
@@ -29,6 +37,12 @@ public class ReportQueryService {
     public Report save(Report report) {
 
         return reportRepository.save(report);
+    }
+
+    public void hideReport(Long reportId) {
+
+        Report report = reportRepository.findById(reportId).orElseThrow(() -> new BusinessException(Error.REPORT_NOT_FOUND));
+        report.hide();
     }
 
     public Member findMember(Long memberId) {
