@@ -1,6 +1,7 @@
 package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
+import com.koa.coremodule.admin.application.dto.AdminLogin;
 import com.koa.coremodule.admin.application.dto.AdminMemberList;
 import com.koa.coremodule.admin.application.dto.AdminMemberReq;
 import com.koa.coremodule.admin.application.dto.AdminReportList;
@@ -24,10 +25,10 @@ public class AdminController {
     /**
      * 어드민 로그인
      */
-    @GetMapping(value = "/login")
-    public ApplicationResponse<Long> loginAdmin(@RequestParam Integer password) {
+    @PostMapping(value = "/login")
+    public ApplicationResponse<Long> loginAdmin(@RequestParam AdminLogin adminLogin) {
 
-        Long adminId = adminGetUseCase.checkPassword(password);
+        Long adminId = adminGetUseCase.checkPassword(adminLogin.password());
         return ApplicationResponse.ok(adminId, "정상적으로 로그인하였습니다.");
     }
 
