@@ -21,7 +21,6 @@ public class AuthController {
 
     private final AuthUseCase authUseCase;
     private final LogoutUseCase logoutUseCase;
-    private final AlarmUseCase alarmUseCase;
 
     @GetMapping("/login/{authority}")
     public ApplicationResponse<AuthResponse> authLogin(@PathVariable Authority authority, @RequestBody LoginRequest loginRequest){
@@ -38,10 +37,6 @@ public class AuthController {
     @DeleteMapping("/logout")
     public ApplicationResponse<Void> logout(@RequestHeader(AuthConsts.REFRESH_TOKEN_HEADER) String refreshToken){
         logoutUseCase.logoutAccessUser(refreshToken);
-
-        // 로그아웃 시 토큰 제거
-        alarmUseCase.deleteFcmToken();
-
         return ApplicationResponse.ok(null);
     }
 }
