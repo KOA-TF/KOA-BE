@@ -12,6 +12,7 @@ import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.domain.entity.Alarm;
 import com.koa.coremodule.fcm.domain.entity.AlarmType;
 import com.koa.coremodule.fcm.domain.entity.AlarmView;
+import com.koa.coremodule.fcm.domain.service.AlarmDeleteService;
 import com.koa.coremodule.fcm.domain.service.AlarmQueryService;
 import com.koa.coremodule.fcm.domain.service.AlarmSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -42,6 +43,7 @@ public class AlarmUseCase {
     private final MemberUtils memberUtils;
     private final AlarmSaveService alarmSaveService;
     private final AlarmQueryService alarmQueryService;
+    private final AlarmDeleteService alarmDeleteService;
     private final NoticeQueryService noticeQueryService;
     private final CommentQueryService commentQueryService;
 
@@ -251,14 +253,8 @@ public class AlarmUseCase {
         alarmSaveService.saveAlarmView(alarmView);
     }
 
-    public void deleteFcmToken() {
-
-        Member memberRequest = memberUtils.getAccessMember();
-        alarmSaveService.deleteFcmToken(memberRequest.getId());
-    }
-
     public void deleteAlarm(Long alarmId) {
-        alarmSaveService.deleteAlarm(alarmId);
+        alarmDeleteService.deleteAlarm(alarmId);
     }
 
     private Member findMember(Long memberId) {

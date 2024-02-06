@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @ApplicationService
 @RequiredArgsConstructor
+@Transactional
 public class CommentCreateUseCase {
     private final MemberUtils memberUtils;
     private final NoticeQueryService noticeQueryService;

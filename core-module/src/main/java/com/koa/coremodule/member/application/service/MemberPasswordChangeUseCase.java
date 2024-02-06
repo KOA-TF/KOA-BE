@@ -16,13 +16,13 @@ public class MemberPasswordChangeUseCase {
     private final MemberUtils memberUtils;
     private final MemberQueryService memberQueryService;
 
-    public void changePassword(MemberPasswordChangeRequest request) {
+    public void changePassword(MemberPasswordChangeRequest memberPasswordChangeRequest) {
         Member member = memberUtils.getAccessMember();
-        member.updatePassword(request.getPassword());
+        member.updatePassword(memberPasswordChangeRequest.getPassword());
     }
 
-    public void changePasswordUnauthenticated(String email, MemberPasswordChangeRequest request) {
-        Member member = memberQueryService.findByEmail(email);
-        member.updatePassword(request.getPassword());
+    public void changePasswordUnauthenticated(MemberPasswordChangeRequest memberPasswordChangeRequest) {
+        Member member = memberQueryService.findByEmail(memberPasswordChangeRequest.getEmail());
+        member.updatePassword(memberPasswordChangeRequest.getPassword());
     }
 }

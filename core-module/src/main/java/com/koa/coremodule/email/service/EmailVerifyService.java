@@ -1,8 +1,6 @@
 package com.koa.coremodule.email.service;
 
-import com.koa.commonmodule.exception.Error;
 import com.koa.commonmodule.utils.RedisUtils;
-import com.koa.coremodule.email.exception.WrongCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

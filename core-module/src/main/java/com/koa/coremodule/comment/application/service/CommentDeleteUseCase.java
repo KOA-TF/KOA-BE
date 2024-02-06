@@ -9,9 +9,11 @@ import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import com.koa.commonmodule.exception.Error;
+import org.springframework.transaction.annotation.Transactional;
 
 @ApplicationService
 @RequiredArgsConstructor
+@Transactional
 public class CommentDeleteUseCase {
 
     private final MemberUtils memberUtils;

@@ -1,6 +1,9 @@
 package com.koa.coremodule.member.application.service;
 
 import com.koa.commonmodule.annotation.ApplicationService;
+import com.koa.coremodule.member.application.dto.request.CheckEmailRequest;
+import com.koa.coremodule.member.application.dto.request.CheckPasswordRequest;
+import com.koa.coremodule.member.application.dto.request.MemberRegisterRequest;
 import com.koa.coremodule.member.application.dto.response.CheckEmailResponse;
 import com.koa.coremodule.member.application.dto.response.CheckPasswordResponse;
 import com.koa.coremodule.member.application.dto.response.CheckRegisterResponse;
@@ -18,19 +21,19 @@ public class MemberCheckUseCase {
     private final MemberUtils memberUtils;
     private final MemberQueryService memberQueryService;
 
-    public CheckRegisterResponse checkMemberRegistered(String email, String password) {
-        boolean isMember = memberQueryService.checkMemberExist(email, password);
-        Member member = isMember ? memberQueryService.findByEmail(email) : null;
+    public CheckRegisterResponse checkMemberRegistered(MemberRegisterRequest memberRegisterRequest) {
+        boolean isMember = memberQueryService.checkMemberExist(memberRegisterRequest.getEmail(), memberRegisterRequest.getPassword());
+        Member member = isMember ? memberQueryService.findByEmail(memberRegisterRequest.getEmail()) : null;
         return new CheckRegisterResponse(isMember, member != null && member.isRegistered());
     }
 
-    public CheckPasswordResponse checkPassword(String password) {
+    public CheckPasswordResponse checkPassword(CheckPasswordRequest checkPasswordRequest) {
         Member member = memberUtils.getAccessMember();
-        return new CheckPasswordResponse(member.checkPassword(password));
+        return new CheckPasswordResponse(member.checkPassword(checkPasswordRequest.getPassword()));
     }
 
-    public CheckEmailResponse checkEmail(String email) {
-        final boolean isEmailExist = memberQueryService.checkEmailExist(email);
+    public CheckEmailResponse checkEmail(CheckEmailRequest checkEmailRequest) {
+        final boolean isEmailExist = memberQueryService.checkEmailExist(checkEmailRequest.getEmail());
         return new CheckEmailResponse(isEmailExist);
     }
 }
