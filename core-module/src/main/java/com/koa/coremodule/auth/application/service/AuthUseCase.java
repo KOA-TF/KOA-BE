@@ -1,9 +1,11 @@
 package com.koa.coremodule.auth.application.service;
 
+import com.google.rpc.context.AttributeContext.Auth;
 import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthRequest;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
+import com.koa.coremodule.auth.application.dto.LoginRequest;
 import com.koa.coremodule.auth.application.service.command.AuthInvoker;
 import com.koa.coremodule.auth.application.utils.TokenExtractUtils;
 import com.koa.coremodule.auth.domain.jwt.JWTProvider;
@@ -21,8 +23,8 @@ public class AuthUseCase {
     private final AuthInvoker authInvoker;
 
 
-    public AuthResponse authLogin(Authority authority, String email, String password){
-        return authInvoker.execute(new AuthRequest(authority, email, password));
+    public AuthResponse authLogin(Authority authority, LoginRequest loginRequest){
+        return authInvoker.execute(new AuthRequest(authority, loginRequest.getEmail(), loginRequest.getPassword()));
     }
 
     public AuthResponse reissue(String refreshToken){

@@ -3,13 +3,14 @@ package com.koa.apimodule.command.api;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.auth.application.common.consts.AuthConsts;
 import com.koa.coremodule.auth.application.dto.AuthResponse;
+import com.koa.coremodule.auth.application.dto.LoginRequest;
 import com.koa.coremodule.auth.application.service.AuthUseCase;
 import com.koa.coremodule.auth.application.service.LogoutUseCase;
 import com.koa.coremodule.member.domain.entity.Authority;
-import com.koa.coremodule.fcm.application.service.AlarmUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RestController
@@ -23,8 +24,8 @@ public class AuthController {
     private final AlarmUseCase alarmUseCase;
 
     @GetMapping("/login/{authority}")
-    public ApplicationResponse<AuthResponse> authLogin(@PathVariable Authority authority, @RequestParam String email, @RequestParam String password){
-        AuthResponse response = authUseCase.authLogin(authority, email, password);
+    public ApplicationResponse<AuthResponse> authLogin(@PathVariable Authority authority, @RequestBody LoginRequest loginRequest){
+        AuthResponse response = authUseCase.authLogin(authority, loginRequest);
         return ApplicationResponse.ok(response);
     }
 
