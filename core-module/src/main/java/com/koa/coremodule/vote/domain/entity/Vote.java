@@ -18,9 +18,14 @@ public class Vote extends BaseEntity {
     private Long id;
 
     private String voteTitle;
+    private VoteStatus status;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "notice_id")
     private Notice notice;
+
+    public void updateStatus() {
+        this.status = VoteStatus.FINISHED;
+    }
 
 }
