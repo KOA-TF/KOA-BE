@@ -1,6 +1,5 @@
 package com.koa.coremodule.vote.application.service;
 
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
@@ -13,7 +12,8 @@ import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
 import com.koa.coremodule.vote.domain.entity.VoteStatusCheck;
-import com.koa.coremodule.vote.domain.exception.VoteException;
+import com.koa.coremodule.vote.domain.exception.VoteError;
+import com.koa.coremodule.vote.domain.exception.VoteItemRecordNotFoundException;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +74,7 @@ public class VoteSaveUseCase {
         VoteItemRecord voteItemRecord;
 
         if (voteQueryService.findVoteItemRecordByMemberIdAndItemId(member.getId(), voteItemId) != null) {
-            throw new VoteException(Error.VOTE_ITEM_RECORD_NOT_FOUND);
+            throw new VoteItemRecordNotFoundException(VoteError.VOTE_ITEM_RECORD_NOT_FOUND);
         } else {
             VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItem, member);
             voteItemRecord = voteSaveService.saveVoteRecord(voteItemRecordRequest);
