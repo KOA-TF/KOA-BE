@@ -5,7 +5,6 @@ import com.koa.coremodule.team.domain.exception.AlreadyEnrollException;
 import com.koa.coremodule.team.domain.exception.TeamError;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import com.koa.commonmodule.exception.Errors;
 
 @DomainService
 @RequiredArgsConstructor

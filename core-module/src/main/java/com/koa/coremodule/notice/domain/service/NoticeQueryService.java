@@ -1,6 +1,5 @@
 package com.koa.coremodule.notice.domain.service;
 
-import com.koa.commonmodule.exception.Errors;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
@@ -11,7 +10,6 @@ import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.NoticeView;
 import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.exception.NoticeError;
-import com.koa.coremodule.notice.domain.exception.NoticeException;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
 import com.koa.coremodule.notice.domain.exception.NoticeTeamNotFoundException;
 import com.koa.coremodule.notice.domain.repository.NoticeImageRepository;
