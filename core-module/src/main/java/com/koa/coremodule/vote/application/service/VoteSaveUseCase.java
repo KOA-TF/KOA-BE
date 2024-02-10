@@ -12,7 +12,7 @@ import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
-import com.koa.coremodule.vote.domain.entity.VoteStatus;
+import com.koa.coremodule.vote.domain.entity.VoteStatusCheck;
 import com.koa.coremodule.vote.domain.exception.VoteException;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
@@ -45,7 +45,7 @@ public class VoteSaveUseCase {
         Vote vote = Vote.builder()
                 .voteTitle(voteEntity.getVoteTitle())
                 .notice(notice)
-                .status(VoteStatus.PRESENT)
+                .status(VoteStatusCheck.PRESENT)
                 .build();
 
         // Vote 엔티티 저장

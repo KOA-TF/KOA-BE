@@ -1,5 +1,5 @@
 package com.koa.coremodule.vote.domain.entity;
 
-public enum VoteStatus {
+public enum VoteStatusCheck {
     PRESENT, FINISHED
 }
