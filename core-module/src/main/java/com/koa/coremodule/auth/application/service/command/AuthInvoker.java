@@ -7,13 +7,13 @@ import com.koa.coremodule.auth.application.exception.AuthException;
 import com.koa.coremodule.auth.application.handler.event.UnusedTokenExpireEvent;
 import com.koa.coremodule.auth.application.service.command.handler.AuthHandler;
 import com.koa.coremodule.auth.domain.entity.TokenType;
+import com.koa.coremodule.auth.domain.exception.AuthError;
 import com.koa.coremodule.auth.domain.jwt.JWTProvider;
 import java.util.List;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import com.koa.commonmodule.exception.Error;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class AuthInvoker {
                 return authHandler.handle(request);
             }
         }
-        throw new AuthException(Error.AUTH_FAIL);
+        throw new AuthException(AuthError.AUTH_FAIL);
     }
 
     private AuthResponse generateServerAuthenticationTokens(String email) {
