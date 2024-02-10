@@ -1,9 +1,9 @@
 package com.koa.coremodule.member.domain.service;
 
 import com.koa.commonmodule.annotation.DomainService;
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.MemberDetail;
-import com.koa.coremodule.member.domain.exception.UserDetailNotFoundException;
+import com.koa.coremodule.member.domain.exception.MemberDetailNotFoundException;
+import com.koa.coremodule.member.domain.exception.MemberError;
 import com.koa.coremodule.member.domain.repository.MemberDetailRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class MemberDetailQueryService {
 
     public MemberDetail findMemberDetailByMemberId(Long memberId) {
         return memberDetailRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new UserDetailNotFoundException(Error.MEMBER_DEAITL_NOT_FOUND));
+                .orElseThrow(() -> new MemberDetailNotFoundException(MemberError.MEMBER_DEAITL_NOT_FOUND));
     }
 
     public List<MemberDetail> findMemberDetailListByMemberIdList(List<Long> memberIdList){
