@@ -5,10 +5,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.image.exception.FileDeleteException;
 import com.koa.coremodule.image.exception.FileExtensionException;
 import com.koa.coremodule.image.exception.FileUploadException;
+import com.koa.coremodule.image.exception.ImageError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -43,7 +43,7 @@ public class AwsS3Service {
             amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, objectMetadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
-            throw new FileUploadException(Error.FILE_UPLOAD_FAIL);
+            throw new FileUploadException(ImageError.FILE_UPLOAD_FAIL);
         }
 
         return amazonS3.getUrl(bucketName, fileName).toString();
@@ -57,7 +57,7 @@ public class AwsS3Service {
         try {
             amazonS3.deleteObject(bucketName, fileUrl);
         } catch (AmazonServiceException e) {
-            throw new FileDeleteException(Error.FILE_DELETE_FAIL);
+            throw new FileDeleteException(ImageError.FILE_DELETE_FAIL);
         }
     }
 
@@ -75,7 +75,7 @@ public class AwsS3Service {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new FileExtensionException(Error.WRONG_FILE_FORMAT);
+            throw new FileExtensionException(ImageError.WRONG_FILE_FORMAT);
         }
     }
 
