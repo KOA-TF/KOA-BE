@@ -26,7 +26,7 @@ public class AdminController {
      * 어드민 로그인
      */
     @PostMapping(value = "/login")
-    public ApplicationResponse<Long> loginAdmin(@RequestParam AdminLogin adminLogin) {
+    public ApplicationResponse<Long> loginAdmin(@RequestBody AdminLogin adminLogin) {
 
         Long adminId = adminGetUseCase.checkPassword(adminLogin.password());
         return ApplicationResponse.ok(adminId, "정상적으로 로그인하였습니다.");
