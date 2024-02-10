@@ -53,7 +53,8 @@ public enum Error {
     WRONG_CODE("잘못된 인증코드입니다.", 6001),
 
     //Team
-    TEAM_NOT_FOUND("팀을 찾을 수 없습니다.", 7000);
+    TEAM_NOT_FOUND("팀을 찾을 수 없습니다.", 7000),
+    ALREADY_ENROLL("이미 참여한 팀입니다.", 7001);
 
     private final String message;
     private final int errorCode;
