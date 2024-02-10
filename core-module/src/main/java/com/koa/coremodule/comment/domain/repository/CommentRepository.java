@@ -1,6 +1,7 @@
 package com.koa.coremodule.comment.domain.repository;
 
 import com.koa.coremodule.comment.domain.entity.Comment;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,19 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	@Query("select c from Comment c where c.parent.id = :commentId order by c.createdAt asc")
 	List<Comment> findChildByCommentId(@Param("commentId") Long commentId);
+
+	@Query("""
+		select c from Comment c 
+		join fetch c.notice n
+		join fetch n.member
+		where c.id = :commentId
+	""")
+	Optional<Comment> findByIdWithNoticeAndMember(@Param("commentId") Long commentId);
+
+	@Query("""
+		select c from Comment c 
+		join fetch c.writer
+		where c.id = :commentId
+	""")
+	Optional<Comment> findByIdWithMember(@Param("commentId") Long commentId);
 }

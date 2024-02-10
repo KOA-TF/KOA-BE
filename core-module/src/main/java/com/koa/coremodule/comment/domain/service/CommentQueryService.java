@@ -23,6 +23,14 @@ public class CommentQueryService {
         return commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException(CommentError.COMMENT_NOT_FOUND));
     }
 
+    public Comment getCommentByIdWithNoticeAndMember(Long commentId){
+        return commentRepository.findByIdWithNoticeAndMember(commentId).orElseThrow(() -> new CommentNotFoundException(CommentError.COMMENT_NOT_FOUND));
+    }
+
+    public Comment getCommentByIdWithWriter(Long commentId){
+        return commentRepository.findByIdWithMember(commentId).orElseThrow(() -> new CommentNotFoundException(CommentError.COMMENT_NOT_FOUND));
+    }
+
     public List<Comment> getCommentByNoticeId(Long noticeId) {
         return commentRepository.findByNoticeId(noticeId);
     }

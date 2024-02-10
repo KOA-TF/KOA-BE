@@ -4,8 +4,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.koa.commonmodule.exception.Error;
-import com.koa.coremodule.attend.domain.exception.AttendException;
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
@@ -16,6 +14,7 @@ import com.koa.coremodule.fcm.domain.service.AlarmDeleteService;
 import com.koa.coremodule.fcm.domain.service.AlarmQueryService;
 import com.koa.coremodule.fcm.domain.service.AlarmSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
+import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendNoticeNotificationRequest;
@@ -46,6 +45,7 @@ public class AlarmUseCase {
     private final AlarmDeleteService alarmDeleteService;
     private final NoticeQueryService noticeQueryService;
     private final CommentQueryService commentQueryService;
+    private final MemberQueryService memberQueryService;
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
     private final static String COMMENT_TITLE = "새로운 댓글이 달렸어요";
@@ -55,16 +55,14 @@ public class AlarmUseCase {
     public void registerFcmToken(String token) {
 
         Member memberRequest = memberUtils.getAccessMember();
-
-        Member member = findMember(memberRequest.getId());
-        member.updateFcmToken(token);
+        memberRequest.updateFcmToken(token);
         log.info("회원의 fcm 토큰이 등록되었습니다.");
     }
 
     public void sendNoticeNotification(SendNoticeNotificationRequest request) {
 
         Member memberRequest = memberUtils.getAccessMember();
-        List<Member> members = findAllMember();
+        List<Member> members = memberQueryService.findAllMember();
 
         Notification notification = Notification.builder()
                 .setTitle(NOTICE_TITLE)
@@ -103,9 +101,9 @@ public class AlarmUseCase {
 
         Member memberRequest = memberUtils.getAccessMember();
 
-        Comment comment = commentQueryService.getCommentById(request.commentId());
+        Comment comment = commentQueryService.getCommentByIdWithNoticeAndMember(request.commentId());
         Notice noticeInfo = comment.getNotice();
-        Member member = findNoticeMember(noticeInfo.getId());
+        Member member = noticeInfo.getMember();
 
         Notification notification = Notification.builder()
                 .setTitle(COMMENT_TITLE)
@@ -143,10 +141,10 @@ public class AlarmUseCase {
         Member memberRequest = memberUtils.getAccessMember();
         List<Member> members = new ArrayList<>();
 
-        Comment comment = commentQueryService.getCommentById(request.commentId());
-        Member noticeMember = findNoticeMember(comment.getNotice().getId());
+        Comment comment = commentQueryService.getCommentByIdWithNoticeAndMember(request.commentId());
+        Member noticeMember = comment.getNotice().getMember();
 
-        Comment parentComment = commentQueryService.getCommentById(comment.getParentId());
+        Comment parentComment = commentQueryService.getCommentByIdWithWriter(comment.getParentId());
         Member commentMember = parentComment.getWriter();
 
 
@@ -241,15 +239,12 @@ public class AlarmUseCase {
     public void saveAlarmView(Long alarmId) {
 
         Member memberRequest = memberUtils.getAccessMember();
-        Member member = alarmQueryService.findMember(memberRequest.getId());
         Alarm alarm = alarmQueryService.findAlarmById(alarmId);
 
         //이미 적재 되어있으면 예외처리
-        if (alarmQueryService.existsByAlarmIdAndMemberId(alarm.getId(), member.getId())) {
-            throw new AttendException(Error.DUPLICATE_ALARM);
-        }
+        alarmQueryService.existsByAlarmIdAndMemberId(alarm.getId(), memberRequest.getId());
 
-        AlarmView alarmView = AlarmView.builder().alarm(alarm).view(ViewType.VIEWED).member(member).build();
+        AlarmView alarmView = AlarmView.builder().alarm(alarm).view(ViewType.VIEWED).member(memberRequest).build();
         alarmSaveService.saveAlarmView(alarmView);
     }
 
@@ -257,19 +252,4 @@ public class AlarmUseCase {
         alarmDeleteService.deleteAlarm(alarmId);
     }
 
-    private Member findMember(Long memberId) {
-        return alarmQueryService.findMember(memberId);
-    }
-
-    private List<Member> findAllMember() {
-        return alarmQueryService.findAllMember();
-    }
-
-    private Member findNoticeMember(Long noticeId) {
-        return alarmQueryService.findNoticeMember(noticeId);
-    }
-
-    private Member findCommentMember(Long memberId) {
-        return alarmQueryService.findMember(memberId);
-    }
 }
