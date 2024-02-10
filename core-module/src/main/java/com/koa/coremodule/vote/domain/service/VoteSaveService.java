@@ -8,9 +8,11 @@ import com.koa.coremodule.vote.domain.repository.VoteRecordRepository;
 import com.koa.coremodule.vote.domain.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VoteSaveService {
 
     private final VoteRepository voteRepository;

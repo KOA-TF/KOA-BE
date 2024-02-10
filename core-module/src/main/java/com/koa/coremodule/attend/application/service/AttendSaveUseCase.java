@@ -12,12 +12,14 @@ import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AttendSaveUseCase {
 
     private final MemberUtils memberUtils;
