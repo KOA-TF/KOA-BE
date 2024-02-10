@@ -2,6 +2,7 @@ package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
+import com.koa.coremodule.fcm.application.service.AlarmDeleteUseCase;
 import com.koa.coremodule.fcm.application.service.AlarmUseCase;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
@@ -19,6 +20,7 @@ import java.util.List;
 public class AlarmController {
 
     private final AlarmUseCase alarmUseCase;
+    private final AlarmDeleteUseCase alarmDeleteUseCase;
 
     /**
      * 토큰 등록
@@ -87,7 +89,7 @@ public class AlarmController {
     @DeleteMapping("/delete")
     public ApplicationResponse<Void> deleteAlarm(Long alarmId) {
 
-        alarmUseCase.deleteAlarm(alarmId);
+        alarmDeleteUseCase.deleteAlarm(alarmId);
         return ApplicationResponse.ok(null, "성공적으로 알림을 삭제했습니다.");
     }
 

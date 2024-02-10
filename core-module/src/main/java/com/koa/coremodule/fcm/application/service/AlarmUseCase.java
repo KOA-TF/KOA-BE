@@ -4,13 +4,13 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.comment.domain.service.CommentQueryService;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.domain.entity.Alarm;
 import com.koa.coremodule.fcm.domain.entity.AlarmType;
 import com.koa.coremodule.fcm.domain.entity.AlarmView;
-import com.koa.coremodule.fcm.domain.service.AlarmDeleteService;
 import com.koa.coremodule.fcm.domain.service.AlarmQueryService;
 import com.koa.coremodule.fcm.domain.service.AlarmSaveService;
 import com.koa.coremodule.member.domain.entity.Member;
@@ -23,7 +23,6 @@ import com.koa.coremodule.notice.domain.entity.ViewType;
 import com.koa.coremodule.notice.domain.service.NoticeQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -33,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
-@Service
+@ApplicationService
 @RequiredArgsConstructor
 @Transactional
 public class AlarmUseCase {
@@ -42,7 +41,6 @@ public class AlarmUseCase {
     private final MemberUtils memberUtils;
     private final AlarmSaveService alarmSaveService;
     private final AlarmQueryService alarmQueryService;
-    private final AlarmDeleteService alarmDeleteService;
     private final NoticeQueryService noticeQueryService;
     private final CommentQueryService commentQueryService;
     private final MemberQueryService memberQueryService;
@@ -248,8 +246,5 @@ public class AlarmUseCase {
         alarmSaveService.saveAlarmView(alarmView);
     }
 
-    public void deleteAlarm(Long alarmId) {
-        alarmDeleteService.deleteAlarm(alarmId);
-    }
 
 }
