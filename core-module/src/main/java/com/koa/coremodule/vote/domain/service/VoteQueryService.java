@@ -15,6 +15,7 @@ import com.koa.coremodule.vote.domain.repository.VoteRepository;
 import com.koa.coremodule.vote.domain.repository.projection.VoteItemProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VoteQueryService {
 
     private final VoteRepository voteRepository;
@@ -151,8 +153,8 @@ public class VoteQueryService {
         return voteRecordRepository.findVoteItemRecordByVoteItemId(voteItemId);
     }
 
-    public List<VoteItemRecord> findVoteItemRecordByMemberId(Long memberId) {
-        return voteRecordRepository.findVoteItemRecordByMemberId(memberId);
+    public List<VoteItemRecord> findVoteItemRecordByMemberIdAndItemId(Long memberId, Long voteItemId) {
+        return voteRecordRepository.findVoteItemRecordByMemberIdAndVoteItemId(memberId, voteItemId);
     }
 
 }
