@@ -1,8 +1,8 @@
 package com.koa.coremodule.comment.domain.service;
 
 import com.koa.commonmodule.annotation.DomainService;
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.comment.domain.entity.Comment;
+import com.koa.coremodule.comment.domain.exception.CommentError;
 import com.koa.coremodule.comment.domain.exception.CommentNotFoundException;
 import com.koa.coremodule.comment.domain.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CommentQueryService {
     private final CommentRepository commentRepository;
 
     public Comment getCommentById(Long commentId){
-        return commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException(Error.COMMENT_NOT_FOUND));
+        return commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException(CommentError.COMMENT_NOT_FOUND));
     }
 
     public List<Comment> getCommentByNoticeId(Long noticeId) {
