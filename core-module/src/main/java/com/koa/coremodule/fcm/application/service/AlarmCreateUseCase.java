@@ -31,7 +31,7 @@ import java.util.List;
 @ApplicationService
 @RequiredArgsConstructor
 @Transactional
-public class AlarmUseCase {
+public class AlarmCreateUseCase {
 
     private final FirebaseMessaging firebaseMessaging;
     private final MemberUtils memberUtils;
@@ -49,6 +49,7 @@ public class AlarmUseCase {
         Member memberRequest = memberUtils.getAccessMember();
         memberRequest.updateFcmToken(token);
         log.info("회원의 fcm 토큰이 등록되었습니다.");
+
     }
 
     public void sendNoticeNotification(SendNoticeNotificationRequest request) {
@@ -190,6 +191,7 @@ public class AlarmUseCase {
 
         AlarmView alarmView = AlarmView.builder().alarm(alarm).view(ViewType.VIEWED).member(memberRequest).build();
         alarmSaveService.saveAlarmView(alarmView);
+
     }
 
 
