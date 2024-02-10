@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
-    Report findByCommentIdAndMemberId(Long memberId, Long commentId);
+    Boolean existsByMemberIdAndCommentId(Long memberId, Long commentId);
 
     Optional<Report> findById(Long reportId);
 }
