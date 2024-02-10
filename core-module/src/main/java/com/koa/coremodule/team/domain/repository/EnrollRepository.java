@@ -12,6 +12,12 @@ public interface EnrollRepository extends JpaRepository<Enroll, Long> {
     void deleteAllByTeamId(Long teamId);
 
     @Query("""
+            select e from Enroll e
+            join fetch Team t on e.team.id = t.id
+    """)
+    List<Enroll> findAllWithTeam();
+
+    @Query("""
               select e from Enroll e
               join fetch Team t on e.team.id = t.id
               join fetch Curriculum c on t.curriculum.id = c.id

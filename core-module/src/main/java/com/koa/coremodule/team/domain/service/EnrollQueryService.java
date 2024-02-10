@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class EnrollQueryService {
     private final EnrollRepository enrollRepository;
 
-    public List<Enroll> findAll() {
-        return enrollRepository.findAll();
+    public List<Enroll> findAllWithTeam() {
+        return enrollRepository.findAllWithTeam();
     }
 
     public List<Enroll> getAllEnrollByMemberId(Long memberId) {
@@ -23,4 +23,5 @@ public class EnrollQueryService {
     public List<Long> findMemberIdListByTeamId(Long teamId) {
         return enrollRepository.findMemberIdListByTeamId(teamId);
     }
+
 }

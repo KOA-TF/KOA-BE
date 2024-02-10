@@ -38,7 +38,7 @@ public class TeamGetUseCase {
     }
 
     private Map<Team, List<Enroll>> createTeamEnrollmentMap() {
-        List<Enroll> enrollList = enrollQueryService.findAll();
+        List<Enroll> enrollList = enrollQueryService.findAllWithTeam();
         Map<Team, List<Enroll>> enrollMap = enrollList.stream()
             .collect(Collectors.groupingBy(Enroll::getTeam));
         return enrollMap;
