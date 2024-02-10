@@ -16,7 +16,6 @@ public class AlarmSaveService {
 
     private final AlarmRepository alarmRepository;
     private final AlarmViewRepository alarmViewRepository;
-    private final NoticeRepository noticeRepository;
 
     public Alarm save(Alarm alarm) {
         return alarmRepository.save(alarm);

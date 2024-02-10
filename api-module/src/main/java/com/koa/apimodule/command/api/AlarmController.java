@@ -3,6 +3,7 @@ package com.koa.apimodule.command.api;
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.application.service.AlarmDeleteUseCase;
+import com.koa.coremodule.fcm.application.service.AlarmGetUseCase;
 import com.koa.coremodule.fcm.application.service.AlarmUseCase;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
@@ -21,6 +22,7 @@ public class AlarmController {
 
     private final AlarmUseCase alarmUseCase;
     private final AlarmDeleteUseCase alarmDeleteUseCase;
+    private final AlarmGetUseCase alarmGetUseCase;
 
     /**
      * 토큰 등록
@@ -69,7 +71,7 @@ public class AlarmController {
     @GetMapping("/lists")
     public ApplicationResponse<List<AlarmLists>> getAlarmLists() {
 
-        List<AlarmLists> lists = alarmUseCase.getAlarmLists();
+        List<AlarmLists> lists = alarmGetUseCase.getAlarmLists();
         return ApplicationResponse.ok(lists, "성공적으로 알림 목록을 조회했습니다.");
     }
 

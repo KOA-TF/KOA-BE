@@ -7,7 +7,6 @@ import com.google.firebase.messaging.Notification;
 import com.koa.commonmodule.annotation.ApplicationService;
 import com.koa.coremodule.comment.domain.entity.Comment;
 import com.koa.coremodule.comment.domain.service.CommentQueryService;
-import com.koa.coremodule.fcm.application.dto.AlarmLists;
 import com.koa.coremodule.fcm.domain.entity.Alarm;
 import com.koa.coremodule.fcm.domain.entity.AlarmType;
 import com.koa.coremodule.fcm.domain.entity.AlarmView;
@@ -25,10 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -47,8 +43,6 @@ public class AlarmUseCase {
 
     private final static String NOTICE_TITLE = "새로운 공지를 확인하세요";
     private final static String COMMENT_TITLE = "새로운 댓글이 달렸어요";
-    private static final DateTimeFormatter LAST_DATE_FORMATTER = DateTimeFormatter.ofPattern("yy/MM/dd HH:mm");
-    private static final DateTimeFormatter NOW_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd HH:mm");
 
     public void registerFcmToken(String token) {
 
@@ -184,54 +178,6 @@ public class AlarmUseCase {
                 }
             }
         }
-    }
-
-    public List<AlarmLists> getAlarmLists() {
-
-        Member memberRequest = memberUtils.getAccessMember();
-        List<Alarm> alarmList = alarmQueryService.findAll();
-        List<Alarm> filteredAlarmList = alarmList.stream()
-                .filter(alarm -> !alarm.getMember().getId().equals(memberRequest.getId()))
-                .sorted(Comparator.comparing(Alarm::getCreatedAt).reversed())
-                .toList();
-
-        List<AlarmView> alarmViews = alarmQueryService.findViews(memberRequest.getId());
-        List<AlarmLists> result = new ArrayList<>();
-
-        for (Alarm a : filteredAlarmList) {
-            boolean isViewed = false;
-
-            // 조회 여부 확인
-            for (AlarmView al : alarmViews) {
-                if (a.getId().equals(al.getAlarm().getId())) {
-                    isViewed = true;
-                    break;
-                }
-            }
-
-            DateTimeFormatter selectedFormatter = LocalDate.now().getYear() == a.getCreatedAt().getYear()
-                    ? NOW_DATE_FORMATTER
-                    : LAST_DATE_FORMATTER;
-
-            AlarmLists alarmLists = AlarmLists.builder()
-                    .alarmId(a.getId())
-                    .title(a.getTitle())
-                    .content(a.getContent())
-                    .date(a.getCreatedAt().format(selectedFormatter))
-                    .viewYn(isViewed)  // viewYn을 조회 여부에 따라 설정
-                    .build();
-
-            if (a.getNotice() != null) {
-                alarmLists.setNoticeId(a.getNotice().getId());
-            }
-            if (a.getComment() != null) {
-                alarmLists.setCommentId(a.getComment().getId());
-            }
-
-            result.add(alarmLists);
-        }
-
-        return result;
     }
 
     public void saveAlarmView(Long alarmId) {
