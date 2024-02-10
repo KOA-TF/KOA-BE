@@ -1,5 +1,6 @@
 package com.koa.coremodule.vote.application.dto;
 
+import com.koa.coremodule.vote.domain.entity.VoteStatusCheck;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class VoteStatus {
     private Long voteAttendId;
     private Integer total;
     private String title;
+    private VoteStatusCheck status;
     private List<VoteItemStatus> items;
 
     @Data

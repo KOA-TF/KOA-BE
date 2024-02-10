@@ -51,5 +51,11 @@ public class VoteController {
     /**
      * 투표 마감 처리
      */
+    @PutMapping("/finished")
+    public ApplicationResponse<Void> voteFinished(Long voteId) {
+
+        voteSaveUseCase.finishVote(voteId);
+        return ApplicationResponse.ok(null, "투표 마감 처리되었습니다.");
+    }
 
 }

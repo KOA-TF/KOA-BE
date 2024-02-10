@@ -1,5 +1,6 @@
 package com.koa.coremodule.vote.application.service;
 
+import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.service.MemberQueryService;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
@@ -11,6 +12,8 @@ import com.koa.coremodule.vote.application.mapper.VoteMapper;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
+import com.koa.coremodule.vote.domain.entity.VoteStatusCheck;
+import com.koa.coremodule.vote.domain.exception.VoteException;
 import com.koa.coremodule.vote.domain.service.VoteQueryService;
 import com.koa.coremodule.vote.domain.service.VoteSaveService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VoteSaveUseCase {
 
     private final MemberUtils memberUtils;
@@ -30,7 +34,6 @@ public class VoteSaveUseCase {
     private final MemberQueryService memberQueryService;
     private final VoteMapper voteMapper;
 
-    @Transactional
     public Long saveVote(VoteRequest voteRequest) {
         // 투표 제목 저장
         Vote voteEntity = voteMapper.toVoteEntity(voteRequest.title());
@@ -42,6 +45,7 @@ public class VoteSaveUseCase {
         Vote vote = Vote.builder()
                 .voteTitle(voteEntity.getVoteTitle())
                 .notice(notice)
+                .status(VoteStatusCheck.PRESENT)
                 .build();
 
         // Vote 엔티티 저장
@@ -61,17 +65,27 @@ public class VoteSaveUseCase {
         return vote.getId();
     }
 
-    @Transactional
     public Long attendVote(Long voteItemId) {
 
         Member memberRequest = memberUtils.getAccessMember();
         VoteItem voteItem = voteQueryService.findVoteItemById(voteItemId);
         Member member = memberQueryService.findMemberById(memberRequest.getId());
 
-        VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItem, member);
-        VoteItemRecord voteItemRecord = voteSaveService.saveVoteRecord(voteItemRecordRequest);
+        VoteItemRecord voteItemRecord;
+
+        if (voteQueryService.findVoteItemRecordByMemberIdAndItemId(member.getId(), voteItemId) != null) {
+            throw new VoteException(Error.VOTE_ITEM_RECORD_NOT_FOUND);
+        } else {
+            VoteItemRecord voteItemRecordRequest = VoteItemRecordMapper.toVoteItemRecord(voteItem, member);
+            voteItemRecord = voteSaveService.saveVoteRecord(voteItemRecordRequest);
+        }
 
         return voteItemRecord.getId();
+    }
+
+    public void finishVote(Long voteId) {
+
+        voteSaveService.finishVote(voteId);
     }
 
 }
