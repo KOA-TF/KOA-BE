@@ -1,7 +1,7 @@
 package com.koa.coremodule.auth.domain.jwt;
 
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.auth.domain.entity.TokenType;
+import com.koa.coremodule.auth.domain.exception.AuthError;
 import com.koa.coremodule.auth.domain.jwt.exception.ExpiredTokenException;
 import com.koa.coremodule.auth.domain.jwt.exception.InvalidTokenException;
 import com.koa.coremodule.auth.domain.service.TokenDeleteService;
@@ -129,9 +129,9 @@ public class JWTProvider {
         try {
             jwtParser.parse(token);
         } catch (MalformedJwtException | SignatureException | IllegalArgumentException e) {
-            throw new InvalidTokenException(Error.INVALID_TOKEN);
+            throw new InvalidTokenException(AuthError.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
-            throw new ExpiredTokenException(Error.EXPIRED_TOKEN);
+            throw new ExpiredTokenException(AuthError.EXPIRED_TOKEN);
         }
     }
 

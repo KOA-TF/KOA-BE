@@ -12,6 +12,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByEmailAndPassword(String email, String password);
     boolean existsByEmail(String email);
     Optional<Member> findByEmail(String email);
+    Optional<Member> findByEmailAndPassword(String email, String password);
 
     @Modifying
     @Query("update Member m set m.fcmToken = null where m.id = :id")

@@ -1,7 +1,5 @@
 package com.koa.coremodule.vote.domain.service;
 
-import com.koa.commonmodule.exception.BusinessException;
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.member.domain.repository.MemberDetailRepository;
 import com.koa.coremodule.member.domain.utils.MemberUtils;
@@ -9,6 +7,9 @@ import com.koa.coremodule.vote.application.dto.VoteStatus;
 import com.koa.coremodule.vote.domain.entity.Vote;
 import com.koa.coremodule.vote.domain.entity.VoteItem;
 import com.koa.coremodule.vote.domain.entity.VoteItemRecord;
+import com.koa.coremodule.vote.domain.exception.VoteError;
+import com.koa.coremodule.vote.domain.exception.VoteItemNotFoundException;
+import com.koa.coremodule.vote.domain.exception.VoteNotFoundException;
 import com.koa.coremodule.vote.domain.repository.VoteItemRepository;
 import com.koa.coremodule.vote.domain.repository.VoteRecordRepository;
 import com.koa.coremodule.vote.domain.repository.VoteRepository;
@@ -127,7 +128,7 @@ public class VoteQueryService {
         if (vote != null) {
             return vote;
         } else {
-            throw new BusinessException(Error.VOTE_NOT_FOUND);
+            throw new VoteNotFoundException(VoteError.VOTE_NOT_FOUND);
         }
     }
 
@@ -138,7 +139,7 @@ public class VoteQueryService {
     }
 
     public VoteItem findVoteItemById(Long voteItemId) {
-        return voteItemRepository.findById(voteItemId).orElseThrow(() -> new BusinessException(Error.VOTE_ITEM_NOT_FOUND));
+        return voteItemRepository.findById(voteItemId).orElseThrow(() -> new VoteItemNotFoundException(VoteError.VOTE_ITEM_NOT_FOUND));
     }
 
     public List<VoteItem> findAllVoteItems() {

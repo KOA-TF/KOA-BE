@@ -2,7 +2,9 @@ package com.koa.apimodule.command.api;
 
 import com.koa.commonmodule.common.ApplicationResponse;
 import com.koa.coremodule.fcm.application.dto.AlarmLists;
-import com.koa.coremodule.fcm.application.service.AlarmUseCase;
+import com.koa.coremodule.fcm.application.service.AlarmDeleteUseCase;
+import com.koa.coremodule.fcm.application.service.AlarmGetUseCase;
+import com.koa.coremodule.fcm.application.service.AlarmCreateUseCase;
 import com.koa.coremodule.notice.application.dto.fcm.RegisterTokenRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendCommentNotificationRequest;
 import com.koa.coremodule.notice.application.dto.fcm.SendNoticeNotificationRequest;
@@ -18,7 +20,9 @@ import java.util.List;
 @RequestMapping("/v1/alarm")
 public class AlarmController {
 
-    private final AlarmUseCase alarmUseCase;
+    private final AlarmCreateUseCase alarmCreateUseCase;
+    private final AlarmDeleteUseCase alarmDeleteUseCase;
+    private final AlarmGetUseCase alarmGetUseCase;
 
     /**
      * 토큰 등록
@@ -26,7 +30,7 @@ public class AlarmController {
     @PostMapping("/register")
     public ApplicationResponse<Void> registerToken(@RequestBody RegisterTokenRequest request) {
 
-        alarmUseCase.registerFcmToken(request.fcmToken());
+        alarmCreateUseCase.registerFcmToken(request.fcmToken());
         return ApplicationResponse.ok(null, "성공적으로 토큰이 등록되었습니다.");
     }
 
@@ -36,7 +40,7 @@ public class AlarmController {
     @PostMapping("/send/notice")
     public ApplicationResponse<Void> sendNoticeNotification(@RequestBody SendNoticeNotificationRequest request) {
 
-        alarmUseCase.sendNoticeNotification(request);
+        alarmCreateUseCase.sendNoticeNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 공지 알림을 보냈습니다.");
     }
 
@@ -46,7 +50,7 @@ public class AlarmController {
     @PostMapping("/send/comment")
     public ApplicationResponse<Void> sendCommentNotification(@RequestBody SendCommentNotificationRequest request) {
 
-        alarmUseCase.sendCommentNotification(request);
+        alarmCreateUseCase.sendCommentNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 댓글 알림을 보냈습니다.");
     }
 
@@ -56,7 +60,7 @@ public class AlarmController {
     @PostMapping("/send/recomment")
     public ApplicationResponse<Void> sendReCommentNotification(@RequestBody SendCommentNotificationRequest request) {
 
-        alarmUseCase.sendReCommentNotification(request);
+        alarmCreateUseCase.sendReCommentNotification(request);
         return ApplicationResponse.ok(null, "성공적으로 대댓글 알림을 보냈습니다.");
     }
 
@@ -67,7 +71,7 @@ public class AlarmController {
     @GetMapping("/lists")
     public ApplicationResponse<List<AlarmLists>> getAlarmLists() {
 
-        List<AlarmLists> lists = alarmUseCase.getAlarmLists();
+        List<AlarmLists> lists = alarmGetUseCase.getAlarmLists();
         return ApplicationResponse.ok(lists, "성공적으로 알림 목록을 조회했습니다.");
     }
 
@@ -77,7 +81,7 @@ public class AlarmController {
     @PostMapping("/view")
     public ApplicationResponse<Void> saveAlarmView(Long alarmId) {
 
-        alarmUseCase.saveAlarmView(alarmId);
+        alarmCreateUseCase.saveAlarmView(alarmId);
         return ApplicationResponse.ok(null, "성공적으로 조회 기록을 적재하였습니다.");
     }
 
@@ -87,7 +91,7 @@ public class AlarmController {
     @DeleteMapping("/delete")
     public ApplicationResponse<Void> deleteAlarm(Long alarmId) {
 
-        alarmUseCase.deleteAlarm(alarmId);
+        alarmDeleteUseCase.deleteAlarm(alarmId);
         return ApplicationResponse.ok(null, "성공적으로 알림을 삭제했습니다.");
     }
 

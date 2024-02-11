@@ -1,6 +1,5 @@
 package com.koa.coremodule.notice.domain.service;
 
-import com.koa.commonmodule.exception.Error;
 import com.koa.coremodule.member.domain.entity.Member;
 import com.koa.coremodule.notice.application.dto.NoticeListResponse;
 import com.koa.coremodule.notice.application.dto.NoticeSelectRequest;
@@ -10,8 +9,9 @@ import com.koa.coremodule.notice.domain.entity.NoticeImage;
 import com.koa.coremodule.notice.domain.entity.NoticeTeam;
 import com.koa.coremodule.notice.domain.entity.NoticeView;
 import com.koa.coremodule.notice.domain.entity.ViewType;
-import com.koa.coremodule.notice.domain.exception.NoticeException;
+import com.koa.coremodule.notice.domain.exception.NoticeError;
 import com.koa.coremodule.notice.domain.exception.NoticeNotFoundException;
+import com.koa.coremodule.notice.domain.exception.NoticeTeamNotFoundException;
 import com.koa.coremodule.notice.domain.repository.NoticeImageRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeRepository;
 import com.koa.coremodule.notice.domain.repository.NoticeTeamRepository;
@@ -63,7 +63,8 @@ public class NoticeQueryService {
                     response.set(i, updatedResponse);
                 }
             } else {
-                final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+                final Notice noticeEntity = noticeRepository.findById(viewRequest.noticeId()).orElseThrow(() -> new NoticeNotFoundException(
+                        NoticeError.NOTICE_NOT_FOUND));
                 NoticeView noticeView = NoticeView.create(ViewType.NONE, member, noticeEntity);
                 noticeViewRepository.save(noticeView);
             }
@@ -111,7 +112,7 @@ public class NoticeQueryService {
     }
 
     public Notice findByNoticeId(Long noticeId) {
-        return noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeNotFoundException(Error.NOTICE_NOT_FOUND));
+        return noticeRepository.findById(noticeId).orElseThrow(() -> new NoticeNotFoundException(NoticeError.NOTICE_NOT_FOUND));
     }
 
     public List<Long> findNoticeIdsByMemberId(Long memberId) {
@@ -143,7 +144,7 @@ public class NoticeQueryService {
     }
 
     public NoticeTeam findNoticeTeamById(Long noticeTeamId) {
-        return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeException(Error.NOTICE_TEAM_NOT_FOUND));
+        return noticeTeamRepository.findById(noticeTeamId).orElseThrow(() -> new NoticeTeamNotFoundException(NoticeError.NOTICE_TEAM_NOT_FOUND));
     }
 
 }

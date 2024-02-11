@@ -45,7 +45,4 @@ public interface NoticeRepository extends JpaRepository<Notice, Long>, NoticeDyn
     @Query("update NoticeView v set v.view = :viewType where v.member.id = :memberId and v.id = :noticeViewId")
     void updateSingleViewYn(Long noticeViewId, Long memberId, ViewType viewType);
 
-    @Query("select n.member.id from Notice n where n.id = :noticeId")
-    Long findMemberIdByNoticeId(Long noticeId);
-
 }
